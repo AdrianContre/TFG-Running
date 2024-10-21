@@ -18,8 +18,8 @@ public class Runner extends User {
     @Column(name="isTrainer", nullable = false)
     private boolean isTrainer;
 
-    @OneToOne(mappedBy = "runner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Trainer trainerProfile;
+    //@OneToOne(mappedBy = "runner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //private Trainer trainerProfile;
 
     public Runner() {}
 
@@ -62,6 +62,7 @@ public class Runner extends User {
         this.isTrainer = isTrainer;
     }
 
+    /*
     public Trainer getTrainerProfile() {
         return trainerProfile;
     }
@@ -69,4 +70,5 @@ public class Runner extends User {
     public void setTrainerProfile(Trainer trainerProfile) {
         this.trainerProfile = trainerProfile;
     }
+    */
 }

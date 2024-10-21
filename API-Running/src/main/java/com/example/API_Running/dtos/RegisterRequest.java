@@ -10,7 +10,7 @@ public class RegisterRequest {
     private Integer weight;
     private Integer height;
     private Integer fcMax;
-    private boolean isTrainer;
+    private boolean trainer;
     private Integer experience;
 
     public RegisterRequest() {}
@@ -24,7 +24,7 @@ public class RegisterRequest {
         this.weight = weight;
         this.height = height;
         this.fcMax = fcMax;
-        this.isTrainer = isTrainer;
+        this.trainer = isTrainer;
         this.experience = experience;
     }
 
@@ -92,12 +92,12 @@ public class RegisterRequest {
         this.fcMax = fcMax;
     }
 
-    public boolean isTrainer() {
-        return isTrainer;
+    public boolean getTrainer() {
+        return this.trainer;
     }
 
     public void setTrainer(boolean trainer) {
-        isTrainer = trainer;
+        this.trainer = trainer;
     }
 
     public Integer getExperience() {
