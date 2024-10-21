@@ -1,6 +1,7 @@
 package com.example.API_Running.models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
@@ -25,6 +26,9 @@ public abstract class User {
 
     @Column(name="password", unique=true)
     private String password;
+
+    @Column(nullable=false, unique = true)
+    private String token;
 
     public User() {}
 
@@ -83,5 +87,13 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken () {
+        return this.token;
+    }
+
+    public void setToken (String token) {
+        this.token = token;
     }
 }
