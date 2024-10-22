@@ -54,6 +54,24 @@ public class AuthService {
             );
         }
 
+        Optional<User> query = this.userRepository.findByUsername(username);
+        if (query.isPresent()) {
+            data.put("error", "User with this username already exists");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        Optional<User> query2 = this.userRepository.findByMail(mail);
+        if (query2.isPresent()) {
+            data.put("error", "User with this mail already exists");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         User savedUser;
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

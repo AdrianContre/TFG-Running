@@ -14,5 +14,5 @@ COPY src ./src
 COPY start.sh .
 
 # Ejecuta la aplicación
-#CMD ["./start.sh"]
-CMD ["mvn", "clean", "spring-boot:run"]
+CMD ["./start.sh"]
+#CMD ["mvn", "clean", "spring-boot:run"]
