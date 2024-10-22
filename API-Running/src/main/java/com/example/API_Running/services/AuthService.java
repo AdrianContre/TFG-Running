@@ -48,7 +48,6 @@ public class AuthService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String passwordEncoded = passwordEncoder.encode(password);
-        //String token = passwordEncoder.encode("token_encrypted31"+username);
         String token = jwtService.generateToken(username);
         if (isTrainer) {
             Trainer trainer = new Trainer();
