@@ -1,0 +1,45 @@
+.title-sec-register {
+    color: black;
+    font-size: 33px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    padding-left: 80px;
+}
+
+.custom-input-register {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px; 
+    width: 450px;
+    height: 80px;
+    margin: 20px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.custom-button-register {
+    width: 250px;
+    height: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.custom-label-register {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    
+}
+
+.padding1-register {
+    padding-right: 325px;
+}
+
+.padding2-register { 
+    padding-right: 325px;
+}
+
+.padding3-register { 
+    padding-right: 270px;
+}
+

@@ -15,8 +15,6 @@ function Login() {
 
     const handleClick = async (event) => {
         event.preventDefault()
-        console.log("username: " + username)
-        console.log("pwd: " + password)
         try {
             const data = await loginService(username, password);
             if (data.token) {
@@ -45,9 +43,9 @@ function Login() {
             <div className='d-flex align-items-center justify-content-center' style={{marginTop: '60px'}}>
                 <p className='title-sec-login'>RUNNING2ALL</p>
                 <div className='button-container d-grid d-flex align-items-center'>
-                    <label className='custom-label-login padding1-login' htmlFor="email">USERNAME</label>
+                    <label className='custom-label-login' htmlFor="email">USERNAME</label>
                     <input name='username' value={username} className='custom-input-login' onChange={updateUsername}/>
-                    <label className='custom-label-login padding2-login' htmlFor="password">CONTRASEÑA</label>
+                    <label className='custom-label-login' htmlFor="password">CONTRASEÑA</label>
                     <input name='password' type={"password"} value={password} className='custom-input-login' onChange={updatePwd}></input>
                     <Button variant='primary' size='lg' className='mt-5 custom-button-login' onClick={handleClick}>INICIAR SESIÓN</Button>
                     

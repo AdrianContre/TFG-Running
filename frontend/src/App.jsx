@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import './App.css'
 import {Link, Route, Routes} from 'react-router-dom'
 import Login from './modules/auth/components/Login';
+import Register from './modules/auth/components/Register';
 import Main from './modules/home/components/Main';
 
 
@@ -14,7 +15,7 @@ function Home() {
         <p className='title'>RUNNING2ALL</p>
       </div>
       <div className='button-container d-grid gap-2'>
-        <Link to='/signin'>
+        <Link to='/login'>
           <Button variant='primary' size='lg' className='mb-5'>Iniciar sesión</Button>
         </Link>
         <Link to='/register'>
@@ -29,7 +30,8 @@ function Home() {
 function App() {
   return (
       <Routes>
-        <Route path='/signin' element={<Login/>} />
+        <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
         <Route path='/main' element={<Main/>} />
         <Route path='/' element={<Home/>} />
       </Routes>
