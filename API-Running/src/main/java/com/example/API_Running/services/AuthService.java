@@ -1,28 +1,36 @@
 package com.example.API_Running.services;
 
+import com.example.API_Running.dtos.LoginRequest;
 import com.example.API_Running.dtos.RegisterRequest;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.models.Trainer;
 import com.example.API_Running.models.User;
+import com.example.API_Running.models.UserDetailsImplementation;
 import com.example.API_Running.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    AuthService (UserRepository userRepository, JwtService jwtService) {
+    AuthService (UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public ResponseEntity<Object> register (RegisterRequest request) {
@@ -46,9 +54,10 @@ public class AuthService {
             );
         }
 
+        User savedUser;
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String passwordEncoded = passwordEncoder.encode(password);
-        String token = jwtService.generateToken(username);
         if (isTrainer) {
             Trainer trainer = new Trainer();
             trainer.setExperience(request.getExperience());
@@ -57,12 +66,11 @@ public class AuthService {
             trainer.setSurname(surname);
             trainer.setUsername(username);
             trainer.setPassword(passwordEncoded);
-            trainer.setToken(token);
             trainer.setWeight(weight);
             trainer.setHeight(height);
             trainer.setFcMax(fcMax);
             trainer.setIsTrainer(true);
-            userRepository.save(trainer);
+            savedUser = userRepository.save(trainer);
         }
         else {
             Runner runner = new Runner();
@@ -74,20 +82,34 @@ public class AuthService {
             runner.setHeight(height);
             runner.setWeight(weight);
             runner.setFcMax(fcMax);
-            runner.setToken(token);
             runner.setIsTrainer(false);
-            userRepository.save(runner);
+            savedUser = userRepository.save(runner);
         }
-
-
-
-
-
-
-
-
+        UserDetailsImplementation u = new UserDetailsImplementation(savedUser);
+        String token = jwtService.getToken(u);
         data.put("token", token);
 
+        return new ResponseEntity<>(
+                data,
+                HttpStatus.OK
+        );
+    }
+
+    public ResponseEntity<Object> login (LoginRequest request) {
+        HashMap<String,Object> data = new HashMap<>();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        Optional<User> query = this.userRepository.findByUsername(request.getUsername());
+        if (!query.isPresent()) {
+            data.put ("error", "User not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        User u = query.get();
+        UserDetailsImplementation user = new UserDetailsImplementation(u);
+        String token=jwtService.getToken(user);
+        data.put("token", token);
         return new ResponseEntity<>(
                 data,
                 HttpStatus.OK

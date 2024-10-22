@@ -27,8 +27,10 @@ public abstract class User {
     @Column(name="password", unique=true)
     private String password;
 
+    /*
     @Column(nullable=false, unique = true)
     private String token;
+     */
 
     public User() {}
 
@@ -89,6 +91,7 @@ public abstract class User {
         this.password = password;
     }
 
+    /*
     public String getToken () {
         return this.token;
     }
@@ -96,4 +99,5 @@ public abstract class User {
     public void setToken (String token) {
         this.token = token;
     }
+     */
 }

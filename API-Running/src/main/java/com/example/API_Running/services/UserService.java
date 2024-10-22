@@ -16,6 +16,7 @@ public class UserService {
          this.userRepository = userRepository;
     }
 
+    /*
     public User getUserByToken(String token) {
         Optional<User> query = this.userRepository.findByToken(token);
         if (!query.isPresent()) {
@@ -24,4 +25,7 @@ public class UserService {
         User u = query.get();
         return u;
     }
+
+     */
+
 }

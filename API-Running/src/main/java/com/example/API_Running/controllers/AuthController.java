@@ -1,5 +1,6 @@
 package com.example.API_Running.controllers;
 
+import com.example.API_Running.dtos.LoginRequest;
 import com.example.API_Running.dtos.RegisterRequest;
 import com.example.API_Running.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class AuthController {
     }
 
     @PostMapping(path="/login")
-    public ResponseEntity<Object> login () {
-        return ResponseEntity.ok("hola");
+    public ResponseEntity<Object> login (@RequestBody LoginRequest request) {
+        return this.authService.login(request);
     }
 
     @PostMapping(path="/register")
