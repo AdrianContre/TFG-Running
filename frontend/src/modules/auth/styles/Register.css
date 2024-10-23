@@ -1,0 +1,53 @@
+/* .title-sec-register {
+    color: black;
+    font-size: 33px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    padding-left: 80px;
+} */
+.title-sec-register {
+    color: black;
+    font-size: 2rem; 
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    text-align: center; 
+    padding-left: 0; 
+    margin-top:2%;
+}
+
+  .container-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar los elementos */
+  }
+  
+
+.custom-input-register {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 20px; 
+    width: 150%; /* Usar porcentaje en lugar de 450px */
+    max-width: 450px; /* Mantener un límite máximo */
+    height: auto; /* Ajustar la altura automáticamente */
+    padding: 10px; /* Usar padding en lugar de altura fija */
+    margin: 10px 20px;
+    text-align: center;
+  }
+  
+  
+
+.custom-button-register {
+    width: 250px;
+    height: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.custom-label-register {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    
+}
+
+
