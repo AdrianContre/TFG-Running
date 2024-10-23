@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import React from 'react'
 import '../styles/Register.css'
 import Button from 'react-bootstrap/Button';
-
-
 import { useNavigate } from 'react-router';
 import { registerService } from "../services/authService";
+import PopUp from './PopUp'
+
 
 
 function Register () {
@@ -18,6 +18,8 @@ function Register () {
     const [mail, setMail] = useState("")
     const [password, setPassword] = useState("")
     const [isTrainer, setIsTrainer] = useState(false)
+    const [error, setError] = useState("")
+    const [show,setShow] = useState(false)
 
     const updateUsername = (event) => {
         setUsername(event.target.value)
@@ -51,18 +53,43 @@ function Register () {
             if (data.token) {
                 localStorage.setItem('token', data.token)
                 console.log(data.token)
+                console.log('Registration successful:', data);
+                navigate('/main')
             }
-            console.log('Registration successful:', data);
-            navigate('/main')
+            else {
+                console.log("aqui puedo manejar el error " + data.error)
+                if (data.error) {
+                    setError(data.error)
+                    setUsername("")
+                    setName("")
+                    setSurname("")
+                    setMail("")
+                    setPassword("")
+                    setIsTrainer(false)
+                    setShow(true)
+                    
+                }
+            }
+            
         } catch (error) {
             console.log(error)
         }
     }
+
+    const handleAlreadyAnAccount = (event) => {
+        event.preventDefault()
+        navigate('/login')
+    }
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
     return (
         <>
-            <div className='d-flex align-items-center justify-content-center' >
-                <p className='title-sec-register'>RUNNING2ALL</p>
-                <div className='button-container d-grid d-flex align-items-center' style={{marginTop: '40px'}}>
+            <p className='title-sec-register'>RUNNING2ALL</p>
+            <div className='d-flex align-items-center justify-content-center'> 
+                <div className='container-register d-grid d-flex align-items-center' >
                     <label className='custom-label-register' htmlFor="name">NOMBRE</label>
                     <input name='name' value={name} className='custom-input-register' onChange={updateName}></input>
                     <label className='custom-label-register' htmlFor="surname">APELLIDOS</label>
@@ -78,10 +105,12 @@ function Register () {
                         <option value="false" selected>Corredor</option>
                         <option value="true">Entrenador</option>
                     </select>
+                    <a className="custom-label-register" style={{fontSize: '20px', marginTop: '10px', cursor: 'pointer'}} onClick={handleAlreadyAnAccount}>Ya tienes cuenta ?</a>
                     <Button variant='primary' size='lg' className='mt-5 custom-button-register' onClick={handleClick}>REGISTRATE</Button>
+                    
                 </div>
             </div>
-            
+            <PopUp error={error} show={show} onHide={onHide} />
         </>
     )
 }

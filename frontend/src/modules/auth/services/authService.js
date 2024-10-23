@@ -42,9 +42,9 @@ export const registerService = async (name, surname, mail, username, password, i
     })
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Error(response);
-    }
+    // if (!response.ok) {
+    //   throw new Error(response);
+    // }
     return response.json();
   })
   .then(data => {
