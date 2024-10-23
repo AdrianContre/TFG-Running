@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,6 @@ public class AuthService {
 
     public ResponseEntity<Object> login (LoginRequest request) {
         HashMap<String,Object> data = new HashMap<>();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         Optional<User> query = this.userRepository.findByUsername(request.getUsername());
         if (!query.isPresent()) {
             data.put ("error", "User not found");
@@ -123,6 +123,12 @@ public class AuthService {
                     data,
                     HttpStatus.NOT_FOUND
             );
+        }
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        } catch (BadCredentialsException e) {
+            data.put("error", "Incorrect password");
+            return new ResponseEntity<>(data, HttpStatus.UNAUTHORIZED);
         }
         User u = query.get();
         UserDetailsImplementation user = new UserDetailsImplementation(u);

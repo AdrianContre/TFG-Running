@@ -6,8 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import {loginService} from '../services/authService'
 import { useNavigate } from 'react-router';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import {faEyeSlash} from '@fortawesome/free-solid-svg-icons'
+import PopUp from './PopUp'
 
 function Login() {
 
@@ -20,9 +19,22 @@ function Login() {
             if (data.token) {
                 localStorage.setItem('token', data.token)
                 console.log(data.token)
+                console.log('Login successful:', data);
+                navigate('/main')
             }
-            console.log('Login successful:', data);
-            navigate('/main')
+            else {
+                setPassword("")
+                setUsername("")
+                if (data.error == "User not found") {
+                    setError("Nombre de usuario incorrecto")
+                }
+                else {
+                    setError("Contraseña incorrecta")
+                }
+                
+                setShow(true)
+            }
+            
         } catch (error) {
             console.log(error)
         }
@@ -36,14 +48,21 @@ function Login() {
         setPassword(event.target.value)
     }
 
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
+
     const [username,setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState("")
+    const [show,setShow] = useState(false)
     return (
         <>
             <div className='d-flex align-items-center justify-content-center' style={{marginTop: '60px'}}>
                 <p className='title-sec-login'>RUNNING2ALL</p>
                 <div className='button-container d-grid d-flex align-items-center'>
-                    <label className='custom-label-login' htmlFor="email">USERNAME</label>
+                    <label className='custom-label-login' htmlFor="email">NOMBRE DE USUARIO</label>
                     <input name='username' value={username} className='custom-input-login' onChange={updateUsername}/>
                     <label className='custom-label-login' htmlFor="password">CONTRASEÑA</label>
                     <input name='password' type={"password"} value={password} className='custom-input-login' onChange={updatePwd}></input>
@@ -51,6 +70,7 @@ function Login() {
                     
                 </div>
             </div>
+            <PopUp error={error} show={show} onHide={onHide} />
             
         </>
     )
