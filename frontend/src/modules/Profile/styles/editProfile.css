@@ -1,0 +1,59 @@
+.container-profile-image {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 5%;
+    margin-top: 5%
+}
+
+.container-column {
+    display: flex;
+    justify-content: space-between; /* Para separar las dos columnas */
+    margin: 2% auto;
+    max-width: 800px; /* Ajustar el ancho máximo del contenedor para no exceder la pantalla */
+}
+
+.col {
+    flex-grow: 1; /* Hacer que ambas columnas ocupen el mismo espacio */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre filas */
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alinear los inputs y etiquetas a la izquierda */
+}
+
+.custom-label-profile {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    white-space: nowrap; /* Mantener las etiquetas en una sola línea */
+    width: 150px; /* Ancho fijo para las etiquetas */
+    margin-right: 10px; /* Espacio entre la etiqueta y el input */
+}
+
+.custom-input-profile {
+    flex-grow: 1; /* Hacer que los inputs ocupen todo el espacio disponible */
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.button-container-edit-profile {
+    display: flex;
+    justify-content: center;
+
+}
+
+.save-button {
+    padding: 10px 20px;
+    font-size: 25px;
+    border-radius: 30px;
+    width: 300px;
+    margin-top:30px;
+}
+
