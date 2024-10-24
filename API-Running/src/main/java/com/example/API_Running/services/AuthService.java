@@ -28,7 +28,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    AuthService (UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService (UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;

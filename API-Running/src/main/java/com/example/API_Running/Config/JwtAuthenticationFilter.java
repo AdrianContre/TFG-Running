@@ -41,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token==null)
         {
+            System.out.println("token es null");
             filterChain.doFilter(request, response);
             return;
         }
