@@ -1,5 +1,6 @@
 package com.example.API_Running.services;
 
+import com.example.API_Running.dtos.TrainerDTO;
 import com.example.API_Running.dtos.UpdateTrainerDTO;
 import com.example.API_Running.models.Trainer;
 import com.example.API_Running.repository.TrainerRepository;
@@ -35,7 +36,8 @@ public class TrainerService {
             trainer.setFcMax(updateTrainerDTO.getFcMax());
             trainer.setExperience(updateTrainerDTO.getExperience());
             this.trainerRepository.save(trainer);
-            data.put("data", "Trainer updated successfully");
+            TrainerDTO info = new TrainerDTO(trainer);
+            data.put("data", info);
             return new ResponseEntity<>(
                     data,
                     HttpStatus.OK

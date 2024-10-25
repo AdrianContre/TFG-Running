@@ -1,5 +1,6 @@
 package com.example.API_Running.services;
 
+import com.example.API_Running.dtos.RunnerDTO;
 import com.example.API_Running.dtos.UpdateRunnerDTO;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.repository.RunnerRepository;
@@ -33,7 +34,8 @@ public class RunnerService {
             runner.setWeight(updateRunnerDTO.getWeight());
             runner.setFcMax(updateRunnerDTO.getFcMax());
             this.runnerRepository.save(runner);
-            data.put("data", "Runner updated successfully");
+            RunnerDTO info = new RunnerDTO(runner);
+            data.put("data", info);
             return new ResponseEntity<>(
                     data,
                     HttpStatus.OK

@@ -8,29 +8,38 @@ import Profile from '../../../assets/images/circleUser.png'
 import '../styles/editProfile.css'
 import { useEffect, useState } from 'react';
 import { updateRunnerProfile, updateTrainerProfile } from '../services/profileService';
+import PopUp from '../../auth/components/PopUp'
 
 
 
 function EditProfile () {
-    const profileData = JSON.parse(localStorage.getItem("userAuth"));
-      const [name, setName] = useState("")
-      const [surname, setSurname] = useState("")
-      const [username, setUsername] = useState("")
-      const [mail, setMail] = useState("")
-      const [height, setHeight] = useState(0)
-      const [weight, setWeight] = useState(0)
-      const [fcMax, setFcMax] = useState(0)
-      const [experience, setExperience] = useState(0)
+    let profileData = JSON.parse(localStorage.getItem("userAuth"));
+    const [name, setName] = useState("")
+    const [surname, setSurname] = useState("")
+    const [username, setUsername] = useState("")
+    const [mail, setMail] = useState("")
+    const [height, setHeight] = useState(0)
+    const [weight, setWeight] = useState(0)
+    const [fcMax, setFcMax] = useState(0)
+    const [experience, setExperience] = useState(0)
+    const [show, setShow] = useState(false)
 
     const handleClick = async (event) => {
         event.preventDefault()
+        let userUpdated;
+        if (name === "" || surname === "" || username === "" || mail === "" || height === "" || weight === "" || fcMax === "" || experience === "") {
+            setShow(true)
+        }
         if (profileData.userType == "Runner") {
-            const query = await updateRunnerProfile(profileData.id, name, surname, username, mail, height, weight, fcMax);
+            userUpdated = await updateRunnerProfile(profileData.id, name, surname, username, mail, height, weight, fcMax);
         }
         else {
-            console.log(experience)
-            const query = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
+            userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
         }
+        profileData = userUpdated;
+        localStorage.setItem("userAuth", JSON.stringify(userUpdated));
+
+        
         
 
     }
@@ -81,6 +90,11 @@ function EditProfile () {
 
     const handleExperienceChange = (event) => {
         setExperience(event.target.value)
+    }
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
     }
      
       return (
@@ -136,6 +150,7 @@ function EditProfile () {
             <div className='button-container-edit-profile'>
                 <Button className='save-button' onClick={handleClick}>GUARDAR CAMBIOS</Button>
             </div>
+            <PopUp error={"Han de estar todos los campos llenos"} show={show} onHide={onHide} title={"Error al editar perfil"} />
         </>
       )
     }
