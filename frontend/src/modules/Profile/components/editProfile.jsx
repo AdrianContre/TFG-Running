@@ -25,10 +25,11 @@ function EditProfile () {
     const handleClick = async (event) => {
         event.preventDefault()
         if (profileData.userType == "Runner") {
-            const query = await updateRunnerProfile(profileData.id, name, surname, mail, height, weight, fcMax);
+            const query = await updateRunnerProfile(profileData.id, name, surname, username, mail, height, weight, fcMax);
         }
         else {
-            const query = await updateTrainerProfile(profileData.id, name, surname, mail, height, weight, fcMax,experience);
+            console.log(experience)
+            const query = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
         }
         
 
