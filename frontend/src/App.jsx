@@ -7,6 +7,7 @@ import Register from './modules/auth/components/Register';
 import Main from './modules/home/components/Main';
 import EditProfile from './modules/Profile/components/editProfile';
 import ViewProfile from './modules/Profile/components/viewProfile';
+import ListMaterials from './modules/Profile/components/ListMaterials';
 
 
 
@@ -32,6 +33,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/listmaterials' element={<ListMaterials/>} />
         <Route path='/profile' element={<ViewProfile/>} />
         <Route path='/editprofile' element={<EditProfile/>} />
         <Route path='/login' element={<Login/>} />

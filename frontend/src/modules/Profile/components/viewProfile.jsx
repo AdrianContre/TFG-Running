@@ -37,6 +37,11 @@ function ViewProfile () {
         navigate('/editprofile')
     }
 
+    const navigateToMaterials = (event) => {
+        event.preventDefault()
+        navigate('/listmaterials')
+    }
+
     return (
         <>
             <NavigationBar/>
@@ -50,7 +55,7 @@ function ViewProfile () {
                         </div>
                     </div>
                     <div className="button-container-profile">
-                        <Button variant="primary" size="lg" className="custom-button-view-profile">Material</Button>
+                        <Button variant="primary" size="lg" className="custom-button-view-profile" onClick={navigateToMaterials}>Material</Button>
                     </div>
                     {userAuth.fcMax !== 0 ? (
                         <div>
