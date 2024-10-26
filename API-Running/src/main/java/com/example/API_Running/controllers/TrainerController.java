@@ -22,4 +22,9 @@ public class TrainerController {
     public ResponseEntity<Object> updateTrainer (@PathVariable Long trainerId, @RequestBody UpdateTrainerDTO updateTrainerDTO) {
         return this.trainerService.updateTrainer(trainerId, updateTrainerDTO);
     }
+
+    @GetMapping(path="/{trainerId}/zones")
+    public ResponseEntity<Object> getZones (@PathVariable Long trainerId) {
+        return this.trainerService.getZones(trainerId);
+    }
 }

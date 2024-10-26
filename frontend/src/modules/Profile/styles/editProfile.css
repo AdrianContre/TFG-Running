@@ -38,7 +38,7 @@
     flex-grow: 1; /* Hacer que los inputs ocupen todo el espacio disponible */
     border-radius: 30px;
     border: 3px solid black;
-    font-size: 20px;
+    font-size: 16px;
     padding: 10px;
     text-align: center;
 }

@@ -2,6 +2,8 @@ package com.example.API_Running.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+
 @Entity
 @DiscriminatorValue("RUNNER")
 public class Runner extends User {
@@ -60,6 +62,21 @@ public class Runner extends User {
 
     public void setIsTrainer (boolean isTrainer) {
         this.isTrainer = isTrainer;
+    }
+
+    public ArrayList<Integer> getZones() {
+        ArrayList<Integer> zones = new ArrayList<>();
+        Integer maxZ1 = (int) (this.fcMax * 0.70) - 1;
+        Integer maxZ2 = (int) (this.fcMax * 0.80) - 1;
+        Integer maxZ3 = (int) (this.fcMax * 0.88) - 1;
+        Integer maxZ4 = (int) (this.fcMax * 0.92) - 1;
+        Integer maxZ5 = this.fcMax;
+        zones.add(maxZ1);
+        zones.add(maxZ2);
+        zones.add(maxZ3);
+        zones.add(maxZ4);
+        zones.add(maxZ5);
+        return zones;
     }
 
     /*

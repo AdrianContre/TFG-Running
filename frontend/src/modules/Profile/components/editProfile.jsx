@@ -1,19 +1,19 @@
 import React from 'react'
-import { User, Lock, Edit } from "lucide-react"
 import Button from 'react-bootstrap/Button';
 import NavigationBar from "../../home/components/NavigationBar";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faCircleUser} from '@fortawesome/free-solid-svg-icons'
 import Profile from '../../../assets/images/circleUser.png'
 import '../styles/editProfile.css'
 import { useEffect, useState } from 'react';
 import { updateRunnerProfile, updateTrainerProfile } from '../services/profileService';
 import PopUp from '../../auth/components/PopUp'
+import { getUserLogged } from '../../home/services/mainService';
+import { Navigate, useNavigate } from 'react-router';
 
 
 
 function EditProfile () {
-    let profileData = JSON.parse(localStorage.getItem("userAuth"));
+    //let profileData = JSON.parse(localStorage.getItem("userAuth"));
+    const [profileData, setProfileData] = useState({})
     const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
     const [username, setUsername] = useState("")
@@ -23,6 +23,7 @@ function EditProfile () {
     const [fcMax, setFcMax] = useState(0)
     const [experience, setExperience] = useState(0)
     const [show, setShow] = useState(false)
+    const navigate = useNavigate()
 
     const handleClick = async (event) => {
         event.preventDefault()
@@ -36,8 +37,11 @@ function EditProfile () {
         else {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
         }
-        profileData = userUpdated;
-        localStorage.setItem("userAuth", JSON.stringify(userUpdated));
+        const user = await  getUserLogged();
+        setProfileData(user)
+        //profileData = user;
+        localStorage.setItem('userAuth', JSON.stringify(user));
+        navigate('/profile')
 
         
         
@@ -45,16 +49,18 @@ function EditProfile () {
     }
 
     useEffect (() => {
-        const loadUser = () => {
-            setName(profileData.name)
-            setSurname(profileData.surname)
-            setUsername(profileData.username)
-            setMail(profileData.mail)
-            setHeight(profileData.height)
-            setWeight(profileData.weight)
-            setFcMax(profileData.fcMax)
-            if (profileData.userType == "Trainer") {
-                setExperience(profileData.experience)
+        const loadUser = async () => {
+            const user = await  getUserLogged();
+            setProfileData(user)
+            setName(user.name)
+            setSurname(user.surname)
+            setUsername(user.username)
+            setMail(user.mail)
+            setHeight(user.height)
+            setWeight(user.weight)
+            setFcMax(user.fcMax)
+            if (user.userType == "Trainer") {
+                setExperience(user.experience)
             }
         }
         loadUser()  

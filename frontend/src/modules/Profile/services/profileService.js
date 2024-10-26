@@ -47,3 +47,50 @@ export const updateTrainerProfile = async (id,name, surname, username, mail, hei
         throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
       });
 }
+
+export const getRunnerZones = async (id) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    console.log(authHeader)
+    return fetch(`${END_POINT_RUNNER}/${id}/zones`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        //console.log(data);
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      });
+}
+
+export const getTrainerZones = async (id) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    console.log(authHeader)
+    return fetch(`${END_POINT_TRAINER}/${id}/zones`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        //console.log(data);
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      });
+}
+

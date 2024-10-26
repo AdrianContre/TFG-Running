@@ -6,6 +6,7 @@ import Login from './modules/auth/components/Login';
 import Register from './modules/auth/components/Register';
 import Main from './modules/home/components/Main';
 import EditProfile from './modules/Profile/components/editProfile';
+import ViewProfile from './modules/Profile/components/viewProfile';
 
 
 
@@ -31,7 +32,8 @@ function Home() {
 function App() {
   return (
       <Routes>
-        <Route path='/profile' element={<EditProfile/>} />
+        <Route path='/profile' element={<ViewProfile/>} />
+        <Route path='/editprofile' element={<EditProfile/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
         <Route path='/main' element={<Main/>} />

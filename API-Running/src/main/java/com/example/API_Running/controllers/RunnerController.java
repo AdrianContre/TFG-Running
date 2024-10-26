@@ -22,4 +22,9 @@ public class RunnerController {
     public ResponseEntity<Object> updateRunner (@PathVariable Long runnerId, @RequestBody UpdateRunnerDTO updateRunnerDTO) {
         return this.runnerService.updateRunner(runnerId, updateRunnerDTO);
     }
+
+    @GetMapping(path="/{runnerId}/zones")
+    public ResponseEntity<Object> getZones (@PathVariable Long runnerId) {
+        return this.runnerService.getZones(runnerId);
+    }
 }
