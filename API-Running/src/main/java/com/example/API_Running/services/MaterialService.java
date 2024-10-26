@@ -52,4 +52,23 @@ public class MaterialService {
                 HttpStatus.OK
         );
     }
+
+    public ResponseEntity<Object> deleteMaterial(Long materialId) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<Material> query = this.materialRepository.findById(materialId);
+        if (!query.isPresent()) {
+            data.put("error", "Material with id " + materialId + " not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        Material material = query.get();
+        this.materialRepository.delete(material);
+        data.put("data", "Material with id " + materialId + " deleted successfully");
+        return new ResponseEntity<>(
+                data,
+                HttpStatus.OK
+        );
+    }
 }

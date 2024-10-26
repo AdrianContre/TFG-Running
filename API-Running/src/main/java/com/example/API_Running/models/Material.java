@@ -25,6 +25,8 @@ public class Material {
     @JoinColumn(name = "runner_id")
     private Runner runner;
 
+    public Material(){}
+
     public Material(String brand, String model, String description, Integer wear, Runner runner) {
         this.brand = brand;
         this.model = model;

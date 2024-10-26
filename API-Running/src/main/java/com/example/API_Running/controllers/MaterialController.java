@@ -22,4 +22,9 @@ public class MaterialController {
     public ResponseEntity<Object> createMaterial (@RequestBody CreateMaterialDTO createMaterialDTO) {
         return this.materialService.createMaterial(createMaterialDTO);
     }
+
+    @DeleteMapping(path = "/{materialId}")
+    public  ResponseEntity<Object> deleteMaterial (@PathVariable Long materialId) {
+        return this.materialService.deleteMaterial(materialId);
+    }
 }
