@@ -27,4 +27,14 @@ public class MaterialController {
     public  ResponseEntity<Object> deleteMaterial (@PathVariable Long materialId) {
         return this.materialService.deleteMaterial(materialId);
     }
+
+    @GetMapping(path="/runners/{runnerId}")
+    public ResponseEntity<Object> getUserMaterial(@PathVariable Long runnerId) {
+        return this.materialService.getUserMaterial(runnerId);
+    }
+
+    @GetMapping(path="/{materialId}")
+    public ResponseEntity<Object> getMaterial(@PathVariable Long materialId) {
+        return this.materialService.getMaterialById(materialId);
+    }
 }

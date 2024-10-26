@@ -1,6 +1,7 @@
 package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.CreateMaterialDTO;
+import com.example.API_Running.dtos.MaterialDTO;
 import com.example.API_Running.models.Material;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.repository.MaterialRepository;
@@ -11,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,6 +69,45 @@ public class MaterialService {
         Material material = query.get();
         this.materialRepository.delete(material);
         data.put("data", "Material with id " + materialId + " deleted successfully");
+        return new ResponseEntity<>(
+                data,
+                HttpStatus.OK
+        );
+    }
+
+    public ResponseEntity<Object> getUserMaterial(Long runnerId) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<Runner> query = this.runnerRepository.findById(runnerId);
+        if (!query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        List<Material> materials = this.materialRepository.findMaterialsByRunnerId(runnerId);
+        List<MaterialDTO> materialDTOS = new ArrayList<>();
+        materials.stream().forEach(material -> {
+            MaterialDTO m = new MaterialDTO(material);
+            materialDTOS.add(m);
+        });
+        data.put("data", materialDTOS);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getMaterialById(Long materialId) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<Material> query = this.materialRepository.findById(materialId);
+        if (!query.isPresent()) {
+            data.put("error", "Material with id " + materialId + " not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        Material material = query.get();
+        MaterialDTO materialDTO = new MaterialDTO(material);
+        data.put("data", materialDTO);
         return new ResponseEntity<>(
                 data,
                 HttpStatus.OK
