@@ -1,6 +1,7 @@
 package com.example.API_Running.controllers;
 
 import com.example.API_Running.dtos.CreateMaterialDTO;
+import com.example.API_Running.dtos.ModifyMaterialDTO;
 import com.example.API_Running.services.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,10 @@ public class MaterialController {
     @GetMapping(path="/{materialId}")
     public ResponseEntity<Object> getMaterial(@PathVariable Long materialId) {
         return this.materialService.getMaterialById(materialId);
+    }
+
+    @PutMapping(path="/{materialId}")
+    public ResponseEntity<Object> editMaterial(@PathVariable Long materialId, @RequestBody ModifyMaterialDTO modifyMaterialDTO) {
+        return this.materialService.editMaterial(materialId, modifyMaterialDTO);
     }
 }

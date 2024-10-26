@@ -2,6 +2,7 @@ package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.CreateMaterialDTO;
 import com.example.API_Running.dtos.MaterialDTO;
+import com.example.API_Running.dtos.ModifyMaterialDTO;
 import com.example.API_Running.models.Material;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.repository.MaterialRepository;
@@ -108,6 +109,30 @@ public class MaterialService {
         Material material = query.get();
         MaterialDTO materialDTO = new MaterialDTO(material);
         data.put("data", materialDTO);
+        return new ResponseEntity<>(
+                data,
+                HttpStatus.OK
+        );
+    }
+
+    public ResponseEntity<Object> editMaterial(Long materialId, ModifyMaterialDTO modifyMaterialDTO) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<Material> query = this.materialRepository.findById(materialId);
+        if (!query.isPresent()) {
+            data.put("error", "Material with id " + materialId + " not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        Material material = query.get();
+        material.setBrand(modifyMaterialDTO.getBrand());
+        material.setModel(modifyMaterialDTO.getModel());
+        material.setDescription(modifyMaterialDTO.getDescription());
+        material.setWear(modifyMaterialDTO.getWear());
+        this.materialRepository.save(material);
+        MaterialDTO mDTO = new MaterialDTO(material);
+        data.put("data", mDTO);
         return new ResponseEntity<>(
                 data,
                 HttpStatus.OK
