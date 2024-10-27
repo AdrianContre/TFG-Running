@@ -1,0 +1,35 @@
+.container-createmat {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar los elementos */
+  }
+  
+
+.custom-input-createmat {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px; 
+    width: 150%; /* Usar porcentaje en lugar de 450px */
+    max-width: 450px; /* Mantener un límite máximo */
+    height: auto; /* Ajustar la altura automáticamente */
+    padding: 10px; /* Usar padding en lugar de altura fija */
+    margin: 10px 20px;
+    text-align: center;
+  }
+  
+  
+
+.custom-button-createmat {
+    width: 250px;
+    height: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.custom-label-createmat {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    margin-top: 20px;
+    
+}

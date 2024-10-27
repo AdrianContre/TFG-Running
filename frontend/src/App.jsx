@@ -8,6 +8,7 @@ import Main from './modules/home/components/Main';
 import EditProfile from './modules/Profile/components/editProfile';
 import ViewProfile from './modules/Profile/components/viewProfile';
 import ListMaterials from './modules/Profile/components/ListMaterials';
+import CreateMaterial from './modules/Profile/components/CreateMaterial';
 
 
 
@@ -33,6 +34,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/creatematerial' element={<CreateMaterial />} />
         <Route path='/listmaterials' element={<ListMaterials/>} />
         <Route path='/profile' element={<ViewProfile/>} />
         <Route path='/editprofile' element={<EditProfile/>} />

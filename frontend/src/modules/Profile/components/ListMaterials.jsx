@@ -5,10 +5,13 @@ import { deleteMaterial, getUserMaterials } from "../services/materialService";
 import MaterialCard from "./MaterialCard";
 import '../styles/listMaterials.css'
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 function ListMaterials () {
 
     const [materials,setMaterials] = useState([])
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const id = JSON.parse(localStorage.getItem("userAuth")).id
@@ -24,6 +27,11 @@ function ListMaterials () {
         setMaterials(prevMaterials => prevMaterials.filter(material => material.id !== materialId))
     }
 
+    const handleCreateMaterial = (event) => {
+        event.preventDefault()
+        navigate('/creatematerial')
+    }
+
 
     return (
         <>
@@ -37,7 +45,7 @@ function ListMaterials () {
             ))}
         </div>
         <div className="title-container">
-            <Button className="custom-material-button" variant="primary" size="lg">Añadir material</Button>
+            <Button className="custom-material-button" variant="primary" size="lg" onClick={handleCreateMaterial}>Añadir material</Button>
         </div>
         </>
     )
