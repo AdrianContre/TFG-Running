@@ -5,7 +5,10 @@ import '../styles/materialCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
 
-const MaterialCard = ({ material }) => {
+const MaterialCard = ({ material, onDelete }) => {
+    const handleDelete = () => {
+        onDelete(material.id)
+    }
     return (
         <Card className="material-card">
             <Card.Body>
@@ -17,7 +20,7 @@ const MaterialCard = ({ material }) => {
                 <Button variant="danger">Eliminar</Button> */}
                 <div className="icons-container">
                     <FontAwesomeIcon icon={faPenToSquare} size="2xl" style={{cursor: 'pointer'}}/>
-                    <FontAwesomeIcon icon={faTrash} size="2xl" style={{color: "#f10909", cursor: 'pointer'}} />
+                    <FontAwesomeIcon icon={faTrash} size="2xl" style={{color: "#f10909", cursor: 'pointer'}} onClick={handleDelete} />
                 </div>
             </Card.Body>
         </Card>

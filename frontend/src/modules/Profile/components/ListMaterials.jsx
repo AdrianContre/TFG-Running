@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import NavigationBar from "../../home/components/NavigationBar";
-import { getUserMaterials } from "../services/materialService";
+import { deleteMaterial, getUserMaterials } from "../services/materialService";
 import MaterialCard from "./MaterialCard";
 import '../styles/listMaterials.css'
 import { Button } from "react-bootstrap";
@@ -19,6 +19,11 @@ function ListMaterials () {
         getMaterialsUser()
     },[])
 
+    const handleDeleteMaterial = async (materialId) => {
+        await deleteMaterial(materialId);
+        setMaterials(prevMaterials => prevMaterials.filter(material => material.id !== materialId))
+    }
+
 
     return (
         <>
@@ -28,7 +33,7 @@ function ListMaterials () {
         </div>
         <div className="material-list">
             {materials.map((material, index) => (
-                <MaterialCard key={index} material={material} />
+                <MaterialCard key={index} material={material} onDelete={handleDeleteMaterial} />
             ))}
         </div>
         <div className="title-container">
