@@ -68,3 +68,26 @@ export const createMaterial = async (brand, model, description, wear, runnerId) 
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const editMaterial = async (brand, model, description, wear, materialId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_MATERIALS}/${materialId}`,{
+      method: 'PUT',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({brand: brand, model: model, description: description, wear: wear})
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
