@@ -70,7 +70,7 @@ function Login() {
                     
                 </div>
             </div>
-            <PopUp error={error} show={show} onHide={onHide} />
+            <PopUp error={error} show={show} onHide={onHide} title={"Error al iniciar sesión"}/>
             
         </>
     )

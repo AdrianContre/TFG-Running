@@ -1,28 +1,11 @@
-/* .title-sec-register {
-    color: black;
-    font-size: 33px;
-    font-family: 'Inter', sans-serif;
-    font-weight: bold;
-    padding-left: 80px;
-} */
-.title-sec-register {
-    color: black;
-    font-size: 2rem; 
-    font-family: 'Inter', sans-serif;
-    font-weight: bold;
-    text-align: center; 
-    padding-left: 0; 
-    margin-top:2%;
-}
-
-  .container-register {
+.container-createmat {
     display: flex;
     flex-direction: column;
     align-items: center; /* Centrar los elementos */
   }
   
 
-.custom-input-register {
+.custom-input-createmat {
     border-radius: 30px;
     border: 3px solid black;
     font-size: 16px; 
@@ -36,18 +19,17 @@
   
   
 
-.custom-button-register {
+.custom-button-createmat {
     width: 250px;
     height: 60px;
     font-family: 'Inter', sans-serif;
     font-weight: bold;
 }
 
-.custom-label-register {
+.custom-label-createmat {
     font-size: 16px;
     font-family: 'Inter', sans-serif;
     font-weight: bold;
+    margin-top: 20px;
     
 }
-
-

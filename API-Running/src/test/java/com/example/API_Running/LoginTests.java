@@ -3,28 +3,21 @@ package com.example.API_Running;
 import com.example.API_Running.controllers.AuthController;
 import com.example.API_Running.dtos.LoginRequest;
 import com.example.API_Running.models.Runner;
-import com.example.API_Running.models.User;
 import com.example.API_Running.repository.UserRepository;
 import com.example.API_Running.services.AuthService;
 import com.example.API_Running.services.JwtService;
 import com.example.API_Running.services.UserDetailsServiceImplementation;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Optional;
 
@@ -35,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuthController.class)
 public class LoginTests {
+
     @Autowired
     private MockMvc mockMvc;
 

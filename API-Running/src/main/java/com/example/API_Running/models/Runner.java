@@ -2,6 +2,9 @@ package com.example.API_Running.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("RUNNER")
 public class Runner extends User {
@@ -18,8 +21,8 @@ public class Runner extends User {
     @Column(name="isTrainer", nullable = false)
     private boolean isTrainer;
 
-    //@OneToOne(mappedBy = "runner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private Trainer trainerProfile;
+    @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Material> materials = new ArrayList<>();
 
     public Runner() {}
 
@@ -62,13 +65,30 @@ public class Runner extends User {
         this.isTrainer = isTrainer;
     }
 
-    /*
-    public Trainer getTrainerProfile() {
-        return trainerProfile;
+    public ArrayList<Integer> getZones() {
+        ArrayList<Integer> zones = new ArrayList<>();
+        Integer maxZ1 = (int) (this.fcMax * 0.70) - 1;
+        Integer maxZ2 = (int) (this.fcMax * 0.80) - 1;
+        Integer maxZ3 = (int) (this.fcMax * 0.88) - 1;
+        Integer maxZ4 = (int) (this.fcMax * 0.92) - 1;
+        Integer maxZ5 = this.fcMax;
+        zones.add(maxZ1);
+        zones.add(maxZ2);
+        zones.add(maxZ3);
+        zones.add(maxZ4);
+        zones.add(maxZ5);
+        return zones;
     }
 
-    public void setTrainerProfile(Trainer trainerProfile) {
-        this.trainerProfile = trainerProfile;
+    public List<Material> getMaterials() {
+        return materials;
     }
-    */
+
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+    }
+
+    public void addMaterial (Material material) {
+        this.materials.add(material);
+    }
 }

@@ -1,13 +1,29 @@
 import { useNavigate } from 'react-router';
+import { getUserLogged } from '../services/mainService';
+import NavigationBar from './NavigationBar';
+import { useEffect } from 'react';
+
 const Main = () => {
     const navigate = useNavigate()
+
+    useEffect (() => {
+        const getUserAuth = async () => {
+            const user = await getUserLogged();
+            localStorage.setItem('userAuth', JSON.stringify(user));
+        }
+        getUserAuth()
+    },[])
     
     return (
-        <div>
-            <div className="d-flex justify-content-center" style={{marginTop:'25%'}}>
-                Página de inicio
+        <>
+            <NavigationBar/>
+            <div className='container'>
+               <p className='text-custom'> BIENVENIDO DE NUEVO!!
+                DESPLAZATE POR LAS 
+                OPCIONES DE LA 
+                PLATAFORMA </p>
             </div>
-        </div>
+        </>
     )
 }
 

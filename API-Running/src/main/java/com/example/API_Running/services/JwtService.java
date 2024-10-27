@@ -28,7 +28,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                //.setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -46,7 +46,8 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetailsImplementation userDetails) {
         final String mailFromToken = getUsernameFromToken(token);
         //final String username2 = getClaim(token,Claims::getSubject);
-        return (mailFromToken.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        //return (mailFromToken.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        return (mailFromToken.equals(userDetails.getUsername()));
         //return (mailFromToken.equals(username2) && !isTokenExpired(token));
     }
 
@@ -66,6 +67,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+     /*
     private Date getExpiration(String token)
     {
         return getClaim(token, Claims::getExpiration);
@@ -75,4 +77,6 @@ public class JwtService {
     {
         return getExpiration(token).before(new Date());
     }
+
+      */
 }
