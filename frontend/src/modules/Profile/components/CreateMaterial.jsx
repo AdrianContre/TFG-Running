@@ -53,7 +53,7 @@ function CreateMaterial () {
                         <label className='custom-label-createmat' htmlFor="description">DESCRIPCIÓN</label>
                         <textarea name='description' value={description} onChange={updateValue(setDescription)} className='custom-input-register'/>
                         <label className='custom-label-createmat' htmlFor="wear">KILOMETRAJE {'(KM)'}</label>
-                        <input name='wear' value={wear} type={"number"} onChange={updateValue(setWear)} className='custom-input-createmat'></input>
+                        <input name='wear' value={wear} type={"number"} step="0.01" onChange={updateValue(setWear)} className='custom-input-createmat'></input>
                         <Button variant='primary' size='lg' className='mt-5 custom-button-createmat' onClick={handleAddMaterial}>AÑADIR</Button>
                     </div>
                 </div>

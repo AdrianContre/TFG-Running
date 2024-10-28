@@ -19,7 +19,8 @@ public class Material {
     private String description;
 
     @Column(name="wear",nullable = false)
-    private Integer wear;
+    //private Integer wear;
+    private Float wear;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "runner_id")
@@ -27,7 +28,7 @@ public class Material {
 
     public Material(){}
 
-    public Material(String brand, String model, String description, Integer wear, Runner runner) {
+    public Material(String brand, String model, String description, /*Integer wear*/Float wear, Runner runner) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -67,12 +68,19 @@ public class Material {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    /*
     public Integer getWear() {
         return wear;
     }
 
     public void setWear(Integer wear) {
+        this.wear = wear;
+    }*/
+    public Float getWear() {
+        return this.wear;
+    }
+
+    public void setWear(Float wear) {
         this.wear = wear;
     }
 
@@ -82,5 +90,9 @@ public class Material {
 
     public void setRunner(Runner runner) {
         this.runner = runner;
+    }
+
+    public void addMileage (Float mileage) {
+        this.wear += mileage;
     }
 }

@@ -72,4 +72,12 @@ public abstract class Activity {
     public void setMaterials(Set<Material> materials) {
         this.materials = materials;
     }
+
+    public Runner getRunner() {
+        return runner;
+    }
+
+    public void setRunner(Runner runner) {
+        this.runner = runner;
+    }
 }

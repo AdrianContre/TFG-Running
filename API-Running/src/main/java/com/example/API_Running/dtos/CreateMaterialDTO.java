@@ -5,10 +5,11 @@ public class CreateMaterialDTO {
     private String brand;
     private String model;
     private String description;
-    private Integer wear;
+    //private Integer wear;
+    private Float wear;
     private Long runnerId;
 
-    public CreateMaterialDTO(String brand, String model, String description, Integer wear, Long runnerId) {
+    public CreateMaterialDTO(String brand, String model, String description, /*Integer wear*/Float wear, Long runnerId) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -40,11 +41,19 @@ public class CreateMaterialDTO {
         this.description = description;
     }
 
+    /*
     public Integer getWear() {
         return wear;
     }
 
     public void setWear(Integer wear) {
+        this.wear = wear;
+    }*/
+    public Float getWear() {
+        return wear;
+    }
+
+    public void setWear (Float wear) {
         this.wear = wear;
     }
 
