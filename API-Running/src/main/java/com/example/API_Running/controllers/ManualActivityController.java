@@ -22,4 +22,10 @@ public class ManualActivityController {
     public ResponseEntity<Object> createManualActivity (@RequestBody CreateManualActivityDTO createManualActivityDTO) {
         return this.manualActivityService.createManualActivity(createManualActivityDTO);
     }
+
+    @DeleteMapping(path="/{manualActivityId}")
+    public ResponseEntity<Object> deleteManualActivity (@PathVariable Long manualActivityId) {
+        return this.manualActivityService.deleteManualActivity(manualActivityId);
+    }
+
 }

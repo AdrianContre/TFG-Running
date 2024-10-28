@@ -66,7 +66,19 @@ public class ManualActivityService {
         manualActivity.setMaterials(materials);
         this.manualActivityRepository.save(manualActivity);
         data.put("data", "Activity created properly");
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
 
+    public ResponseEntity<Object> deleteManualActivity(Long manualActivityId) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<ManualActivity> query = this.manualActivityRepository.findById(manualActivityId);
+        if (!query.isPresent()) {
+            data.put("error", "Manual activity not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        ManualActivity manualActivity = query.get();
+        this.manualActivityRepository.delete(manualActivity);
+        data.put("data", "Manual activity deleted successfully");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }
