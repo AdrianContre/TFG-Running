@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -29,7 +31,7 @@ public class ManualActivityService {
         this.materialRepository = materialRepository;
     }
 
-    public ResponseEntity<Object> createManualActivity(CreateManualActivityDTO createManualActivityDTO) {
+    public ResponseEntity<Object> createManualActivity(CreateManualActivityDTO createManualActivityDTO)  {
         HashMap<String,Object> data = new HashMap<>();
         String name = createManualActivityDTO.getName();
         String description = createManualActivityDTO.getDescription();
@@ -56,10 +58,6 @@ public class ManualActivityService {
             }
         });
         ManualActivity manualActivity = new ManualActivity(distance, duration,pace,fcAvg);
-
-        if (createManualActivityDTO.getRoute() != null) {
-            manualActivity.setRoute(createManualActivityDTO.getRoute());
-        }
         manualActivity.setName(name);
         manualActivity.setDescription(description);
         manualActivity.setRunner(runner);
@@ -80,5 +78,26 @@ public class ManualActivityService {
         this.manualActivityRepository.delete(manualActivity);
         data.put("data", "Manual activity deleted successfully");
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> uploadRoute(Long manualActivityId, MultipartFile route) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<ManualActivity> query = this.manualActivityRepository.findById(manualActivityId);
+        if (!query.isPresent()) {
+            data.put("error", "Manual activity not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        try {
+            byte[] routeBytes = route.getBytes();
+            ManualActivity m = query.get();
+            m.setRoute(routeBytes);
+            this.manualActivityRepository.save(m);
+            data.put("data", "Route set properly");
+            return new ResponseEntity<>(data,HttpStatus.OK);
+        }
+        catch(IOException e) {
+            data.put("error", "Error uploading the route");
+            return new ResponseEntity<>(data, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

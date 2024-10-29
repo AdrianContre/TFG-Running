@@ -2,7 +2,9 @@ package com.example.API_Running.models;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -20,6 +22,10 @@ public abstract class Activity {
 
     @Column(name="description",nullable = false)
     private String description;
+
+    @CreationTimestamp
+    @Column(name = "date")
+    private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "runner_id")
@@ -63,6 +69,14 @@ public abstract class Activity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public Set<Material> getMaterials() {

@@ -5,6 +5,7 @@ import com.example.API_Running.services.ManualActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
@@ -27,5 +28,12 @@ public class ManualActivityController {
     public ResponseEntity<Object> deleteManualActivity (@PathVariable Long manualActivityId) {
         return this.manualActivityService.deleteManualActivity(manualActivityId);
     }
+
+    @PutMapping(path="/route/{manualActivityId}", consumes = "multipart/form-data")
+    public ResponseEntity<Object> setRouteToManualActivity(@PathVariable Long manualActivityId, @RequestParam MultipartFile route) {
+        return this.manualActivityService.uploadRoute(manualActivityId, route);
+    }
+
+
 
 }
