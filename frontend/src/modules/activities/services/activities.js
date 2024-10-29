@@ -1,8 +1,8 @@
-const API_ROUTE = "http://localhost:8081/api/v1/users/whoAmI"
+const END_POINT_ACTIVITIES = "http://localhost:8081/api/v1/activities"
 
-export const getUserLogged = async () => {
+export const listActivities = async (runnerId) => {
     const authHeader = `Bearer ${localStorage.getItem('token')}`
-    return fetch(API_ROUTE,{
+    return fetch(`${END_POINT_ACTIVITIES}/runners/${runnerId}`,{
         method: 'GET',
         headers: {
         'Authorization': authHeader,
@@ -16,8 +16,7 @@ export const getUserLogged = async () => {
         return response.json();
       })
       .then(data => {
-        console.log(data);
-        return data.userLogged;
+        return data;
       })
       .catch(error => {
         console.error('Error:', error);

@@ -1,0 +1,8 @@
+.list-activities-container {
+    display: flex;
+    align-items: left;
+    justify-content: flex-start;
+    margin-top: 2%;
+    margin-left: 2%;
+
+}

@@ -5,11 +5,12 @@ import {Link, Route, Routes} from 'react-router-dom'
 import Login from './modules/auth/components/Login';
 import Register from './modules/auth/components/Register';
 import Main from './modules/home/components/Main';
-import EditProfile from './modules/Profile/components/editProfile';
-import ViewProfile from './modules/Profile/components/viewProfile';
-import ListMaterials from './modules/Profile/components/ListMaterials';
-import CreateMaterial from './modules/Profile/components/CreateMaterial';
-import EditMaterial from './modules/Profile/components/EditMaterial';
+import EditProfile from './modules/profile/components/editProfile';
+import ViewProfile from './modules/profile/components/viewProfile';
+import ListMaterials from './modules/profile/components/ListMaterials';
+import CreateMaterial from './modules/profile/components/CreateMaterial';
+import EditMaterial from './modules/profile/components/EditMaterial';
+import ListActivities from './modules/activities/components/ListActivities';
 
 
 
@@ -35,6 +36,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/activities' element={<ListActivities />} />
         <Route path='/editmaterial' element={<EditMaterial />} />
         <Route path='/creatematerial' element={<CreateMaterial />} />
         <Route path='/listmaterials' element={<ListMaterials/>} />
