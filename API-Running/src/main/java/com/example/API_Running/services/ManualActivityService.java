@@ -2,6 +2,7 @@ package com.example.API_Running.services;
 
 
 import com.example.API_Running.dtos.CreateManualActivityDTO;
+import com.example.API_Running.dtos.ManualActivityDTO;
 import com.example.API_Running.models.ManualActivity;
 import com.example.API_Running.models.Material;
 import com.example.API_Running.models.Runner;
@@ -99,5 +100,19 @@ public class ManualActivityService {
             data.put("error", "Error uploading the route");
             return new ResponseEntity<>(data, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    public ResponseEntity<Object> getManualActivity(Long manualActId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<ManualActivity> query = this.manualActivityRepository.findById(manualActId);
+        if (!query.isPresent()) {
+            data.put("error", "Manual activity not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        ManualActivity manualActivity = query.get();
+        ManualActivityDTO info = new ManualActivityDTO(manualActivity);
+        data.put("data", info);
+        return new ResponseEntity<>(data,HttpStatus.OK);
     }
 }

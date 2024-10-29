@@ -34,6 +34,13 @@ public class ManualActivityController {
         return this.manualActivityService.uploadRoute(manualActivityId, route);
     }
 
+    @GetMapping(path = "/{manualActId}")
+    public ResponseEntity<Object> getManualActivity (@PathVariable Long manualActId) {
+        return this.manualActivityService.getManualActivity(manualActId);
+    }
+
+
+
 
 
 }
