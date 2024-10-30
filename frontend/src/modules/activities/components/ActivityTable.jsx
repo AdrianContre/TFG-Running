@@ -1,12 +1,15 @@
 import '../styles/activityTable.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash, faEye} from '@fortawesome/free-solid-svg-icons'
+import { deleteManualActivity } from '../services/activitiesService';
+import { useNavigate } from 'react-router';
 
-function ActivityTable ({activities}) {
+function ActivityTable ({activities, onDeleteActivity}) {
 
     const formatDate = (dateString) => {
         const options = { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' };
         const date = new Date(dateString);
+       
         
         // Obtener la fecha formateada
         let formattedDate = date.toLocaleDateString('es-ES', options).replace(" ", ''); // Formato por defecto
@@ -17,6 +20,15 @@ function ActivityTable ({activities}) {
         let finalDate = `${formattedDate.slice(0,3)}.,${formattedDate.slice(4)}`;
         return finalDate; // Limpiar espacios
     };
+
+    const navigate = useNavigate()
+
+    const handleDeleteAct = async (activity) => {
+        if (activity.type === "ManualActivity") {
+            const deleteAct = await deleteManualActivity(activity.id)
+            onDeleteActivity(activity.id)
+        }
+    }
 
     return (
         <div className='table-container'>
@@ -44,7 +56,7 @@ function ActivityTable ({activities}) {
                                 <div className="icons-activities-container">
                                     <FontAwesomeIcon icon={faEye} style={{color: "#005eff", cursor: 'pointer'}} />
                                     <FontAwesomeIcon icon={faPenToSquare} style={{cursor: 'pointer'}} />
-                                    <FontAwesomeIcon icon={faTrash} style={{color: "#f10909", cursor: 'pointer'}}  />
+                                    <FontAwesomeIcon icon={faTrash} style={{color: "#f10909", cursor: 'pointer'}} onClick={() => {handleDeleteAct(activity)}} />
                                 </div>
                             </td>
                         </tr>

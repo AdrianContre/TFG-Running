@@ -11,6 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 function NavigationBar () {
   const handleClick = (event) => {
     localStorage.removeItem('token')
+    localStorage.removeItem('userAuth')
   }
     return (
         <>

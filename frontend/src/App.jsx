@@ -11,6 +11,7 @@ import ListMaterials from './modules/profile/components/ListMaterials';
 import CreateMaterial from './modules/profile/components/CreateMaterial';
 import EditMaterial from './modules/profile/components/EditMaterial';
 import ListActivities from './modules/activities/components/ListActivities';
+import CreateActivity from './modules/activities/components/CreateActivity';
 
 
 
@@ -36,6 +37,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/createactivity' element={<CreateActivity />} />
         <Route path='/activities' element={<ListActivities />} />
         <Route path='/editmaterial' element={<EditMaterial />} />
         <Route path='/creatematerial' element={<CreateMaterial />} />

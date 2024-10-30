@@ -63,8 +63,8 @@ public class ManualActivityService {
         manualActivity.setDescription(description);
         manualActivity.setRunner(runner);
         manualActivity.setMaterials(materials);
-        this.manualActivityRepository.save(manualActivity);
-        data.put("data", "Activity created properly");
+        ManualActivity newManualActivity = this.manualActivityRepository.save(manualActivity);
+        data.put("data", newManualActivity.getId());
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 

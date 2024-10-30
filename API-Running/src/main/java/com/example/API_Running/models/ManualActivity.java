@@ -25,7 +25,7 @@ public class ManualActivity extends Activity {
     private Integer fcAvg;
 
     @Lob
-    @Column(name="route",nullable = true, columnDefinition="BLOB")
+    @Column(name="route",nullable = true, columnDefinition="MEDIUMBLOB")
     private byte[] route;
 
     public ManualActivity(){}
