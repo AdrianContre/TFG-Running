@@ -98,3 +98,27 @@ export const deleteManualActivity = async (manualActId) => {
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const getManualActivity = async (manualActId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_MANUAL_ACTIVITIES}/${manualActId}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}

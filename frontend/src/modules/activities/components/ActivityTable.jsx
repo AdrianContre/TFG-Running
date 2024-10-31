@@ -11,14 +11,12 @@ function ActivityTable ({activities, onDeleteActivity}) {
         const date = new Date(dateString);
        
         
-        // Obtener la fecha formateada
-        let formattedDate = date.toLocaleDateString('es-ES', options).replace(" ", ''); // Formato por defecto
-        //formattedDate = formattedDate.replace(',', '.'); // Cambiar la coma por un punto
-        //formattedDate = formattedDate.replace(/(lun\.|mar\.|mié\.|jue\.|vie\.|sáb\.|dom)\./, '$1.'); // Asegurar que el punto esté al final del día
+       
+        let formattedDate = date.toLocaleDateString('es-ES', options).replace(" ", ''); 
     
-        // Eliminar cualquier espacio adicional
+        
         let finalDate = `${formattedDate.slice(0,3)}.,${formattedDate.slice(4)}`;
-        return finalDate; // Limpiar espacios
+        return finalDate;
     };
 
     const navigate = useNavigate()
@@ -27,6 +25,12 @@ function ActivityTable ({activities, onDeleteActivity}) {
         if (activity.type === "ManualActivity") {
             const deleteAct = await deleteManualActivity(activity.id)
             onDeleteActivity(activity.id)
+        }
+    }
+
+    const handleViewActivity = (activity) => {
+        if (activity.type === "ManualActivity") {
+            navigate('/viewmanualactivity',{ state: { manualActivityId: activity.id } })
         }
     }
 
@@ -54,7 +58,7 @@ function ActivityTable ({activities, onDeleteActivity}) {
                                 <input type="hidden" value={activity.id} />
                                 <input type="hidden" value={activity.type} />
                                 <div className="icons-activities-container">
-                                    <FontAwesomeIcon icon={faEye} style={{color: "#005eff", cursor: 'pointer'}} />
+                                    <FontAwesomeIcon icon={faEye} style={{color: "#005eff", cursor: 'pointer'}} onClick={() => {handleViewActivity(activity)}}/>
                                     <FontAwesomeIcon icon={faPenToSquare} style={{cursor: 'pointer'}} />
                                     <FontAwesomeIcon icon={faTrash} style={{color: "#f10909", cursor: 'pointer'}} onClick={() => {handleDeleteAct(activity)}} />
                                 </div>

@@ -18,6 +18,7 @@ public class ManualActivityDTO {
     private String description;
     private LocalDateTime date;
     private Float distance;
+    private Float pace;
     private LocalTime duration;
     private Integer fcAvg;
     private List<String> materials;
@@ -31,6 +32,7 @@ public class ManualActivityDTO {
         this.date = manualActivity.getDate();
         this.distance = manualActivity.getDistance();
         this.duration = manualActivity.getDuration();
+        this.pace = manualActivity.getPace();
         this.fcAvg = manualActivity.getFcAvg();
         this.materials = new ArrayList<>();
         if (manualActivity.getRoute() != null) {
@@ -117,5 +119,13 @@ public class ManualActivityDTO {
 
     public void setMaterials(List<String> materials) {
         this.materials = materials;
+    }
+
+    public Float getPace() {
+        return pace;
+    }
+
+    public void setPace(Float pace) {
+        this.pace = pace;
     }
 }
