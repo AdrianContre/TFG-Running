@@ -9,6 +9,7 @@ public class MaterialDTO {
     private String description;
     //private Integer wear;
     private Float wear;
+    private byte[] photo;
 
     public MaterialDTO(Material material) {
         this.id = material.getId();
@@ -16,6 +17,7 @@ public class MaterialDTO {
         this.model = material.getModel();
         this.description = material.getDescription();
         this.wear = material.getWear();
+        this.photo = material.getPhoto();
     }
 
     public Long getId(){
@@ -64,5 +66,13 @@ public class MaterialDTO {
 
     public void setWear(Float wear) {
         this.wear = wear;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }

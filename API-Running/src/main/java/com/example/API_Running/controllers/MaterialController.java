@@ -6,6 +6,7 @@ import com.example.API_Running.services.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin
 @RestController
@@ -42,5 +43,10 @@ public class MaterialController {
     @PutMapping(path="/{materialId}")
     public ResponseEntity<Object> editMaterial(@PathVariable Long materialId, @RequestBody ModifyMaterialDTO modifyMaterialDTO) {
         return this.materialService.editMaterial(materialId, modifyMaterialDTO);
+    }
+
+    @PutMapping(path="/{materialId}/photo")
+    public ResponseEntity<Object> uploadPhoto(@PathVariable Long materialId, @RequestParam MultipartFile photo) {
+        return this.materialService.uploadPhoto(materialId, photo);
     }
 }

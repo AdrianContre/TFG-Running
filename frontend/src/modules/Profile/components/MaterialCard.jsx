@@ -5,6 +5,7 @@ import '../styles/materialCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 
 const MaterialCard = ({ material, onDelete }) => {
     const navigate = useNavigate();
@@ -15,6 +16,17 @@ const MaterialCard = ({ material, onDelete }) => {
         event.preventDefault()
         navigate('/editmaterial', { state: { material: material } })
     }
+
+    const [picture, setPicture] = useState(null)
+
+    useEffect(() => {
+        const getPicture = () => {
+            if (material.photo !== null) {
+                setPicture(`data:image/jpeg;base64,${material.photo}`)
+            }
+        }
+        getPicture()
+    },[])
     return (
         <Card className="material-card">
             <Card.Body>
@@ -22,6 +34,9 @@ const MaterialCard = ({ material, onDelete }) => {
                 <Card.Text>Modelo: {material.model}</Card.Text>
                 <Card.Text>Descripción: {material.description}</Card.Text>
                 <Card.Text>Kilometraje: {material.wear} km</Card.Text>
+                {picture !== null ? (
+                    <Card.Img style={{height: '300px', marginBottom: '20px'}} src={picture} />
+                ) : <></>}
                 {/* <Button variant="success">Editar</Button>
                 <Button variant="danger">Eliminar</Button> */}
                 <div className="icons-container">

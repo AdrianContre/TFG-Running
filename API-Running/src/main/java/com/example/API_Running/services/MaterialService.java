@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,9 +51,9 @@ public class MaterialService {
         Runner runner = query.get();
         Material material = new Material(brand,model,description,wear,runner);
         runner.addMaterial(material);
-        this.materialRepository.save(material);
+        Material newMat = this.materialRepository.save(material);
         this.runnerRepository.save(runner);
-        data.put("data", "Material added successfully");
+        data.put("data", newMat.getId());
         return new ResponseEntity<>(
                 data,
                 HttpStatus.OK
@@ -138,5 +140,27 @@ public class MaterialService {
                 data,
                 HttpStatus.OK
         );
+    }
+
+    public ResponseEntity<Object> uploadPhoto(Long materialId, MultipartFile photo) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<Material> query = this.materialRepository.findById(materialId);
+        if (!query.isPresent()) {
+            data.put("error", "Material not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        try {
+            byte[] photoBytes = photo.getBytes();
+            Material mat = query.get();
+            mat.setPhoto(photoBytes);
+            this.materialRepository.save(mat);
+            data.put("data", "Photo uploaded properly");
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }
+        catch(IOException e) {
+            data.put("error", "Error uploading the photo");
+            return new ResponseEntity<>(data, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

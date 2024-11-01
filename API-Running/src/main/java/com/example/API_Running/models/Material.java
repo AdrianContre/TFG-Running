@@ -26,6 +26,10 @@ public class Material {
     @JoinColumn(name = "runner_id")
     private Runner runner;
 
+    @Lob
+    @Column(name="photo",nullable = true, columnDefinition = "MEDIUMBLOB")
+    private byte[] photo;
+
     public Material(){}
 
     public Material(String brand, String model, String description, /*Integer wear*/Float wear, Runner runner) {
@@ -94,5 +98,13 @@ public class Material {
 
     public void addMileage (Float mileage) {
         this.wear += mileage;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }
