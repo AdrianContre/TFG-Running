@@ -34,7 +34,8 @@ public class MaterialService {
         String brand = createMaterialDTO.getBrand();
         String model = createMaterialDTO.getModel();
         String description = createMaterialDTO.getDescription();
-        Integer wear = createMaterialDTO.getWear();
+        //Integer wear = createMaterialDTO.getWear();
+        Float wear = createMaterialDTO.getWear();
         Long runnerId = createMaterialDTO.getRunnerId();
 
         Optional<Runner> query = this.runnerRepository.findById(runnerId);

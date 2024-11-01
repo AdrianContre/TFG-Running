@@ -11,6 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 function NavigationBar () {
   const handleClick = (event) => {
     localStorage.removeItem('token')
+    localStorage.removeItem('userAuth')
   }
     return (
         <>
@@ -21,7 +22,7 @@ function NavigationBar () {
                 <Nav.Link href="#plans">Planes de entrenamiento generales</Nav.Link>
                 <Nav.Link href="#MyPlans">Mis planes</Nav.Link>
                 <Nav.Link href="#groups">Grupos</Nav.Link>
-                <Nav.Link href="#activities">Actividades</Nav.Link>
+                <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
               </Nav>
               {/* <Nav className="ms-auto">
                     <Nav.Link as={NavLink} to="/profile">

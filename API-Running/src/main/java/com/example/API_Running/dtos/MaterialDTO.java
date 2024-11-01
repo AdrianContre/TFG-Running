@@ -7,7 +7,8 @@ public class MaterialDTO {
     private String brand;
     private String model;
     private String description;
-    private Integer wear;
+    //private Integer wear;
+    private Float wear;
 
     public MaterialDTO(Material material) {
         this.id = material.getId();
@@ -48,12 +49,20 @@ public class MaterialDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    /*
     public Integer getWear() {
         return wear;
     }
 
     public void setWear(Integer wear) {
+        this.wear = wear;
+    }
+     */
+    public Float getWear() {
+        return wear;
+    }
+
+    public void setWear(Float wear) {
         this.wear = wear;
     }
 }

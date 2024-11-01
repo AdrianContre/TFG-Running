@@ -2,7 +2,6 @@ const API_ROUTE = "http://localhost:8081/api/v1/users/whoAmI"
 
 export const getUserLogged = async () => {
     const authHeader = `Bearer ${localStorage.getItem('token')}`
-    console.log(authHeader)
     return fetch(API_ROUTE,{
         method: 'GET',
         headers: {

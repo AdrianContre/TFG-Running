@@ -1,0 +1,28 @@
+.table th {
+    border-bottom: none; /* Eliminar línea entre títulos */
+}
+
+.table td {
+    border-bottom: 1px solid #dee2e6; /* Línea entre filas */
+    font-size: 20px;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none; /* Eliminar la línea en la última fila */
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa; /* Color de fondo al pasar el ratón por encima */
+}
+
+.table-container {
+    margin-left: 2%;
+    margin-right: 10%;
+    margin-top: 2%;
+}
+
+.icons-activities-container {
+    display: flex;
+    gap: 20px;
+    
+}
