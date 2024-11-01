@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -54,5 +56,25 @@ public class UserService {
                 data,
                 HttpStatus.OK
         );
+    }
+
+    public ResponseEntity<Object> uploadProfilePicture(Long userId, MultipartFile profilePicture) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<User> query = this.userRepository.findById(userId);
+        if (!query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        User u = query.get();
+        try {
+            byte[] profileBytes = profilePicture.getBytes();
+            u.setProfilePicture(profileBytes);
+            this.userRepository.save(u);
+            data.put("data", "Profile picture set properly");
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        } catch (IOException e) {
+            data.put("error", "Error uploading profile picture");
+            return new ResponseEntity<>(data, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

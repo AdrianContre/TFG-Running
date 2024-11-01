@@ -2,7 +2,9 @@
     display: flex;
     align-items: flex-start;
     margin-left: 5%;
-    margin-top: 5%
+    margin-top: 5%;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .container-column {
@@ -10,6 +12,13 @@
     justify-content: space-between; /* Para separar las dos columnas */
     margin: 2% auto;
     max-width: 800px; /* Ajustar el ancho máximo del contenedor para no exceder la pantalla */
+}
+
+.edit-profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .col {

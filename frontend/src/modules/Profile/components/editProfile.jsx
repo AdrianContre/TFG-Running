@@ -3,11 +3,13 @@ import Button from 'react-bootstrap/Button';
 import NavigationBar from "../../home/components/NavigationBar";
 import Profile from '../../../assets/images/circleUser.png'
 import '../styles/editProfile.css'
-import { useEffect, useState } from 'react';
-import { updateRunnerProfile, updateTrainerProfile } from '../services/profileService';
+import { useEffect, useState, useRef } from 'react';
+import { updateRunnerProfile, updateTrainerProfile, uploadPicture } from '../services/profileService';
 import PopUp from '../../auth/components/PopUp'
 import { getUserLogged } from '../../home/services/mainService';
 import { Navigate, useNavigate } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faDownload} from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -23,7 +25,11 @@ function EditProfile () {
     const [fcMax, setFcMax] = useState(0)
     const [experience, setExperience] = useState(0)
     const [show, setShow] = useState(false)
+    const [picture, setPicture] = useState(null)
+    const [modified, setModified] = useState(false)
+    const [file, setFile] = useState(null)
     const navigate = useNavigate()
+    const fileInputRef = useRef(null);
 
     const handleClick = async (event) => {
         event.preventDefault()
@@ -37,15 +43,17 @@ function EditProfile () {
         else {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
         }
-        const user = await  getUserLogged();
+        if (modified) {
+            console.log("entro aquí")
+            let formData = new FormData()
+            formData.append('profilePicture', file)
+            const upload = await uploadPicture(profileData.id,formData)
+        }
+        const user = await getUserLogged();
         setProfileData(user)
         //profileData = user;
         localStorage.setItem('userAuth', JSON.stringify(user));
         navigate('/profile')
-
-        
-        
-
     }
 
     useEffect (() => {
@@ -61,6 +69,9 @@ function EditProfile () {
             setFcMax(user.fcMax)
             if (user.userType == "Trainer") {
                 setExperience(user.experience)
+            }
+            if (user.profilePicture !== null) {
+                setPicture(`data:image/jpeg;base64,${user.profilePicture}`)
             }
         }
         loadUser()  
@@ -102,12 +113,47 @@ function EditProfile () {
         event.preventDefault()
         setShow(false)
     }
+
+    
+
+    // Maneja el clic en el botón para abrir el selector de archivos
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
+    // Maneja la selección de un archivo
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            onFileSelect(file); // Llama a la función para manejar el archivo seleccionado
+        }
+    };
+
+    const onFileSelect = (file) => {
+        const imageUrl = URL.createObjectURL(file);
+        setPicture(imageUrl)
+        setModified(true)
+        setFile(file)
+    }
      
       return (
         <>       
             <NavigationBar />
             <div className='container-profile-image'>
-                <img src={Profile} alt="profile" style={{ width: '150px', height: '150px' }}/>
+                {picture !== null ? (
+                   <img src={picture} alt="profile" className='edit-profile-picture'/> 
+                ) : (
+                    <img src={Profile} alt="profile" className='edit-profile-picture'/>
+                )}
+               <Button variant="light" style={{marginLeft: '20px'}} onClick={handleButtonClick}><FontAwesomeIcon icon={faDownload} /> Importar</Button>
+               <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+                accept="image/*" // Solo permite imágenes
+                />
+                
             </div>
             <div className="container-column">
                 <div className="row">

@@ -11,6 +11,7 @@ public class RunnerDTO {
     private Integer weight;
     private Integer height;
     private Integer fcMax;
+    private byte[] profilePicture;
     private String userType;
 
     public RunnerDTO(Runner r) {
@@ -22,6 +23,7 @@ public class RunnerDTO {
         this.weight = r.getWeight();
         this.height = r.getHeight();
         this.fcMax = r.getFcMax();
+        this.profilePicture = r.getProfilePicture();
         this.userType = "Runner";
 
     }
@@ -95,5 +97,13 @@ public class RunnerDTO {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

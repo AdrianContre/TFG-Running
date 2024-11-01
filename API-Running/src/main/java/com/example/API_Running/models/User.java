@@ -27,10 +27,9 @@ public abstract class User {
     @Column(name="password", unique=true)
     private String password;
 
-    /*
-    @Column(nullable=false, unique = true)
-    private String token;
-     */
+    @Lob
+    @Column(name="profilePicture", nullable = true, columnDefinition = "MEDIUMBLOB")
+    private byte[] profilePicture;
 
     public User() {}
 
@@ -91,13 +90,11 @@ public abstract class User {
         this.password = password;
     }
 
-    /*
-    public String getToken () {
-        return this.token;
+    public byte[] getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setToken (String token) {
-        this.token = token;
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
-     */
 }
