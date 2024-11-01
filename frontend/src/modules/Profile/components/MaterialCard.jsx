@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import ProgressBar from './ProgressBar';
 
 const MaterialCard = ({ material, onDelete }) => {
     const navigate = useNavigate();
@@ -34,6 +35,7 @@ const MaterialCard = ({ material, onDelete }) => {
                 <Card.Text>Modelo: {material.model}</Card.Text>
                 <Card.Text>Descripción: {material.description}</Card.Text>
                 <Card.Text>Kilometraje: {material.wear} km</Card.Text>
+                <ProgressBar current={material.wear} limit={700} />
                 {picture !== null ? (
                     <Card.Img style={{height: '300px', marginBottom: '20px'}} src={picture} />
                 ) : <></>}
