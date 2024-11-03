@@ -34,6 +34,12 @@ function ActivityTable ({activities, onDeleteActivity}) {
         }
     }
 
+    const handleEditActivity = (activity) => {
+        if (activity.type === "ManualActivity") {
+            navigate('/editmanualactivity', { state: {manualActivityId: activity.id}})
+        }
+    }
+
     return (
         <div className='table-container'>
             <table className="table">
@@ -54,12 +60,11 @@ function ActivityTable ({activities, onDeleteActivity}) {
                             <td>{activity.duration}</td>
                             <td>{formatDate(activity.date)}</td>
                             <td>
-                                {/* ID y tipo de actividad en campos ocultos */}
                                 <input type="hidden" value={activity.id} />
                                 <input type="hidden" value={activity.type} />
                                 <div className="icons-activities-container">
                                     <FontAwesomeIcon icon={faEye} style={{color: "#005eff", cursor: 'pointer'}} onClick={() => {handleViewActivity(activity)}}/>
-                                    <FontAwesomeIcon icon={faPenToSquare} style={{cursor: 'pointer'}} />
+                                    <FontAwesomeIcon icon={faPenToSquare} style={{cursor: 'pointer'}} onClick={() => {handleEditActivity(activity)}}/>
                                     <FontAwesomeIcon icon={faTrash} style={{color: "#f10909", cursor: 'pointer'}} onClick={() => {handleDeleteAct(activity)}} />
                                 </div>
                             </td>

@@ -14,7 +14,7 @@ export const getUserMaterials = async (id) => {
         return response.json();
       })
       .then(data => {
-        console.log(data);
+        //console.log(data);
         return data.data
       })
       .catch(error => {

@@ -13,6 +13,7 @@ import EditMaterial from './modules/profile/components/EditMaterial';
 import ListActivities from './modules/activities/components/ListActivities';
 import CreateActivity from './modules/activities/components/CreateActivity';
 import ViewManualActivity from './modules/activities/components/ViewManualActivity';
+import EditManualActivity from './modules/activities/components/EditManualActivity';
 
 
 
@@ -38,6 +39,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/editmanualactivity' element={<EditManualActivity />} />
         <Route path='/viewmanualactivity' element={<ViewManualActivity />} />
         <Route path='/createactivity' element={<CreateActivity />} />
         <Route path='/activities' element={<ListActivities />} />
