@@ -5,7 +5,7 @@ import PopUp from "../../auth/components/PopUp";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 import Button from 'react-bootstrap/Button';
-import { editMaterial } from "../services/materialService";
+import { editMaterial, uploadPhoto } from "../services/materialService";
 import { data } from "@remix-run/router";
 
 function EditMaterial () {
@@ -16,6 +16,7 @@ function EditMaterial () {
     const [description, setDescription] = useState("")
     const [wear, setWear] = useState(0)
     const [show, setShow] = useState(false)
+    const [picture, setPicture] = useState(null)
     const navigate = useNavigate()
 
     const updateValue = (setter) => (event) => { 
@@ -37,13 +38,19 @@ function EditMaterial () {
                 console.log("Error")
             }
             else {
+                if (picture !== null) {
+                    const formData = new FormData()
+                    formData.append('photo', picture)
+                    const upload = await uploadPhoto(material.id, formData)
+
+                }
+                
                 navigate('/listmaterials')
             }
         }
     }
 
     useEffect(() => {
-        console.log(material)
         setBrand(material.brand)
         setModel(material.model)
         setDescription(material.description)
@@ -65,6 +72,8 @@ function EditMaterial () {
                         <textarea name='description' value={description} onChange={updateValue(setDescription)} className='custom-input-register'/>
                         <label className='custom-label-createmat' htmlFor="wear">KILOMETRAJE {'(KM)'}</label>
                         <input name='wear' value={wear} type={"number"} step="0.01" onChange={updateValue(setWear)} className='custom-input-createmat'></input>
+                        <label className='custom-label-createmat' htmlFor="picture">Imagen {'(opcional)'}</label>
+                        <input name='picture'  type="file"  onChange={(e) => setPicture(e.target.files[0])} className='custom-input-createmat' accept=".png, .jpg, .jpeg"></input>
                         <Button variant='primary' size='lg' className='mt-5 custom-button-createmat' onClick={handleEditMaterial}>EDITAR</Button>
                     </div>
                 </div>

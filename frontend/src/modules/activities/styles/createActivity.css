@@ -1,29 +1,29 @@
 .container-createact {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrar los elementos */
+    align-items: center; 
 }
 
 .form-columns {
     display: flex;
-    justify-content: space-between; /* Espacio entre las columnas */
-    width: 100%; /* Ajustar el ancho de las columnas */
-    max-width: 900px; /* Ajustar el ancho máximo de la sección de formulario */
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px; 
 }
 
 .form-column {
-    flex: 1; /* Permitir que las columnas ocupen el mismo espacio */
-    margin: 0 50px; /* Espaciado entre las columnas */
+    flex: 1;
+    margin: 0 50px;
 }
 
 .custom-input-createact {
     border-radius: 30px;
     border: 3px solid black;
     font-size: 16px; 
-    width: 100%; /* Usar 100% para ocupar todo el ancho disponible */
-    height: 50px; /* Ajustar la altura para todos los inputs */
-    padding: 10px; /* Usar padding en lugar de altura fija */
-    margin: 10px 0; /* Margen vertical para separar los inputs */
+    width: 100%; 
+    height: 50px; 
+    padding: 10px; 
+    margin: 10px 0; 
     text-align: center;
 }
 
@@ -31,14 +31,14 @@
     border-radius: 30px;
     border: 3px solid black;
     font-size: 16px; 
-    width: 100%; /* Usar 100% para ocupar todo el ancho disponible */
-    height: 50px; /* Ajustar la altura para todos los inputs */
-    padding: 10px; /* Usar padding en lugar de altura fija */
+    width: 100%; 
+    height: 50px; 
+    padding: 10px;
     margin: 10px 0;
 }
 
 .custom-textarea-createact {
-    height: 100px; /* Ajustar altura específica para el textarea */
+    height: 100px; 
 }
 
 .custom-button-createact {
@@ -67,6 +67,6 @@
 }
 
 .Select--is-focused {
-    border-color: #007bff; /* Cambia el color cuando está enfocado */
+    border-color: #007bff;
     box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.5);
 }

@@ -25,7 +25,7 @@ export const listActivities = async (runnerId) => {
       });
 }
 
-export const createManualActivity = async (name, description, distance, duration, pace, fcAvg, runnerId, materialsId) => {
+export const createManualActivity = async (name, description, distance, duration, pace, fcAvg, runnerId, materialsId, date) => {
   const authHeader = `Bearer ${localStorage.getItem('token')}`
     return fetch(`${END_POINT_MANUAL_ACTIVITIES}`,{
         method: 'POST',
@@ -33,7 +33,7 @@ export const createManualActivity = async (name, description, distance, duration
         'Authorization': authHeader,
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name: name, description: description, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg, runnerId: runnerId, materialsId: materialsId}),
+        body: JSON.stringify({name: name, description: description, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg, runnerId: runnerId, materialsId: materialsId,date: date}),
     })
     .then(response => {
         // if (!response.ok) {
@@ -107,6 +107,31 @@ export const getManualActivity = async (manualActId) => {
       'Authorization': authHeader,
       'Content-Type': 'application/json',
       }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
+export const editManualActivity = async (manualActId, name, description, distance, duration, pace, fcAvg, materialsId, date) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_MANUAL_ACTIVITIES}/${manualActId}`,{
+      method: 'PUT',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({name: name, description: description, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg, materialsId: materialsId, date: date})
   })
   .then(response => {
       if (!response.ok) {

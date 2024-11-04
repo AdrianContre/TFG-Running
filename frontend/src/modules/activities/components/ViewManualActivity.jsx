@@ -6,6 +6,8 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import GpxViewer from "./GpxViewer";
 import "../styles/viewManualActivity.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faDownload} from '@fortawesome/free-solid-svg-icons'
 
 function ViewManualActivity() {
     const location = useLocation();
@@ -16,12 +18,7 @@ function ViewManualActivity() {
     const formatDate = (dateString) => {
         const options = { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' };
         const date = new Date(dateString);
-       
-        
-       
         let formattedDate = date.toLocaleDateString('es-ES', options).replace(" ", ''); 
-    
-        
         let finalDate = `${formattedDate.slice(0,3)}.,${formattedDate.slice(4)}`;
         return finalDate;
     };
@@ -94,6 +91,15 @@ function ViewManualActivity() {
                 
                 {gpxUrl && (
                     <MapContainer className="view-activity-map" center={[0, 0]} zoom={13}>
+                        <a
+                        href={gpxUrl}
+                        download={`${activity.name}.gpx`}
+                        className="download-button"
+                        >
+                            <FontAwesomeIcon icon={faDownload} style={{color: "#000000", marginRight: '5px'}} />
+                            GPX
+                        </a>
+
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                         <GpxViewer gpxUrl={gpxUrl} />
                     </MapContainer>

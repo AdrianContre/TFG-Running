@@ -20,7 +20,6 @@ function ListActivities () {
                 setShow(true)
             }
             else { 
-                console.log(queryActivities)
                 setActivities(queryActivities.data)
             }
         }

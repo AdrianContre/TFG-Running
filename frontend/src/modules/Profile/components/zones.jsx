@@ -1,7 +1,6 @@
 import '../styles/zones.css'
 
 function Zones ({zones}) {
-    console.log("zonas: " + zones)
     return (
         <div className="table-container-heart-zones">
             <table className="heart-rate-zones-table">

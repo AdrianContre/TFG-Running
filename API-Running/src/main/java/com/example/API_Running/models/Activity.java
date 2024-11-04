@@ -2,7 +2,7 @@ package com.example.API_Running.models;
 
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -23,7 +23,7 @@ public abstract class Activity {
     @Column(name="description",nullable = false)
     private String description;
 
-    @CreationTimestamp
+
     @Column(name = "date")
     private LocalDateTime date;
 

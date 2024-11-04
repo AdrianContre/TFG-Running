@@ -22,7 +22,6 @@ public class ManualActivityDTO {
     private LocalTime duration;
     private Integer fcAvg;
     private List<String> materials;
-    //private MultipartFile route;
     private byte[] route;
 
     public ManualActivityDTO (ManualActivity manualActivity) {
@@ -36,7 +35,6 @@ public class ManualActivityDTO {
         this.fcAvg = manualActivity.getFcAvg();
         this.materials = new ArrayList<>();
         if (manualActivity.getRoute() != null) {
-            //this.route = new CustomMultipartFile("route.gpx", manualActivity.getRoute());
             this.route = manualActivity.getRoute();
         }
         else {

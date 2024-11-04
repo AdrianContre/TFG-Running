@@ -19,12 +19,15 @@ public class Material {
     private String description;
 
     @Column(name="wear",nullable = false)
-    //private Integer wear;
     private Float wear;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "runner_id")
     private Runner runner;
+
+    @Lob
+    @Column(name="photo",nullable = true, columnDefinition = "MEDIUMBLOB")
+    private byte[] photo;
 
     public Material(){}
 
@@ -68,14 +71,7 @@ public class Material {
     public void setDescription(String description) {
         this.description = description;
     }
-    /*
-    public Integer getWear() {
-        return wear;
-    }
 
-    public void setWear(Integer wear) {
-        this.wear = wear;
-    }*/
     public Float getWear() {
         return this.wear;
     }
@@ -94,5 +90,13 @@ public class Material {
 
     public void addMileage (Float mileage) {
         this.wear += mileage;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }

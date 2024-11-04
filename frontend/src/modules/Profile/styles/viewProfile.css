@@ -1,18 +1,18 @@
 .profile-layout {
     display: flex;
-    justify-content: space-between; /* Distribuye las columnas a lo largo del ancho */
+    justify-content: space-between;
     padding: 20px;
 }
 
 .profile-left {
-    width: 50%; /* La columna izquierda ocupará el 50% del ancho */
+    width: 50%; 
 }
 
 .profile-right {
-    width: 50%; /* La columna derecha ocupará el otro 50% */
+    width: 50%; 
     display: flex;
-    align-items: center; /* Alinea verticalmente si es necesario */
-    justify-content: center; /* Centra horizontalmente el contenido de la columna derecha */
+    align-items: center; 
+    justify-content: center; 
 }
 
 .profilecontainer {
@@ -20,6 +20,13 @@
     align-items: center;
     margin-left: 2%;
     margin-top: 5%
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover; 
 }
 
 .profile-details {
@@ -30,15 +37,15 @@
 }
 
 .profile-name {
-    font-size: 24px; /* Ajusta el tamaño del texto */
+    font-size: 24px; 
     font-weight: bold;
-    margin: 0; /* Elimina márgenes para un mejor centrado */
+    margin: 0; 
 }
 
 .profile-username {
-    font-size: 16px; /* Tamaño más pequeño para el nombre de usuario */
-    color: #555; /* Puedes ajustar el color a algo más sutil si deseas */
-    margin: 0; /* Elimina márgenes */
+    font-size: 16px;
+    color: #555; 
+    margin: 0;
 }
 
 .custom-button-view-profile {

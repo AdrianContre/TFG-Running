@@ -2,7 +2,7 @@ import React from "react";
 import NavigationBar from "../../home/components/NavigationBar";
 import Button from 'react-bootstrap/Button';
 import { useState } from "react";
-import { createMaterial } from "../services/materialService";
+import { createMaterial, uploadPhoto } from "../services/materialService";
 import { useNavigate } from "react-router";
 import '../styles/createMaterial.css'
 import PopUp from "../../auth/components/PopUp";
@@ -13,6 +13,7 @@ function CreateMaterial () {
     const [description, setDescription] = useState("")
     const [wear, setWear] = useState(0)
     const [show, setShow] = useState(false)
+    const [picture,setPicture] = useState(null)
     const navigate = useNavigate()
 
     const handleAddMaterial = async () => {
@@ -25,6 +26,12 @@ function CreateMaterial () {
                 console.log("Error")
             }
             else {
+                if (picture !== null) {
+                    const materialId = data
+                    const formData = new FormData()
+                    formData.append('photo', picture)
+                    const upload = await uploadPhoto(materialId, formData)
+                }
                 navigate('/listmaterials')
             }
         }
@@ -54,6 +61,8 @@ function CreateMaterial () {
                         <textarea name='description' value={description} onChange={updateValue(setDescription)} className='custom-input-register'/>
                         <label className='custom-label-createmat' htmlFor="wear">KILOMETRAJE {'(KM)'}</label>
                         <input name='wear' value={wear} type={"number"} step="0.01" onChange={updateValue(setWear)} className='custom-input-createmat'></input>
+                        <label className='custom-label-createmat' htmlFor="picture">Imagen {'(opcional)'}</label>
+                        <input name='picture'  type="file"  onChange={(e) => setPicture(e.target.files[0])} className='custom-input-createmat' accept=".png, .jpg, .jpeg"></input>
                         <Button variant='primary' size='lg' className='mt-5 custom-button-createmat' onClick={handleAddMaterial}>AÑADIR</Button>
                     </div>
                 </div>

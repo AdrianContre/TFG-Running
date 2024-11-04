@@ -5,7 +5,6 @@ import com.example.API_Running.dtos.UpdateRunnerDTO;
 import com.example.API_Running.dtos.UserZonesDTO;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.repository.RunnerRepository;
-import com.example.API_Running.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

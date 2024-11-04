@@ -4,25 +4,23 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public class CreateManualActivityDTO {
+public class ModifyManualActivityDTO {
     private String name;
     private String description;
     private Float distance;
     private LocalTime duration;
     private Float pace;
     private Integer fcAvg;
-    private Long runnerId;
     private List<Long> materialsId;
     private LocalDateTime date;
 
-    public CreateManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, Long runnerId, List<Long> materialsId, LocalDateTime date) {
+    public ModifyManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, List<Long> materialsId, LocalDateTime date) {
         this.name = name;
         this.description = description;
         this.distance = distance;
         this.duration = duration;
         this.pace = pace;
         this.fcAvg = fcAvg;
-        this.runnerId = runnerId;
         this.materialsId = materialsId;
         this.date = date;
     }
@@ -73,14 +71,6 @@ public class CreateManualActivityDTO {
 
     public void setFcAvg(Integer fcAvg) {
         this.fcAvg = fcAvg;
-    }
-
-    public Long getRunnerId() {
-        return runnerId;
-    }
-
-    public void setRunnerId(Long runnerId) {
-        this.runnerId = runnerId;
     }
 
     public List<Long> getMaterialsId() {

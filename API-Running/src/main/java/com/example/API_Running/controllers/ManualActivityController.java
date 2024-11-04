@@ -1,6 +1,7 @@
 package com.example.API_Running.controllers;
 
 import com.example.API_Running.dtos.CreateManualActivityDTO;
+import com.example.API_Running.dtos.ModifyManualActivityDTO;
 import com.example.API_Running.services.ManualActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,10 @@ public class ManualActivityController {
     @GetMapping(path = "/{manualActId}")
     public ResponseEntity<Object> getManualActivity (@PathVariable Long manualActId) {
         return this.manualActivityService.getManualActivity(manualActId);
+    }
+    @PutMapping(path = "/{manualActivityId}")
+    public ResponseEntity<Object> updateManualActivity (@PathVariable Long manualActivityId, @RequestBody ModifyManualActivityDTO modifyManualActivity) {
+        return this.manualActivityService.updateManualActivity(manualActivityId, modifyManualActivity);
     }
 
 

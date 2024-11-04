@@ -12,11 +12,11 @@ function ViewProfile () {
     const userAuth = JSON.parse(localStorage.getItem("userAuth"))
 
     const [heartZones, setHeartZones] = useState({})
+    const [picture, setPicture] = useState(null)
 
     const navigate = useNavigate()
 
     useEffect (() => {
-        console.log("entro aqui")
         const getHeartRateZones = async () => {
             if (userAuth.userType == "Runner") {
                 const zones = await getRunnerZones(userAuth.id);
@@ -24,8 +24,11 @@ function ViewProfile () {
             }
             else {
                 const zones = await getTrainerZones(userAuth.id);
-                console.log(zones.data)
                 setHeartZones(zones.data)
+            }
+
+            if (userAuth.profilePicture !== null) {
+                setPicture(`data:image/jpeg;base64,${userAuth.profilePicture}`)
             }
         }
         getHeartRateZones()
@@ -48,7 +51,10 @@ function ViewProfile () {
             <div className="profile-layout">
                 <div className="profile-left">
                     <div className='profilecontainer'>
-                        <img src={Profile} alt="profile" style={{ width: '150px', height: '150px' }}/>
+                        {picture !== null ? (
+                        <img src={picture} alt="profile" className="profile-picture"/>)
+                    : (<img src={Profile} alt="profile" className="profile-picture"/>)}
+                        
                         <div className="profile-details">
                             <h2 className="profile-name">{userAuth.name} {userAuth.surname}</h2>
                             <p className="profile-username">@{userAuth.username}</p>

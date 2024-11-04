@@ -13,6 +13,8 @@ import EditMaterial from './modules/profile/components/EditMaterial';
 import ListActivities from './modules/activities/components/ListActivities';
 import CreateActivity from './modules/activities/components/CreateActivity';
 import ViewManualActivity from './modules/activities/components/ViewManualActivity';
+import EditManualActivity from './modules/activities/components/EditManualActivity';
+import AuthRoute from './AuthRoute';
 
 
 
@@ -38,17 +40,18 @@ function Home() {
 function App() {
   return (
       <Routes>
-        <Route path='/viewmanualactivity' element={<ViewManualActivity />} />
-        <Route path='/createactivity' element={<CreateActivity />} />
-        <Route path='/activities' element={<ListActivities />} />
-        <Route path='/editmaterial' element={<EditMaterial />} />
-        <Route path='/creatematerial' element={<CreateMaterial />} />
-        <Route path='/listmaterials' element={<ListMaterials/>} />
-        <Route path='/profile' element={<ViewProfile/>} />
-        <Route path='/editprofile' element={<EditProfile/>} />
+        <Route path='/editmanualactivity' element={<AuthRoute element={EditManualActivity}/>} />
+        <Route path='/viewmanualactivity' element={<AuthRoute element={ViewManualActivity}/>} />
+        <Route path='/createactivity' element={<AuthRoute element={CreateActivity}/>} />
+        <Route path='/activities' element={<AuthRoute element={ListActivities}/>} />
+        <Route path='/editmaterial' element={<AuthRoute element={EditMaterial}/>} />
+        <Route path='/creatematerial' element={<AuthRoute element={CreateMaterial}/>} />
+        <Route path='/listmaterials' element={<AuthRoute element={ListMaterials}/>} />
+        <Route path='/profile' element={<AuthRoute element={ViewProfile}/>} />
+        <Route path='/editprofile' element={<AuthRoute element={EditProfile}/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
-        <Route path='/main' element={<Main/>} />
+        <Route path='/main' element={<AuthRoute element={Main}/>} />
         <Route path='/' element={<Home/>} />
       </Routes>
   )

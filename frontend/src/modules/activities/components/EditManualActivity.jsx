@@ -1,47 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { getUserMaterials } from "../../profile/services/materialService";
-import { useEffect, useState } from "react";
-import PopUp from "../../auth/components/PopUp";
-import Button from 'react-bootstrap/Button';
-import '../styles/createActivity.css';
+import { addRoute, editManualActivity, getManualActivity } from "../services/activitiesService";
 import Select from "react-select";
-import { addRoute, createManualActivity } from "../services/activitiesService";
-import { useNavigate } from "react-router";
+import { getUserMaterials } from "../../profile/services/materialService";
+import Button from 'react-bootstrap/Button';
+import PopUp from "../../auth/components/PopUp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 
-function CreateActivity() {
+function EditManualActivity () {
     registerLocale('es', es)
-    const [materials, setMaterials] = useState([]);
-    const [show, setShow] = useState(false);
+    const navigate = useNavigate()
+    const location = useLocation();
+    const { manualActivityId } = location.state;
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [distance, setDistance] = useState(0);
-    const [duration, setDuration] = useState("00:00:00");
-    const [pace, setPace] = useState(0);
-    const [fcAvg, setFcAvg] = useState(0);
+    const [distance, setDistance] = useState(null);
+    const [duration, setDuration] = useState("");
+    const [fcAvg, setFcAvg] = useState(null);
+    const [pace, setPace] = useState(null);
     const [route, setRoute] = useState(null);
+    const [materials, setMaterials] = useState([]);
     const [selectedMaterials, setSelectedMaterials] = useState([]);
+    const [materialOptions, setMaterialOptions] = useState([])
+    const [defaultMats, setDefault] = useState([])
+    const [show,setShow] = useState(false)
     const [error, setError] = useState("")
-    const [title,setTitle] = useState("")
-    const navigate = useNavigate()
-
-    const [date, setDate] = useState(new Date());
+    const [title, setTitle] = useState("")
+    const [date,setDate] = useState(new Date())
 
     useEffect(() => {
-        const getMaterials = async () => {
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
-            const userMaterials = await getUserMaterials(runnerId);
-            if (userMaterials.error) {
-                setShow(true);
-            } else { 
-                setMaterials(userMaterials);
-            }
+        const fetchInfo = async () => {
+            const manualActivity = await getManualActivity(manualActivityId);
+            setName(manualActivity.data.name);
+            setDescription(manualActivity.data.description);
+            setDistance(manualActivity.data.distance);
+            setDuration(manualActivity.data.duration);
+            setFcAvg(manualActivity.data.fcAvg);
+            setPace(manualActivity.data.pace);
+            setDate(new Date(manualActivity.data.date))
+
+            const activityMaterialLabels = manualActivity.data.materials;
+            setDefault(activityMaterialLabels)
+
+            const userId = JSON.parse(localStorage.getItem("userAuth")).id;
+            const mats = await getUserMaterials(userId);
+            setMaterials(mats);
+            const options = mats.map(material => ({
+                value: material.id, 
+                label: `${material.brand} ${material.model}`
+            }))
+            setMaterialOptions(options)
+            let selected = []
+            activityMaterialLabels.forEach(material => {
+                options.forEach(opt => {
+                    if (opt.label === material) {
+                        selected.push(opt)
+                    }
+                })
+            })
+            setSelectedMaterials(selected); 
         };
-        getMaterials();
+
+
+        fetchInfo();
     }, []);
 
     const updateValue = (setter) => (event) => { 
@@ -53,19 +78,13 @@ function CreateActivity() {
         setShow(false);
     };
 
-    const materialOptions = materials.map(material => ({
-        value: material.id, 
-        label: `${material.brand} ${material.model}`
-    }));
-
-    const handleSendActivity = async (event) => {
-        event.preventDefault();
-        const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
+    const handleEditManualActivity = async (event) => {
+        event.preventDefault()
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
         })
-        const dataInfo = date.toISOString()
+        const dataInfo = date.toISOString() 
         if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0 || date == "") {
             setShow(true)
             setError("Todos los campos excepto la ruta son obligatorios")
@@ -73,13 +92,12 @@ function CreateActivity() {
         }
         else {
             try {
-                const activity = await createManualActivity(name, description,distance,duration,pace,fcAvg,runnerId,materialsId,dataInfo)
+                const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId,dataInfo)
                 if (activity.data) {
                     if (route !== null) {
-                        const id = activity.data
                         const formData = new FormData()
                         formData.append('route', route)
-                        const uploadRoute = await addRoute(formData,id)
+                        const uploadRoute = await addRoute(formData,manualActivityId)
                     }
                     navigate('/activities')
                 }
@@ -91,17 +109,15 @@ function CreateActivity() {
             }
             
         }
-        
-    };
 
-    
+    }
 
     return (
         <>
             <NavigationBar />
             <div className='d-flex align-items-center justify-content-center' style={{ marginTop: '5%' }}> 
                 <div className='container-createact d-flex'>
-                    <h1 className="custom-h1">Añadir actividad</h1>
+                    <h1 className="custom-h1">Editar actividad</h1>
                     <div className='form-columns'>
                         <div className='form-column'>
                             <label className='custom-label-createact' htmlFor="brand">NOMBRE</label>
@@ -130,6 +146,7 @@ function CreateActivity() {
                             <Select
                                 isMulti
                                 options={materialOptions}
+                                value={selectedMaterials} // Preselecciona los materiales de la actividad
                                 onChange={(selected) => setSelectedMaterials(selected)}
                                 className="custom-select-createact"
                             />
@@ -144,10 +161,9 @@ function CreateActivity() {
                                     locale="es"
                                 />
                             </div>
-                            
                         </div>
                     </div>
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleSendActivity}>AÑADIR</Button>
+                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleEditManualActivity}>EDITAR</Button>
                 </div>
             </div>
             <PopUp error={error} show={show} onHide={handleHide} title={title}/>
@@ -155,4 +171,5 @@ function CreateActivity() {
     );
 }
 
-export default CreateActivity;
+export default EditManualActivity;
+

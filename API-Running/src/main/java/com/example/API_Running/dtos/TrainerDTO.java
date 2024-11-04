@@ -12,6 +12,7 @@ public class TrainerDTO {
     private Integer weight;
     private Integer height;
     private Integer fcMax;
+    private byte[] profilePicture;
     private Integer experience;
 
 
@@ -27,6 +28,7 @@ public class TrainerDTO {
         this.weight = t.getWeight();
         this.height = t.getHeight();
         this.fcMax = t.getFcMax();
+        this.profilePicture = t.getProfilePicture();
         this.userType = "Trainer";
         this.experience = t.getExperience();
 
@@ -109,5 +111,13 @@ public class TrainerDTO {
 
     public void setExperience(Integer experience) {
         this.experience = experience;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }
