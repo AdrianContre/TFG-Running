@@ -6,8 +6,13 @@ import Select from "react-select";
 import { getUserMaterials } from "../../profile/services/materialService";
 import Button from 'react-bootstrap/Button';
 import PopUp from "../../auth/components/PopUp";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { es } from 'date-fns/locale/es';
 
 function EditManualActivity () {
+    registerLocale('es', es)
     const navigate = useNavigate()
     const location = useLocation();
     const { manualActivityId } = location.state;
@@ -25,6 +30,7 @@ function EditManualActivity () {
     const [show,setShow] = useState(false)
     const [error, setError] = useState("")
     const [title, setTitle] = useState("")
+    const [date,setDate] = useState(new Date())
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -35,6 +41,7 @@ function EditManualActivity () {
             setDuration(manualActivity.data.duration);
             setFcAvg(manualActivity.data.fcAvg);
             setPace(manualActivity.data.pace);
+            setDate(new Date(manualActivity.data.date))
 
             const activityMaterialLabels = manualActivity.data.materials;
             setDefault(activityMaterialLabels)
@@ -77,14 +84,15 @@ function EditManualActivity () {
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
         })
-        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0) {
+        const dataInfo = date.toISOString() 
+        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0 || date == "") {
             setShow(true)
             setError("Todos los campos excepto la ruta son obligatorios")
             setTitle("Error al crear actividad")
         }
         else {
             try {
-                const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId)
+                const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId,dataInfo)
                 console.log(activity)
                 if (activity.data) {
                     console.log("entro aquí")
@@ -146,6 +154,17 @@ function EditManualActivity () {
                                 onChange={(selected) => setSelectedMaterials(selected)}
                                 className="custom-select-createact"
                             />
+                            <div className="row" style={{marginTop: '20px'}}>
+                                <label className='custom-label-createact' htmlFor="date">FECHA</label>
+                                <DatePicker 
+                                    name="date"
+                                    selected={date} 
+                                    onChange={(date) => setDate(date)} 
+                                    dateFormat="dd/MM/yyyy"
+                                    className='custom-input-createact'
+                                    locale="es"
+                                />
+                            </div>
                         </div>
                     </div>
                     <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleEditManualActivity}>EDITAR</Button>

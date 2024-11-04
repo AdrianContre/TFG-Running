@@ -1,5 +1,6 @@
 package com.example.API_Running.dtos;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -11,8 +12,9 @@ public class ModifyManualActivityDTO {
     private Float pace;
     private Integer fcAvg;
     private List<Long> materialsId;
+    private LocalDateTime date;
 
-    public ModifyManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, List<Long> materialsId) {
+    public ModifyManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, List<Long> materialsId, LocalDateTime date) {
         this.name = name;
         this.description = description;
         this.distance = distance;
@@ -20,6 +22,7 @@ public class ModifyManualActivityDTO {
         this.pace = pace;
         this.fcAvg = fcAvg;
         this.materialsId = materialsId;
+        this.date = date;
     }
 
     public String getName() {
@@ -76,5 +79,13 @@ public class ModifyManualActivityDTO {
 
     public void setMaterialsId(List<Long> materialsId) {
         this.materialsId = materialsId;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

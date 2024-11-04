@@ -2,6 +2,7 @@ package com.example.API_Running.dtos;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -14,8 +15,9 @@ public class CreateManualActivityDTO {
     private Integer fcAvg;
     private Long runnerId;
     private List<Long> materialsId;
+    private LocalDateTime date;
 
-    public CreateManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, Long runnerId, List<Long> materialsId) {
+    public CreateManualActivityDTO(String name, String description, Float distance, LocalTime duration, Float pace, Integer fcAvg, Long runnerId, List<Long> materialsId, LocalDateTime date) {
         this.name = name;
         this.description = description;
         this.distance = distance;
@@ -24,6 +26,7 @@ public class CreateManualActivityDTO {
         this.fcAvg = fcAvg;
         this.runnerId = runnerId;
         this.materialsId = materialsId;
+        this.date = date;
     }
 
     public String getName() {
@@ -88,5 +91,13 @@ public class CreateManualActivityDTO {
 
     public void setMaterialsId(List<Long> materialsId) {
         this.materialsId = materialsId;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

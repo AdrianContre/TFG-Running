@@ -23,7 +23,7 @@ public abstract class Activity {
     @Column(name="description",nullable = false)
     private String description;
 
-    @CreationTimestamp
+
     @Column(name = "date")
     private LocalDateTime date;
 

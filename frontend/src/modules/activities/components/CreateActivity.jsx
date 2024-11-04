@@ -10,8 +10,11 @@ import { addRoute, createManualActivity } from "../services/activitiesService";
 import { useNavigate } from "react-router";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { es } from 'date-fns/locale/es';
 
 function CreateActivity() {
+    registerLocale('es', es)
     const [materials, setMaterials] = useState([]);
     const [show, setShow] = useState(false);
     const [name, setName] = useState("");
@@ -62,14 +65,15 @@ function CreateActivity() {
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
         })
-        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0) {
+        const dataInfo = date.toISOString()
+        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0 || date == "") {
             setShow(true)
             setError("Todos los campos excepto la ruta son obligatorios")
             setTitle("Error al crear actividad")
         }
         else {
             try {
-                const activity = await createManualActivity(name, description,distance,duration,pace,fcAvg,runnerId,materialsId)
+                const activity = await createManualActivity(name, description,distance,duration,pace,fcAvg,runnerId,materialsId,dataInfo)
                 if (activity.data) {
                     if (route !== null) {
                         const id = activity.data
@@ -129,7 +133,7 @@ function CreateActivity() {
                                 onChange={(selected) => setSelectedMaterials(selected)}
                                 className="custom-select-createact"
                             />
-                            {/* <div className="row" style={{marginTop: '20px'}}>
+                            <div className="row" style={{marginTop: '20px'}}>
                                 <label className='custom-label-createact' htmlFor="date">FECHA</label>
                                 <DatePicker 
                                     name="date"
@@ -137,8 +141,9 @@ function CreateActivity() {
                                     onChange={(date) => setDate(date)} 
                                     dateFormat="dd/MM/yyyy"
                                     className='custom-input-createact'
+                                    locale="es"
                                 />
-                            </div> */}
+                            </div>
                             
                         </div>
                     </div>

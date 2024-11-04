@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -41,6 +42,7 @@ public class ManualActivityService {
         LocalTime duration = createManualActivityDTO.getDuration();
         Float pace = createManualActivityDTO.getPace();
         Integer fcAvg = createManualActivityDTO.getFcAvg();
+        LocalDateTime date = createManualActivityDTO.getDate();
         Long runnerId = createManualActivityDTO.getRunnerId();
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
@@ -62,6 +64,7 @@ public class ManualActivityService {
         ManualActivity manualActivity = new ManualActivity(distance, duration,pace,fcAvg);
         manualActivity.setName(name);
         manualActivity.setDescription(description);
+        manualActivity.setDate(date);
         manualActivity.setRunner(runner);
         manualActivity.setMaterials(materials);
         ManualActivity newManualActivity = this.manualActivityRepository.save(manualActivity);
@@ -147,6 +150,7 @@ public class ManualActivityService {
         mAct.setDuration(modifyManualActivity.getDuration());
         mAct.setPace(modifyManualActivity.getPace());
         mAct.setFcAvg(modifyManualActivity.getFcAvg());
+        mAct.setDate(modifyManualActivity.getDate());
 
         List<Long> materialsId = modifyManualActivity.getMaterialsId();
         Set<Material> materials = new HashSet<>();
