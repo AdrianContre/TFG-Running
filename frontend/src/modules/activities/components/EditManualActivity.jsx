@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { getManualActivity } from "../services/activitiesService";
+import { addRoute, editManualActivity, getManualActivity } from "../services/activitiesService";
 import Select from "react-select";
 import { getUserMaterials } from "../../profile/services/materialService";
 import Button from 'react-bootstrap/Button';
+import PopUp from "../../auth/components/PopUp";
 
 function EditManualActivity () {
+    const navigate = useNavigate()
     const location = useLocation();
     const { manualActivityId } = location.state;
     const [name, setName] = useState("");
@@ -20,6 +22,9 @@ function EditManualActivity () {
     const [selectedMaterials, setSelectedMaterials] = useState([]);
     const [materialOptions, setMaterialOptions] = useState([])
     const [defaultMats, setDefault] = useState([])
+    const [show,setShow] = useState(false)
+    const [error, setError] = useState("")
+    const [title, setTitle] = useState("")
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -61,6 +66,48 @@ function EditManualActivity () {
         setter(event.target.value);
     };
 
+    const handleHide = (event) => {
+        event.preventDefault();
+        setShow(false);
+    };
+
+    const handleEditManualActivity = async (event) => {
+        event.preventDefault()
+        let materialsId = []
+        selectedMaterials.forEach((material) => {
+            materialsId.push(material.value)
+        })
+        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0) {
+            setShow(true)
+            setError("Todos los campos excepto la ruta son obligatorios")
+            setTitle("Error al crear actividad")
+        }
+        else {
+            try {
+                const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId)
+                console.log(activity)
+                if (activity.data) {
+                    console.log("entro aquí")
+                    if (route !== null) {
+                        console.log("ruta?")
+                        const formData = new FormData()
+                        formData.append('route', route)
+                        const uploadRoute = await addRoute(formData,manualActivityId)
+                    }
+                    navigate('/activities')
+                }
+            }
+            catch (Error) {
+                console.log(Error)
+                setShow(true)
+                setError("Revisa el formato de los campos del formulario")
+                setTitle("Error al crear actividad")
+            }
+            
+        }
+
+    }
+
     return (
         <>
             <NavigationBar />
@@ -101,9 +148,10 @@ function EditManualActivity () {
                             />
                         </div>
                     </div>
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact'>EDITAR</Button>
+                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleEditManualActivity}>EDITAR</Button>
                 </div>
             </div>
+            <PopUp error={error} show={show} onHide={handleHide} title={title}/>
         </>
     );
 }

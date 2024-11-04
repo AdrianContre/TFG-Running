@@ -122,3 +122,28 @@ export const getManualActivity = async (manualActId) => {
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const editManualActivity = async (manualActId, name, description, distance, duration, pace, fcAvg, materialsId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_MANUAL_ACTIVITIES}/${manualActId}`,{
+      method: 'PUT',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({name: name, description: description, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg, materialsId: materialsId})
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}

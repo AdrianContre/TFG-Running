@@ -8,6 +8,8 @@ import '../styles/createActivity.css';
 import Select from "react-select";
 import { addRoute, createManualActivity } from "../services/activitiesService";
 import { useNavigate } from "react-router";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function CreateActivity() {
     const [materials, setMaterials] = useState([]);
@@ -23,6 +25,9 @@ function CreateActivity() {
     const [error, setError] = useState("")
     const [title,setTitle] = useState("")
     const navigate = useNavigate()
+
+    const [date, setDate] = useState(new Date());
+
     useEffect(() => {
         const getMaterials = async () => {
             const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
@@ -124,6 +129,17 @@ function CreateActivity() {
                                 onChange={(selected) => setSelectedMaterials(selected)}
                                 className="custom-select-createact"
                             />
+                            {/* <div className="row" style={{marginTop: '20px'}}>
+                                <label className='custom-label-createact' htmlFor="date">FECHA</label>
+                                <DatePicker 
+                                    name="date"
+                                    selected={date} 
+                                    onChange={(date) => setDate(date)} 
+                                    dateFormat="dd/MM/yyyy"
+                                    className='custom-input-createact'
+                                />
+                            </div> */}
+                            
                         </div>
                     </div>
                     <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleSendActivity}>AÑADIR</Button>
