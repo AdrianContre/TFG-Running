@@ -19,7 +19,6 @@ public class Material {
     private String description;
 
     @Column(name="wear",nullable = false)
-    //private Integer wear;
     private Float wear;
 
     @ManyToOne(fetch = FetchType.LAZY)

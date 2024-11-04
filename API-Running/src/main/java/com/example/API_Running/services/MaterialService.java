@@ -3,8 +3,10 @@ package com.example.API_Running.services;
 import com.example.API_Running.dtos.CreateMaterialDTO;
 import com.example.API_Running.dtos.MaterialDTO;
 import com.example.API_Running.dtos.ModifyMaterialDTO;
+import com.example.API_Running.models.Activity;
 import com.example.API_Running.models.Material;
 import com.example.API_Running.models.Runner;
+import com.example.API_Running.repository.ActivityRepository;
 import com.example.API_Running.repository.MaterialRepository;
 import com.example.API_Running.repository.RunnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,13 @@ import java.util.Optional;
 public class MaterialService {
     private final MaterialRepository materialRepository;
     private final RunnerRepository runnerRepository;
+    private final ActivityRepository activityRepository;
 
     @Autowired
-    public MaterialService (MaterialRepository materialRepository, RunnerRepository runnerRepository) {
+    public MaterialService (MaterialRepository materialRepository, RunnerRepository runnerRepository, ActivityRepository activityRepository) {
         this.materialRepository = materialRepository;
         this.runnerRepository = runnerRepository;
+        this.activityRepository = activityRepository;
     }
 
     public ResponseEntity<Object> createMaterial (CreateMaterialDTO createMaterialDTO) {
@@ -36,7 +40,6 @@ public class MaterialService {
         String brand = createMaterialDTO.getBrand();
         String model = createMaterialDTO.getModel();
         String description = createMaterialDTO.getDescription();
-        //Integer wear = createMaterialDTO.getWear();
         Float wear = createMaterialDTO.getWear();
         Long runnerId = createMaterialDTO.getRunnerId();
 
@@ -71,6 +74,13 @@ public class MaterialService {
             );
         }
         Material material = query.get();
+        List<Activity> activitiesWithMaterial = activityRepository.findAllByMaterialsContains(material);
+
+        for (Activity activity : activitiesWithMaterial) {
+            activity.getMaterials().remove(material);
+            activityRepository.save(activity);
+        }
+
         this.materialRepository.delete(material);
         data.put("data", "Material with id " + materialId + " deleted successfully");
         return new ResponseEntity<>(
