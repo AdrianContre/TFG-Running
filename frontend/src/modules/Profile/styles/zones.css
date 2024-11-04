@@ -7,17 +7,16 @@
 }
 
 .heart-rate-zones-table {
-    width: 50%; /* Ajusta el ancho de la tabla */
-    /*margin: 20px auto; /* Centra la tabla horizontalmente */
+    width: 50%;
     border-collapse: collapse;
-    text-align: center; /* Alinea el texto al centro */
+    text-align: center; 
 }
 
 .heart-rate-zones-table th,
 .heart-rate-zones-table td {
     padding: 15px;
     border: 1px solid #ddd;
-    text-align: center; /* Alinea todo el texto de las celdas al centro */
+    text-align: center; 
 }
 
 .heart-rate-zones-table th {
@@ -26,7 +25,7 @@
 }
 
 .zone-label {
-    background-color: #f4f4f4; /* Fondo gris para las celdas de zonas */
+    background-color: #f4f4f4;
     font-weight: bold;
 }
 

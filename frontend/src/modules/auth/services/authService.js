@@ -7,18 +7,14 @@ export const loginService = async (username, password) => {
       body: JSON.stringify({ username: username, password: password })
     })
     .then(response => {
-      // if (!response.ok) {
-      //   throw new Error(response);
-      // }
       return response.json();
     })
     .then(data => {
-      console.log(data);
       return data;
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      throw error;
     });
   };
 
@@ -42,9 +38,6 @@ export const registerService = async (name, surname, mail, username, password, i
     })
   })
   .then(response => {
-    // if (!response.ok) {
-    //   throw new Error(response);
-    // }
     return response.json();
   })
   .then(data => {
@@ -53,7 +46,7 @@ export const registerService = async (name, surname, mail, username, password, i
   })
   .catch(error => {
     console.error('Error:', error);
-    throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    throw error; 
   });
 }
   

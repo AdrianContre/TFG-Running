@@ -45,10 +45,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetailsImplementation userDetails) {
         final String mailFromToken = getUsernameFromToken(token);
-        //final String username2 = getClaim(token,Claims::getSubject);
-        //return (mailFromToken.equals(userDetails.getUsername())&& !isTokenExpired(token));
         return (mailFromToken.equals(userDetails.getUsername()));
-        //return (mailFromToken.equals(username2) && !isTokenExpired(token));
     }
 
     private Claims getAllClaims(String token)

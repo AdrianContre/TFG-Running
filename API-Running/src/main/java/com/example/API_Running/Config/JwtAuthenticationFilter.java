@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token==null)
         {
-            System.out.println("token es null");
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetailsImplementation userDetails= (UserDetailsImplementation) userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(token, userDetails))
             {
-                System.out.println("token valido");
                 UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -66,7 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         }
-        System.out.println("llegó al final del filter");
         filterChain.doFilter(request, response);
     }
 

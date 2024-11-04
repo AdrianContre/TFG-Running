@@ -41,7 +41,6 @@ function EditMaterial () {
                 if (picture !== null) {
                     const formData = new FormData()
                     formData.append('photo', picture)
-                    console.log(formData)
                     const upload = await uploadPhoto(material.id, formData)
 
                 }
@@ -52,7 +51,6 @@ function EditMaterial () {
     }
 
     useEffect(() => {
-        console.log(material)
         setBrand(material.brand)
         setModel(material.model)
         setDescription(material.description)

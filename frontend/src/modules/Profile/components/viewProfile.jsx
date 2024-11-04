@@ -17,7 +17,6 @@ function ViewProfile () {
     const navigate = useNavigate()
 
     useEffect (() => {
-        console.log("entro aqui")
         const getHeartRateZones = async () => {
             if (userAuth.userType == "Runner") {
                 const zones = await getRunnerZones(userAuth.id);
@@ -25,13 +24,10 @@ function ViewProfile () {
             }
             else {
                 const zones = await getTrainerZones(userAuth.id);
-                console.log(zones.data)
                 setHeartZones(zones.data)
             }
 
-            console.log(userAuth)
             if (userAuth.profilePicture !== null) {
-                console.log(userAuth.profilePicture)
                 setPicture(`data:image/jpeg;base64,${userAuth.profilePicture}`)
             }
         }

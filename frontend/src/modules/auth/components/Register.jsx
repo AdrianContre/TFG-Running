@@ -41,39 +41,45 @@ function Register () {
     }
 
     const handleSelectChange = (event) => {
-        setIsTrainer(event.target.value);  // Actualiza el estado con el valor seleccionado
+        setIsTrainer(event.target.value);
     };
     
     
 
     const handleClick = async (event) => {
         event.preventDefault()
-        try {
-            const data = await registerService(name, surname, mail, username, password, isTrainer);
-            if (data.token) {
-                localStorage.setItem('token', data.token)
-                console.log(data.token)
-                console.log('Registration successful:', data);
-                navigate('/main')
-            }
-            else {
-                console.log("aqui puedo manejar el error " + data.error)
-                if (data.error) {
-                    setError(data.error)
-                    setUsername("")
-                    setName("")
-                    setSurname("")
-                    setMail("")
-                    setPassword("")
-                    setIsTrainer(false)
-                    setShow(true)
-                    
-                }
-            }
-            
-        } catch (error) {
-            console.log(error)
+        if (name == "" || surname == "" || mail == "" || username == "" || password == "" || isTrainer == "") {
+            setShow(true)
+            setError("Todos los campos han de estar completos")
         }
+        else {
+            try {
+                const data = await registerService(name, surname, mail, username, password, isTrainer);
+                if (data.token) {
+                    localStorage.setItem('token', data.token)
+                    console.log(data.token)
+                    console.log('Registration successful:', data);
+                    navigate('/main')
+                }
+                else {
+                    if (data.error) {
+                        setError(data.error)
+                        setUsername("")
+                        setName("")
+                        setSurname("")
+                        setMail("")
+                        setPassword("")
+                        setIsTrainer(false)
+                        setShow(true)
+                        
+                    }
+                }
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        
     }
 
     const handleAlreadyAnAccount = (event) => {

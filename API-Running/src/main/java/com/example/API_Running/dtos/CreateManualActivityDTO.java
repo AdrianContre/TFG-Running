@@ -1,7 +1,5 @@
 package com.example.API_Running.dtos;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;

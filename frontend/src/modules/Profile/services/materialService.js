@@ -14,12 +14,11 @@ export const getUserMaterials = async (id) => {
         return response.json();
       })
       .then(data => {
-        //console.log(data);
         return data.data
       })
       .catch(error => {
         console.error('Error:', error);
-        throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+        throw error; 
       });
 }
 
@@ -42,7 +41,7 @@ export const deleteMaterial = async (materialId) => {
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      throw error;
     });
 }
 
@@ -60,12 +59,10 @@ export const createMaterial = async (brand, model, description, wear, runnerId) 
       return response.json();
     })
     .then(data => {
-      console.log(data);
       return data.data
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
 
@@ -83,12 +80,11 @@ export const editMaterial = async (brand, model, description, wear, materialId) 
       return response.json();
     })
     .then(data => {
-      console.log(data);
       return data.data
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      throw error; 
     });
 }
 
@@ -105,11 +101,10 @@ export const uploadPhoto = async (materialId, picture) => {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       return data.data
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+      throw error; 
     });
 }

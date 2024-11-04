@@ -1,6 +1,5 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import '../styles/materialCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
@@ -39,8 +38,6 @@ const MaterialCard = ({ material, onDelete }) => {
                 {picture !== null ? (
                     <Card.Img style={{height: '300px', marginBottom: '20px'}} src={picture} />
                 ) : <></>}
-                {/* <Button variant="success">Editar</Button>
-                <Button variant="danger">Eliminar</Button> */}
                 <div className="icons-container">
                     <FontAwesomeIcon icon={faPenToSquare} size="2xl" style={{cursor: 'pointer'}} onClick={handleEdit}/>
                     <FontAwesomeIcon icon={faTrash} size="2xl" style={{color: "#f10909", cursor: 'pointer'}} onClick={handleDelete} />

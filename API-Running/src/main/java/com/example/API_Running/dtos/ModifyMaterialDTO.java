@@ -4,10 +4,9 @@ public class ModifyMaterialDTO {
     private String brand;
     private String model;
     private String description;
-    //private Integer wear;
     private Float wear;
 
-    public ModifyMaterialDTO(String brand, String model, String description, /*Integer wear*/Float wear) {
+    public ModifyMaterialDTO(String brand, String model, String description, Float wear) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -38,15 +37,6 @@ public class ModifyMaterialDTO {
         this.description = description;
     }
 
-    /*
-    public Integer getWear() {
-        return wear;
-    }
-
-    public void setWear(Integer wear) {
-        this.wear = wear;
-    }
-     */
     public Float getWear() {
         return wear;
     }

@@ -9,11 +9,7 @@ public class Trainer extends Runner {
     @Column(name="experience", nullable = false)
     private Integer experience;
 
-    /*
-    @OneToOne
-    @JoinColumn(name = "runner_id")
-    private Runner runner;
-     */
+
 
     public Trainer() {}
 

@@ -27,7 +27,6 @@ function CreateMaterial () {
             }
             else {
                 if (picture !== null) {
-                    console.log(data)
                     const materialId = data
                     const formData = new FormData()
                     formData.append('photo', picture)

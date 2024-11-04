@@ -2,7 +2,7 @@ package com.example.API_Running.models;
 
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+
 
 import java.time.LocalDateTime;
 import java.util.Set;

@@ -71,14 +71,7 @@ public class Material {
     public void setDescription(String description) {
         this.description = description;
     }
-    /*
-    public Integer getWear() {
-        return wear;
-    }
 
-    public void setWear(Integer wear) {
-        this.wear = wear;
-    }*/
     public Float getWear() {
         return this.wear;
     }

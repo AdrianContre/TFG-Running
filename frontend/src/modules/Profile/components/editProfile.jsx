@@ -14,7 +14,6 @@ import {faDownload} from '@fortawesome/free-solid-svg-icons'
 
 
 function EditProfile () {
-    //let profileData = JSON.parse(localStorage.getItem("userAuth"));
     const [profileData, setProfileData] = useState({})
     const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
@@ -44,14 +43,12 @@ function EditProfile () {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
         }
         if (modified) {
-            console.log("entro aquí")
             let formData = new FormData()
             formData.append('profilePicture', file)
             const upload = await uploadPicture(profileData.id,formData)
         }
         const user = await getUserLogged();
         setProfileData(user)
-        //profileData = user;
         localStorage.setItem('userAuth', JSON.stringify(user));
         navigate('/profile')
     }
@@ -115,17 +112,15 @@ function EditProfile () {
     }
 
     
-
-    // Maneja el clic en el botón para abrir el selector de archivos
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    // Maneja la selección de un archivo
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            onFileSelect(file); // Llama a la función para manejar el archivo seleccionado
+            onFileSelect(file); 
         }
     };
 
@@ -151,7 +146,7 @@ function EditProfile () {
                 ref={fileInputRef}
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
-                accept="image/*" // Solo permite imágenes
+                accept="image/*" 
                 />
                 
             </div>

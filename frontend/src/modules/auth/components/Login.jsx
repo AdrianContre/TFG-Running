@@ -18,8 +18,6 @@ function Login() {
             const data = await loginService(username, password);
             if (data.token) {
                 localStorage.setItem('token', data.token)
-                console.log(data.token)
-                console.log('Login successful:', data);
                 navigate('/main')
             }
             else {

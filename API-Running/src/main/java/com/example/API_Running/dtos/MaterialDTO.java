@@ -7,7 +7,6 @@ public class MaterialDTO {
     private String brand;
     private String model;
     private String description;
-    //private Integer wear;
     private Float wear;
     private byte[] photo;
 
@@ -51,15 +50,7 @@ public class MaterialDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-    /*
-    public Integer getWear() {
-        return wear;
-    }
 
-    public void setWear(Integer wear) {
-        this.wear = wear;
-    }
-     */
     public Float getWear() {
         return wear;
     }

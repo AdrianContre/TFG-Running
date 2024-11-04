@@ -93,11 +93,8 @@ function EditManualActivity () {
         else {
             try {
                 const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId,dataInfo)
-                console.log(activity)
                 if (activity.data) {
-                    console.log("entro aquí")
                     if (route !== null) {
-                        console.log("ruta?")
                         const formData = new FormData()
                         formData.append('route', route)
                         const uploadRoute = await addRoute(formData,manualActivityId)
@@ -106,7 +103,6 @@ function EditManualActivity () {
                 }
             }
             catch (Error) {
-                console.log(Error)
                 setShow(true)
                 setError("Revisa el formato de los campos del formulario")
                 setTitle("Error al crear actividad")
