@@ -2,6 +2,9 @@ package com.example.API_Running.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("TRAINER")
 public class Trainer extends Runner {
@@ -9,7 +12,8 @@ public class Trainer extends Runner {
     @Column(name="experience", nullable = false)
     private Integer experience;
 
-
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TrainingPlan> plans = new ArrayList<>();
 
     public Trainer() {}
 
@@ -26,5 +30,11 @@ public class Trainer extends Runner {
         this.experience = experience;
     }
 
+    public List<TrainingPlan> getPlans() {
+        return plans;
+    }
 
+    public void setPlans(List<TrainingPlan> plans) {
+        this.plans = plans;
+    }
 }
