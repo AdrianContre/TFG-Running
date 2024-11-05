@@ -15,6 +15,8 @@ import CreateActivity from './modules/activities/components/CreateActivity';
 import ViewManualActivity from './modules/activities/components/ViewManualActivity';
 import EditManualActivity from './modules/activities/components/EditManualActivity';
 import AuthRoute from './AuthRoute';
+import ViewTrainingPlans from './modules/TrainingPlans/components/ViewTrainingPlans';
+import CreateTrainingPlan from './modules/TrainingPlans/components/CreateTrainingPlan';
 
 
 
@@ -40,6 +42,8 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/createtrainingplans' element={<AuthRoute element={CreateTrainingPlan} />} />
+        <Route path='/trainingplans' element={<AuthRoute element={ViewTrainingPlans} />} />
         <Route path='/editmanualactivity' element={<AuthRoute element={EditManualActivity}/>} />
         <Route path='/viewmanualactivity' element={<AuthRoute element={ViewManualActivity}/>} />
         <Route path='/createactivity' element={<AuthRoute element={CreateActivity}/>} />

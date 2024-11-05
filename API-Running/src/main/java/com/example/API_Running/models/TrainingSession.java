@@ -29,8 +29,7 @@ public abstract class TrainingSession {
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingSessionResult> results = new ArrayList<>();
 
-    public TrainingSession() {
-    }
+    public TrainingSession() {}
 
     public TrainingSession(Long id, String name, String description, TrainingWeek trainingWeek, List<TrainingSessionResult> results) {
         this.id = id;

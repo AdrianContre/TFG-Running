@@ -28,6 +28,8 @@ public class Comment {
     @JoinColumn(name = "training_week_id")
     private TrainingWeek trainingWeek;
 
+    public Comment() {}
+
     public Comment(Long id, String content, LocalDateTime sendDate, User sender, TrainingWeek trainingWeek) {
         this.id = id;
         this.content = content;

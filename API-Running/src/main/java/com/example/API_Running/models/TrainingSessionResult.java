@@ -7,11 +7,8 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name = "session_result_type")
 @Entity
 @Table(name="TrainingSessionResult")
-public abstract class TrainingSessionResult {
+public abstract class TrainingSessionResult extends Activity{
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
 
     @Column(name="effort", nullable = false)
     private Integer effort;
@@ -20,22 +17,13 @@ public abstract class TrainingSessionResult {
     @JoinColumn(name = "training_session_id")
     private TrainingSession session;
 
-    public TrainingSessionResult() {
-    }
+    public TrainingSessionResult() {}
 
-    public TrainingSessionResult(Long id, Integer effort, TrainingSession session) {
-        this.id = id;
+    public TrainingSessionResult(Integer effort, TrainingSession session) {
         this.effort = effort;
         this.session = session;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Integer getEffort() {
         return effort;

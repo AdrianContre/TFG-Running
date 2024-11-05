@@ -48,7 +48,8 @@ function Register () {
 
     const handleClick = async (event) => {
         event.preventDefault()
-        if (name == "" || surname == "" || mail == "" || username == "" || password == "" || isTrainer == "") {
+        console.log(isTrainer)
+        if (name == "" || surname == "" || mail == "" || username == "" || password == "" || isTrainer === null) {
             setShow(true)
             setError("Todos los campos han de estar completos")
         }

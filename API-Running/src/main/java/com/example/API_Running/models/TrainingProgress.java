@@ -21,6 +21,8 @@ public class TrainingProgress {
     @JoinColumn(name = "training_plan_id")
     private TrainingPlan trainingPlan;
 
+    public TrainingProgress() {}
+
     public TrainingProgress(Long id, Float percentage, Runner runner, TrainingPlan trainingPlan) {
         this.id = id;
         this.percentage = percentage;

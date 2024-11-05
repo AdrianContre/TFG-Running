@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Material")
+@Table(name = "TrainingPlan")
 public class TrainingPlan {
 
     @Id
@@ -34,13 +34,13 @@ public class TrainingPlan {
     @JoinColumn(name = "trainer_id")
     private Trainer creator;
 
-    @ManyToMany
-    @JoinTable(
-            name = "clients",
-            joinColumns = @JoinColumn(name = "training_plan_id"),
-            inverseJoinColumns = @JoinColumn(name = "runner_id")
-    )
-    private List<Runner> clients = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "clients",
+//            joinColumns = @JoinColumn(name = "training_plan_id"),
+//            inverseJoinColumns = @JoinColumn(name = "runner_id")
+//    )
+//    private List<Runner> clients = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainingPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingWeek> trainingWeeks = new ArrayList<>();
@@ -48,8 +48,9 @@ public class TrainingPlan {
     @OneToMany(mappedBy = "trainingPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingProgress> trainingProgresses;
 
+    public TrainingPlan() {}
 
-    public TrainingPlan(Long id, String name, String description, Integer weeks, DistanceObjective distanceObjective, RunnerLevel level, Trainer creator, List<Runner> clients, List<TrainingWeek> trainingWeeks, List<TrainingProgress> trainingProgresses) {
+    public TrainingPlan(Long id, String name, String description, Integer weeks, DistanceObjective distanceObjective, RunnerLevel level, Trainer creator/*, List<Runner> clients*/, List<TrainingWeek> trainingWeeks, List<TrainingProgress> trainingProgresses) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,7 +58,7 @@ public class TrainingPlan {
         this.distanceObjective = distanceObjective;
         this.level = level;
         this.creator = creator;
-        this.clients = clients;
+        //this.clients = clients;
         this.trainingWeeks = trainingWeeks;
         this.trainingProgresses = trainingProgresses;
     }
@@ -118,13 +119,13 @@ public class TrainingPlan {
         this.creator = creator;
     }
 
-    public List<Runner> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Runner> clients) {
-        this.clients = clients;
-    }
+//    public List<Runner> getClients() {
+//        return clients;
+//    }
+//
+//    public void setClients(List<Runner> clients) {
+//        this.clients = clients;
+//    }
 
     public List<TrainingWeek> getTrainingWeeks() {
         return trainingWeeks;

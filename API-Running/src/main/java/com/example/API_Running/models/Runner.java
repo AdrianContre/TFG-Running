@@ -24,8 +24,8 @@ public class Runner extends User {
     @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "clients")
-    private List<TrainingPlan> trainingPlans = new ArrayList<>();
+//    @ManyToMany(mappedBy = "clients")
+//    private List<TrainingPlan> trainingPlans = new ArrayList<>();
 
     @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingProgress> plansProgress = new ArrayList<>();
@@ -106,13 +106,13 @@ public class Runner extends User {
         isTrainer = trainer;
     }
 
-    public List<TrainingPlan> getTrainingPlans() {
-        return trainingPlans;
-    }
-
-    public void setTrainingPlans(List<TrainingPlan> trainingPlans) {
-        this.trainingPlans = trainingPlans;
-    }
+//    public List<TrainingPlan> getTrainingPlans() {
+//        return trainingPlans;
+//    }
+//
+//    public void setTrainingPlans(List<TrainingPlan> trainingPlans) {
+//        this.trainingPlans = trainingPlans;
+//    }
 
     public List<TrainingProgress> getPlansProgress() {
         return plansProgress;

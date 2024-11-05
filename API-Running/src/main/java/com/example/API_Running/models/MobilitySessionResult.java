@@ -6,5 +6,5 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("MOBILITY_RESULT")
 public class MobilitySessionResult extends TrainingSessionResult{
-
+    public MobilitySessionResult() {}
 }

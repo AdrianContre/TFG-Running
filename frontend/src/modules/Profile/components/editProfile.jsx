@@ -46,6 +46,7 @@ function EditProfile () {
             let formData = new FormData()
             formData.append('profilePicture', file)
             const upload = await uploadPicture(profileData.id,formData)
+            console.log(upload)
         }
         const user = await getUserLogged();
         setProfileData(user)
@@ -185,7 +186,7 @@ function EditProfile () {
                             <label className="custom-label-profile">FC MAX (ppm)</label>
                             <input name="fcMax" type="number" value={fcMax} onChange={handleFcMaxChange} className="custom-input-profile" />
                         </div>
-                        {profileData.userType ? (
+                        {profileData.userType === "Trainer" ? (
                             <div className='row'>
                                 <label className="custom-label-profile">EXPERIENCIA (años)</label>
                                 <input name="experience" type="number" value={experience} onChange={handleExperienceChange} className="custom-input-profile" />

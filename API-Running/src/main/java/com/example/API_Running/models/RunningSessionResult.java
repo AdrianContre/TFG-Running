@@ -25,6 +25,8 @@ public class RunningSessionResult extends TrainingSessionResult{
     @Column(name="route",nullable = true)
     private byte[] route;
 
+    public RunningSessionResult() {}
+
     public RunningSessionResult(Float distance, LocalTime duration, Float pace, Integer fcAvg, byte[] route) {
         this.distance = distance;
         this.duration = duration;

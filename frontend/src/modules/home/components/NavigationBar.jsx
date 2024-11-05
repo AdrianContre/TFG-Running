@@ -19,6 +19,7 @@ function NavigationBar () {
   useEffect (() => {
     const user = JSON.parse(localStorage.getItem('userAuth'))
     if (user.profilePicture !== null) {
+      console.log("entro aqui")
       setProfilePicture(`data:image;base64,${user.profilePicture}`)
     }
   },[])
@@ -28,7 +29,7 @@ function NavigationBar () {
             <Container>
               <Navbar.Brand as={NavLink} to="/main">Principal</Navbar.Brand>
               <Nav className="me-auto">
-                <Nav.Link href="#plans">Planes de entrenamiento generales</Nav.Link>
+                <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
                 <Nav.Link href="#MyPlans">Mis planes</Nav.Link>
                 <Nav.Link href="#groups">Grupos</Nav.Link>
                 <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>

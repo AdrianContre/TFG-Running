@@ -30,6 +30,8 @@ public class TrainingWeek {
     @OneToMany(mappedBy = "trainingWeek", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    public TrainingWeek() {}
+
     public TrainingWeek(Long id, String name, String description, TrainingPlan trainingPlan, List<TrainingSession> sessions, List<Comment> comments) {
         this.id = id;
         this.name = name;

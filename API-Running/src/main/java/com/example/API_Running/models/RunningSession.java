@@ -19,6 +19,8 @@ public class RunningSession extends TrainingSession{
     @Column(name="duration", nullable = false)
     private LocalTime duration;
 
+    public RunningSession() {}
+
     public RunningSession(String type, Float distance, LocalTime duration) {
         this.type = type;
         this.distance = distance;
