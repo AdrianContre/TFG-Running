@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/CreateTrainingPlan.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
+import { createPlan } from "../services/trainingService";
 
 function CreateTrainingPlan() {
     const [numWeeks, setNumWeeks] = useState(1);
@@ -117,6 +118,7 @@ function CreateTrainingPlan() {
     };
 
     const handleCreatePlan = async (event) => {
+        const trainerId = JSON.parse(localStorage.getItem("userAuth")).id
         event.preventDefault()
         console.log(name)
         console.log(description)
@@ -124,6 +126,7 @@ function CreateTrainingPlan() {
         console.log(level)
         console.log(objDistance)
         console.log(sessionsInfo)
+        const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
     }
 
     const renderTrainingRows = () => {
@@ -274,6 +277,7 @@ function CreateTrainingPlan() {
                                             value={sessionData.runningType}
                                             onChange={handleInputChange}
                                         >
+                                            <option value="">Seleccione tipo</option>
                                             <option value="Recovery">Recovery</option>
                                             <option value="Rodaje">Rodaje</option>
                                             <option value="Series">Series</option>

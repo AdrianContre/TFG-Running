@@ -14,12 +14,6 @@ public class TrainingWeek {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name",nullable = false)
-    private String name;
-
-    @Column(name="description",nullable = false)
-    private String description;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "training_plan_id")
     private TrainingPlan trainingPlan;
@@ -32,10 +26,7 @@ public class TrainingWeek {
 
     public TrainingWeek() {}
 
-    public TrainingWeek(Long id, String name, String description, TrainingPlan trainingPlan, List<TrainingSession> sessions, List<Comment> comments) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    public TrainingWeek(TrainingPlan trainingPlan, List<TrainingSession> sessions, List<Comment> comments) {
         this.trainingPlan = trainingPlan;
         this.sessions = sessions;
         this.comments = comments;
@@ -47,22 +38,6 @@ public class TrainingWeek {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public TrainingPlan getTrainingPlan() {

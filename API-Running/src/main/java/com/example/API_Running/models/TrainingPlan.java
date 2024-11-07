@@ -18,29 +18,21 @@ public class TrainingPlan {
     @Column(name="name",nullable = false)
     private String name;
 
-    @Column(name="description",nullable = false)
+    @Column(name="description",nullable = false, length = 1000)
     private String description;
 
     @Column(name="weeks",nullable = false)
     private Integer weeks;
 
     @Column(name="distanceObjective",nullable = false)
-    private DistanceObjective distanceObjective;
+    private String distanceObjective;
 
     @Column(name="level",nullable = false)
-    private RunnerLevel level;
+    private String level;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer creator;
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "clients",
-//            joinColumns = @JoinColumn(name = "training_plan_id"),
-//            inverseJoinColumns = @JoinColumn(name = "runner_id")
-//    )
-//    private List<Runner> clients = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainingPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingWeek> trainingWeeks = new ArrayList<>();
@@ -50,15 +42,13 @@ public class TrainingPlan {
 
     public TrainingPlan() {}
 
-    public TrainingPlan(Long id, String name, String description, Integer weeks, DistanceObjective distanceObjective, RunnerLevel level, Trainer creator/*, List<Runner> clients*/, List<TrainingWeek> trainingWeeks, List<TrainingProgress> trainingProgresses) {
-        this.id = id;
+    public TrainingPlan(String name, String description, Integer weeks, String distanceObjective, String level, Trainer creator, List<TrainingWeek> trainingWeeks, List<TrainingProgress> trainingProgresses) {
         this.name = name;
         this.description = description;
         this.weeks = weeks;
         this.distanceObjective = distanceObjective;
         this.level = level;
         this.creator = creator;
-        //this.clients = clients;
         this.trainingWeeks = trainingWeeks;
         this.trainingProgresses = trainingProgresses;
     }
@@ -95,19 +85,19 @@ public class TrainingPlan {
         this.weeks = weeks;
     }
 
-    public DistanceObjective getDistanceObjective() {
+    public String getDistanceObjective() {
         return distanceObjective;
     }
 
-    public void setDistanceObjective(DistanceObjective distanceObjective) {
+    public void setDistanceObjective(String distanceObjective) {
         this.distanceObjective = distanceObjective;
     }
 
-    public RunnerLevel getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(RunnerLevel level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
@@ -118,14 +108,6 @@ public class TrainingPlan {
     public void setCreator(Trainer creator) {
         this.creator = creator;
     }
-
-//    public List<Runner> getClients() {
-//        return clients;
-//    }
-//
-//    public void setClients(List<Runner> clients) {
-//        this.clients = clients;
-//    }
 
     public List<TrainingWeek> getTrainingWeeks() {
         return trainingWeeks;
