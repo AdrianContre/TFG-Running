@@ -1,11 +1,11 @@
 package com.example.API_Running.models;
 
-import com.example.API_Running.enums.DistanceObjective;
-import com.example.API_Running.enums.RunnerLevel;
+
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "TrainingPlan")
@@ -39,6 +39,9 @@ public class TrainingPlan {
 
     @OneToMany(mappedBy = "trainingPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingProgress> trainingProgresses;
+
+    @ManyToMany(mappedBy = "trainingPlans")
+    private Set<TrainingGroup> groups;
 
     public TrainingPlan() {}
 
@@ -123,5 +126,13 @@ public class TrainingPlan {
 
     public void setTrainingProgresses(List<TrainingProgress> trainingProgresses) {
         this.trainingProgresses = trainingProgresses;
+    }
+
+    public Set<TrainingGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<TrainingGroup> groups) {
+        this.groups = groups;
     }
 }

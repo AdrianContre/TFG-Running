@@ -1,4 +1,4 @@
-const END_POINT_TRAINING_PLANS = "http://localhost:8081/api/v1/trainingplan"
+const END_POINT_TRAINING_PLANS = "http://localhost:8081/api/v1/trainingplans"
 
 export const createPlan = async (name, description, numWeeks, objDistance, level, sessions, trainerId) => {
     const authHeader = `Bearer ${localStorage.getItem('token')}`

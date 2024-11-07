@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "api/v1/trainingplan")
+@RequestMapping(path = "api/v1/trainingplans")
 public class TrainingPlanController {
     private final TrainingPlanService trainingPlanService;
 
@@ -20,5 +20,15 @@ public class TrainingPlanController {
     @PostMapping
     public ResponseEntity<Object> createTrainingPlan (@RequestBody CreateTrainingPlanDTO trainingPlanDTO) {
         return this.trainingPlanService.createTrainingPlan(trainingPlanDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getTrainingPlans() {
+        return this.trainingPlanService.getTrainingPlans();
+    }
+
+    @GetMapping(path = "/trainers/{trainerId}")
+    public ResponseEntity<Object> getTrainersPlan(@PathVariable Long trainerId) {
+        return this.trainingPlanService.getTrainerPlans(trainerId);
     }
 }
