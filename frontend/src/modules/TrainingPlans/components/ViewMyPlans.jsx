@@ -4,12 +4,11 @@ import CirclePlus from '../../../assets/images/plus-circle.png'
 import '../styles/viewTrainingPlans.css'
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { getOtherUsersPlans } from "../services/trainingService"
+import { getMyPlans, getOtherUsersPlans } from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 
-function ViewTrainingPlans () {
+function ViewMyPlans () {
     const navigate = useNavigate()
-    const [isTrainer, setIsTrainer] = useState(null)
     const [plans,setPlans] = useState([])
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
@@ -20,23 +19,14 @@ function ViewTrainingPlans () {
     useEffect(() => {
         const fetchInfo = async () => {
             const user = JSON.parse(localStorage.getItem('userAuth'))
-            if (user.userType === "Runner") {
-                setIsTrainer(false)
-            }
-            else {
-                setIsTrainer(true)
-            }
-            const trainersPlans = await getOtherUsersPlans();
+            const trainerId = user.id
+            const trainersPlans = await getMyPlans(trainerId);
             setPlans(trainersPlans)
             setFilteredPlans(trainersPlans)
         }
         fetchInfo()
         
     },[])
-    const handleClick = (event) => {
-        event.preventDefault();
-        navigate('/createtrainingplans')
-    }
 
 
     const handleFilterChange = () => {
@@ -83,18 +73,6 @@ function ViewTrainingPlans () {
                     ))}
                 </select>
             </div>
-
-            {isTrainer ? (
-                <div className="image-container">
-                    <div className="circle-container">
-                        <img className="circle-image" src={CirclePlus} onClick={handleClick}/>
-                        <div className="tooltip-text-view-training-plans">Crear plan de entrenamiento</div>
-                    </div>
-                </div> 
-            ): (
-                <>
-                </>
-            )}
             <div className="plans-container">
                 {filteredPlans.map((plan, index) => (
                     <TrainingPlanCard
@@ -112,4 +90,4 @@ function ViewTrainingPlans () {
     )
 }
 
-export default ViewTrainingPlans;
+export default ViewMyPlans;

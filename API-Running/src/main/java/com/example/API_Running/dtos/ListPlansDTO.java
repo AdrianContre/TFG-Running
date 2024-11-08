@@ -3,6 +3,7 @@ package com.example.API_Running.dtos;
 import com.example.API_Running.models.TrainingPlan;
 
 public class ListPlansDTO {
+    private Long id;
     private String name;
     private String objDistance;
     private String level;
@@ -10,11 +11,20 @@ public class ListPlansDTO {
     private String trainerSurname;
 
     public ListPlansDTO(TrainingPlan trainingPlan) {
+        this.id = trainingPlan.getId();
         this.name = trainingPlan.getName();
         this.objDistance = trainingPlan.getDistanceObjective();
         this.level = trainingPlan.getLevel();
         this.trainerName = trainingPlan.getCreator().getName();
         this.trainerSurname = trainingPlan.getCreator().getSurname();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

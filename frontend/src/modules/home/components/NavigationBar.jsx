@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 
 function NavigationBar () {
   const [profilePicture, setProfilePicture] = useState(null)
+  const [userRole, setUserRole] = useState("")
   const handleClick = (event) => {
     localStorage.removeItem('token')
     localStorage.removeItem('userAuth')
@@ -22,6 +23,12 @@ function NavigationBar () {
       console.log("entro aqui")
       setProfilePicture(`data:image;base64,${user.profilePicture}`)
     }
+    if (user.userType === "Trainer") {
+      setUserRole("trainer")
+    }
+    else {
+      setUserRole("runner")
+    }
   },[])
     return (
         <>
@@ -30,7 +37,12 @@ function NavigationBar () {
               <Navbar.Brand as={NavLink} to="/main">Principal</Navbar.Brand>
               <Nav className="me-auto">
                 <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
-                <Nav.Link href="#MyPlans">Mis planes</Nav.Link>
+                {userRole === "trainer" ? (
+                  <Nav.Link as={NavLink} to='/myplans'>Mis planes</Nav.Link>
+                ) : (
+                  <></>
+                )}
+                <Nav.Link href="#courseplans">Planes en curso</Nav.Link>
                 <Nav.Link href="#groups">Grupos</Nav.Link>
                 <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
               </Nav>

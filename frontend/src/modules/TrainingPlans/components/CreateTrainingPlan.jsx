@@ -6,8 +6,10 @@ import '../styles/CreateTrainingPlan.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import { createPlan } from "../services/trainingService";
+import { useNavigate } from "react-router";
 
 function CreateTrainingPlan() {
+    const navigate = useNavigate()
     const [numWeeks, setNumWeeks] = useState(1);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -127,6 +129,9 @@ function CreateTrainingPlan() {
         console.log(objDistance)
         console.log(sessionsInfo)
         const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+        if (send) {
+            navigate('/myplans')
+        }
     }
 
     const renderTrainingRows = () => {
