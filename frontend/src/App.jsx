@@ -18,6 +18,7 @@ import AuthRoute from './AuthRoute';
 import ViewTrainingPlans from './modules/TrainingPlans/components/ViewTrainingPlans';
 import CreateTrainingPlan from './modules/TrainingPlans/components/CreateTrainingPlan';
 import ViewMyPlans from './modules/TrainingPlans/components/ViewMyPlans';
+import ViewDetails from './modules/TrainingPlans/components/ViewDetails';
 
 
 
@@ -43,6 +44,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/viewplan' element={<AuthRoute element={ViewDetails} />} />
         <Route path='/myplans' element={<AuthRoute element={ViewMyPlans} />} />
         <Route path='/createtrainingplans' element={<AuthRoute element={CreateTrainingPlan} />} />
         <Route path='/trainingplans' element={<AuthRoute element={ViewTrainingPlans} />} />

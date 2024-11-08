@@ -31,4 +31,9 @@ public class TrainingPlanController {
     public ResponseEntity<Object> getTrainersPlan(@PathVariable Long trainerId) {
         return this.trainingPlanService.getTrainerPlans(trainerId);
     }
+
+    @GetMapping(path="/{planId}")
+    public ResponseEntity<Object> getPlan(@PathVariable Long planId) {
+        return this.trainingPlanService.getPlan(planId);
+    }
 }

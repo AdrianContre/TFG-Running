@@ -3,6 +3,7 @@ package com.example.API_Running.services;
 import com.example.API_Running.dtos.CreateTrainingPlanDTO;
 import com.example.API_Running.dtos.ListPlansDTO;
 import com.example.API_Running.dtos.SessionDTO;
+import com.example.API_Running.dtos.TrainingPlanDetailDTO;
 import com.example.API_Running.models.*;
 import com.example.API_Running.repository.TrainerRepository;
 import com.example.API_Running.repository.TrainingPlanRepository;
@@ -142,6 +143,19 @@ public class TrainingPlanService {
             plansDTOS.add(p);
         });
         data.put("data", plansDTOS);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getPlan(Long planId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
+        if (!query.isPresent()) {
+            data.put("error", "Training plan not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        TrainingPlan plan = query.get();
+        TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan);
+        data.put("data", info);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

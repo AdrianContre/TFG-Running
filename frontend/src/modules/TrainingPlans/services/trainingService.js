@@ -69,3 +69,26 @@ export const getMyPlans = async (trainerId) => {
       throw error; 
     });
 }
+
+export const getPlanInfo = async (planId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_TRAINING_PLANS}/${planId}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}

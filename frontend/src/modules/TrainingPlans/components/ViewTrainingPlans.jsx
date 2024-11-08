@@ -99,6 +99,7 @@ function ViewTrainingPlans () {
                 {filteredPlans.map((plan, index) => (
                     <TrainingPlanCard
                         key={index}
+                        id={plan.id}
                         name={plan.name}
                         objDistance={plan.objDistance}
                         level={plan.level}
