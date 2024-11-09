@@ -135,4 +135,8 @@ public class TrainingPlan {
     public void setGroups(Set<TrainingGroup> groups) {
         this.groups = groups;
     }
+
+    public void addTrainningProgress (TrainingProgress trainingProgress) {
+        this.trainingProgresses.add(trainingProgress);
+    }
 }

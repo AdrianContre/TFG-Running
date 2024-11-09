@@ -1,14 +1,8 @@
 package com.example.API_Running.services;
 
-import com.example.API_Running.dtos.CreateTrainingPlanDTO;
-import com.example.API_Running.dtos.ListPlansDTO;
-import com.example.API_Running.dtos.SessionDTO;
-import com.example.API_Running.dtos.TrainingPlanDetailDTO;
+import com.example.API_Running.dtos.*;
 import com.example.API_Running.models.*;
-import com.example.API_Running.repository.TrainerRepository;
-import com.example.API_Running.repository.TrainingPlanRepository;
-import com.example.API_Running.repository.TrainingSessionRepository;
-import com.example.API_Running.repository.TrainingWeekRepository;
+import com.example.API_Running.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +19,17 @@ public class TrainingPlanService {
     private final TrainingWeekRepository trainingWeekRepository;
     private final TrainingSessionRepository trainingSessionRepository;
     private final TrainerRepository trainerRepository;
+    private final RunnerRepository runnerRepository;
+    private final TrainingProgressRepository trainingProgressRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
         this.trainerRepository = trainerRepository;
+        this.runnerRepository = runnerRepository;
+        this.trainingProgressRepository = trainingProgressRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -155,6 +153,59 @@ public class TrainingPlanService {
         }
         TrainingPlan plan = query.get();
         TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan);
+        data.put("data", info);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> enrollUserToAPlan(Long planId, EnrrollToAPlanDTO body) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<Runner> query = this.runnerRepository.findById(body.getUserId());
+        if (!query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        Optional<TrainingPlan> query2 = this.trainingPlanRepository.findById(planId);
+        if (!query2.isPresent()) {
+            data.put("error", "Training plan not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        TrainingPlan t = query2.get();
+        Runner r = query.get();
+        Optional<TrainingProgress> query_tp = this.trainingProgressRepository.findProgressByPlanAndRunner(r.getId(), planId);
+        if (query_tp.isPresent()) {
+            data.put("error", "The user has already a progress on this plan");
+            return new ResponseEntity<>(data, HttpStatus.CONFLICT);
+        }
+        TrainingProgress newTp = new TrainingProgress();
+        newTp.setPercentage((float) 0);
+        newTp.setRunner(r);
+        newTp.setTrainingPlan(t);
+        TrainingProgress savedTp = this.trainingProgressRepository.save(newTp);
+        t.addTrainningProgress(savedTp);
+        this.trainingPlanRepository.save(t);
+        data.put("data", "User enrolled to the plan properly");
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getRunnerEnrolledPlans(Long runnerId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<Runner> query = this.runnerRepository.findById(runnerId);
+        if (!query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }
+        List<TrainingProgress> tps = this.trainingProgressRepository.findAllUserProgress(runnerId);
+        if (tps.isEmpty()) {
+            data.put("data", new ArrayList<>());
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }
+        List<EnrolledPlanDTO> info = new ArrayList<>();
+        tps.stream().forEach(tp -> {
+            TrainingPlan trainingPlan = tp.getTrainingPlan();
+            EnrolledPlanDTO planDTO = new EnrolledPlanDTO(trainingPlan, tp.getPercentage());
+            info.add(planDTO);
+        });
         data.put("data", info);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

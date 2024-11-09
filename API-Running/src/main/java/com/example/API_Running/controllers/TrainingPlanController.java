@@ -1,8 +1,10 @@
 package com.example.API_Running.controllers;
 
 import com.example.API_Running.dtos.CreateTrainingPlanDTO;
+import com.example.API_Running.dtos.EnrrollToAPlanDTO;
 import com.example.API_Running.services.TrainingPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +37,15 @@ public class TrainingPlanController {
     @GetMapping(path="/{planId}")
     public ResponseEntity<Object> getPlan(@PathVariable Long planId) {
         return this.trainingPlanService.getPlan(planId);
+    }
+
+    @PostMapping(path="/{planId}/enroll")
+    public ResponseEntity<Object> enrollPlanToUser (@PathVariable Long planId, @RequestBody EnrrollToAPlanDTO body) {
+        return this.trainingPlanService.enrollUserToAPlan(planId, body);
+    }
+
+    @GetMapping(path="/enrolled/{runnerId}")
+    public ResponseEntity<Object> getRunnerEnrolledPlans(@PathVariable Long runnerId) {
+        return this.trainingPlanService.getRunnerEnrolledPlans(runnerId);
     }
 }
