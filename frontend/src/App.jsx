@@ -20,6 +20,7 @@ import CreateTrainingPlan from './modules/TrainingPlans/components/CreateTrainin
 import ViewMyPlans from './modules/TrainingPlans/components/ViewMyPlans';
 import ViewDetails from './modules/TrainingPlans/components/ViewDetails';
 import ListEnrolledPlans from './modules/TrainingPlans/components/ListEnrolledPlans';
+import EditTrainingPlan from './modules/TrainingPlans/components/EditTrainingPlan';
 
 
 
@@ -48,6 +49,7 @@ function App() {
         <Route path='/enrolledplans' element={<AuthRoute element={ListEnrolledPlans} />} /> 
         <Route path='/viewplan' element={<AuthRoute element={ViewDetails} />} />
         <Route path='/myplans' element={<AuthRoute element={ViewMyPlans} />} />
+        <Route path='/editplan' element={<AuthRoute element={EditTrainingPlan} />} />
         <Route path='/createtrainingplans' element={<AuthRoute element={CreateTrainingPlan} />} />
         <Route path='/trainingplans' element={<AuthRoute element={ViewTrainingPlans} />} />
         <Route path='/editmanualactivity' element={<AuthRoute element={EditManualActivity}/>} />

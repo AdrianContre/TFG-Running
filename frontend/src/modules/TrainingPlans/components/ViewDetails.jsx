@@ -100,6 +100,11 @@ function ViewDetails () {
         }
     }
 
+    const handleEdit = (event) => {
+        event.preventDefault()
+        navigate('/editplan', { state: {planId: planId}})
+    }
+
     const renderTrainingRows = () => {
         console.log(sessionsInfo)
         let rows = [];
@@ -186,7 +191,7 @@ function ViewDetails () {
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
             {trainer.id === userAuth.id ? (
-                <Button variant="primary" size="lg" className="mt-5 custom-button-createact">
+                <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleEdit}>
                     EDITAR
                 </Button>
             ) : (
