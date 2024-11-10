@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Entity
@@ -62,5 +63,15 @@ public class TrainingWeek {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Integer getNumSessions() {
+        Integer counter = 0;
+        for (int i = 0; i<7; ++i) {
+            if (sessions.get(i) != null) {
+                counter += 1;
+            }
+        }
+        return counter;
     }
 }

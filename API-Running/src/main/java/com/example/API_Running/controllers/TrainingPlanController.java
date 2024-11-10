@@ -48,4 +48,9 @@ public class TrainingPlanController {
     public ResponseEntity<Object> getRunnerEnrolledPlans(@PathVariable Long runnerId) {
         return this.trainingPlanService.getRunnerEnrolledPlans(runnerId);
     }
+
+    @DeleteMapping(path= "/withdraw/{planId}")
+    public ResponseEntity<Object> withDrawUserInPlan(@PathVariable Long planId, @RequestBody EnrrollToAPlanDTO body) {
+        return this.trainingPlanService.withdrawUserInPlan(planId, body);
+    }
 }

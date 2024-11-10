@@ -1,8 +1,8 @@
 import React from "react";
 import NavigationBar from "../../home/components/NavigationBar";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router";
-import { getPlanInfo } from "../services/trainingService";
+import { useLocation, useNavigate } from "react-router";
+import { enrollUserToPlan, getPlanInfo, unenrollUserToPlan } from "../services/trainingService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faRunning, faMapMarkerAlt, faSignal, faUser} from '@fortawesome/free-solid-svg-icons';
 import ModalSession from "./ModalSession";
@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 
 
 function ViewDetails () {
+    const navigate = useNavigate()
     const [planData, setPlan] = useState({})
     const location = useLocation()
     const {planId} = location.state
@@ -25,6 +26,7 @@ function ViewDetails () {
     const [selectedSession, setSelectedSession] = useState(null);
     const [hoveredSession, setHoveredSession] = useState({ weekIndex: null, dayIndex: null });
     const [userAuth, setUserAuth] = useState({})
+    const[isEnrolled, setIsEnrolled] = useState(false)
 
 
 
@@ -44,13 +46,10 @@ function ViewDetails () {
             setTrainer(planInfo.creator)
             setTrainingWeeks(planInfo.trainingWeeks)
             setSessionsInfo(Array(numWeeks).fill(Array(7).fill(null)))
+            setIsEnrolled(planInfo.enrolled)
             
             const user = JSON.parse(localStorage.getItem("userAuth"))
             setUserAuth(user)
-            console.log(planInfo.creator)
-            console.log(user.id)
-            console.log(trainer.id === user.id)
-
 
             
             const weeklySessionsMatrix = planInfo.trainingWeeks.map(week => {
@@ -77,6 +76,29 @@ function ViewDetails () {
         setShowModal(false);
         setSelectedSession(null);
     };
+
+    const handleEnroll = async (event) => {
+        event.preventDefault()
+        try {
+            const fetch = await enrollUserToPlan(planId, userAuth.id)
+            navigate('/enrolledplans')
+        }
+        catch (error) {
+            alert(error)
+        }
+        
+    }
+
+    const handleUnenroll = async (event) => {
+        event.preventDefault()
+        try {
+            const fetch = await unenrollUserToPlan(planId, userAuth.id)
+            navigate('/trainingplans')
+        }
+        catch(error) {
+            alert(error)
+        }
+    }
 
     const renderTrainingRows = () => {
         console.log(sessionsInfo)
@@ -163,11 +185,22 @@ function ViewDetails () {
                 </div>
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
-                {trainer.id === userAuth.id ? (
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' >EDITAR</Button>
+            {trainer.id === userAuth.id ? (
+                <Button variant="primary" size="lg" className="mt-5 custom-button-createact">
+                    EDITAR
+                </Button>
+            ) : (
+                !isEnrolled ? (
+                    <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleEnroll}>
+                        INSCRIBIRME
+                    </Button>
                 ) : (
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' >APUNTARME</Button>
-                )}
+                    <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleUnenroll}>
+                        DESINSCRIBIRME
+                    </Button>
+                )
+            )}
+                    
             </div>
             <ModalSession
                 show={showModal}

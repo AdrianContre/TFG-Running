@@ -1,15 +1,11 @@
-import React from "react"
-import NavigationBar from "../../home/components/NavigationBar"
-import CirclePlus from '../../../assets/images/plus-circle.png'
-import '../styles/viewTrainingPlans.css'
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
-import { getOtherUsersPlans } from "../services/trainingService"
+import React from "react";
+import { useEffect, useState } from "react";
 import TrainingPlanCard from "./TrainingPlanCard"
+import NavigationBar from "../../home/components/NavigationBar";
+import { getUserEnrolledPlans } from "../services/trainingService";
 
-function ViewTrainingPlans () {
-    const navigate = useNavigate()
-    const [isTrainer, setIsTrainer] = useState(null)
+function ListEnrolledPlans() {
+
     const [plans,setPlans] = useState([])
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
@@ -17,27 +13,16 @@ function ViewTrainingPlans () {
 
     const distances = ["5K", "10K", "21K", "42K"];
     const levels = ["Principiante", "Intermedio", "Avanzado"];
+
     useEffect(() => {
-        const fetchInfo = async () => {
-            const user = JSON.parse(localStorage.getItem('userAuth'))
-            if (user.userType === "Runner") {
-                setIsTrainer(false)
-            }
-            else {
-                setIsTrainer(true)
-            }
-            const trainersPlans = await getOtherUsersPlans();
+        const fetchData = async () => {
+            const user = JSON.parse(localStorage.getItem("userAuth"))
+            const trainersPlans = await getUserEnrolledPlans(user.id);
             setPlans(trainersPlans)
             setFilteredPlans(trainersPlans)
         }
-        fetchInfo()
-        
+        fetchData()
     },[])
-    const handleClick = (event) => {
-        event.preventDefault();
-        navigate('/createtrainingplans')
-    }
-
 
     const handleFilterChange = () => {
         let filtered = plans;
@@ -61,7 +46,7 @@ function ViewTrainingPlans () {
         <>
             <NavigationBar />
             {plans.length > 0 ? (
-                <div className="filter-container">
+            <div className="filter-container">
                 <select
                     value={selectedDistance}
                     onChange={(e) => setSelectedDistance(e.target.value)}
@@ -78,29 +63,17 @@ function ViewTrainingPlans () {
                     onChange={(e) => setSelectedLevel(e.target.value)}
                     className="filter-select"
                 >
-                    <option value="">Seleccionar nivel</option>
+                    <option value="">Selecionar nivel</option>
                     {levels.map((level, index) => (
                         <option key={index} value={level}>{level}</option>
                     ))}
                 </select>
-            </div>
-            ) : (<div className='container'>
-            <p className='text-custom'>
-             NO HAY PLANES DISPONIBLES</p>
-         </div>)}
-            
+            </div>) : (<div className='container'>
+               <p className='text-custom'>
+                NO ESTAS INSCRITO A NINGÚN PLAN, APUNTATE A ALGUNO!!</p>
+            </div>)}
 
-            {isTrainer ? (
-                <div className="image-container">
-                    <div className="circle-container">
-                        <img className="circle-image" src={CirclePlus} onClick={handleClick}/>
-                        <div className="tooltip-text-view-training-plans">Crear plan de entrenamiento</div>
-                    </div>
-                </div> 
-            ): (
-                <>
-                </>
-            )}
+
             <div className="plans-container">
                 {filteredPlans.map((plan, index) => (
                     <TrainingPlanCard
@@ -111,12 +84,12 @@ function ViewTrainingPlans () {
                         level={plan.level}
                         trainerName={plan.trainerName}
                         trainerSurname={plan.trainerSurname}
+                        numSessions={plan.numSessions}
                     />
                 ))}
             </div>
-            
         </>
     )
 }
 
-export default ViewTrainingPlans;
+export default ListEnrolledPlans;

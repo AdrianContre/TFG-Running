@@ -15,7 +15,9 @@ public class TrainingPlanDetailDTO {
     private String level;
     private PlanCreatorDTO creator;
     private List<TrainingWeekDTO> trainingWeeks;
-    public TrainingPlanDetailDTO(TrainingPlan trainingPlan) {
+    private boolean enrolled;
+
+    public TrainingPlanDetailDTO(TrainingPlan trainingPlan, boolean enrolled) {
         this.id = trainingPlan.getId();
         this.name = trainingPlan.getName();
         this.description = trainingPlan.getDescription();
@@ -24,6 +26,7 @@ public class TrainingPlanDetailDTO {
         this.level = trainingPlan.getLevel();
         this.creator = new PlanCreatorDTO(trainingPlan.getCreator());
         this.trainingWeeks = buildTrainingWeek(trainingPlan.getTrainingWeeks());
+        this.enrolled = enrolled;
     }
 
     public List<TrainingWeekDTO> buildTrainingWeek (List<TrainingWeek> trainingWeek) {
@@ -96,5 +99,13 @@ public class TrainingPlanDetailDTO {
 
     public void setTrainingWeeks(List<TrainingWeekDTO> trainingWeeks) {
         this.trainingWeeks = trainingWeeks;
+    }
+
+    public boolean getEnrolled() {
+        return enrolled;
+    }
+
+    public void setEnrolled(boolean enrolled) {
+        this.enrolled = enrolled;
     }
 }

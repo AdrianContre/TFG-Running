@@ -116,7 +116,8 @@ public class TrainingPlanService {
         User user = u.getUser();
         Long userId = user.getId();
 
-        List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
+        //List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
+        List<TrainingPlan> plans = this.trainingPlanRepository.findAvailableTrainingPlans(userId);
         List<ListPlansDTO> plansDTO = new ArrayList<>();
         plans.stream().forEach(plan -> {
             ListPlansDTO p = new ListPlansDTO(plan);
@@ -145,6 +146,10 @@ public class TrainingPlanService {
     }
 
     public ResponseEntity<Object> getPlan(Long planId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        Long userId = user.getId();
         HashMap<String, Object> data = new HashMap<>();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
         if (!query.isPresent()) {
@@ -152,7 +157,12 @@ public class TrainingPlanService {
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
         TrainingPlan plan = query.get();
-        TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan);
+        boolean enrolled = false;
+        Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(userId, planId);
+        if (query2.isPresent()) {
+            enrolled = true;
+        }
+        TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan,enrolled);
         data.put("data", info);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
@@ -207,6 +217,25 @@ public class TrainingPlanService {
             info.add(planDTO);
         });
         data.put("data", info);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> withdrawUserInPlan(Long planId, EnrrollToAPlanDTO body) {
+        HashMap<String, Object> data = new HashMap<>();
+        Long userId = body.getUserId();
+        Optional<Runner> query = this.runnerRepository.findById(userId);
+        if (!query.isPresent()) {
+            data.put("error", "Runner not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(userId, planId);
+        if (!query2.isPresent()) {
+            data.put("error", "The runner is not enrolled to the plan");
+        }
+        TrainingProgress tp = query2.get();
+        this.trainingProgressRepository.delete(tp);
+        data.put("data", "User unenrolled properly");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

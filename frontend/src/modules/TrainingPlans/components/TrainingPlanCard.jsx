@@ -1,11 +1,11 @@
 import React from "react";
 import '../styles/trainingPlanCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faRunning, faMapMarkerAlt, faSignal, faUser} from '@fortawesome/free-solid-svg-icons'
+import {faRunning, faMapMarkerAlt, faSignal, faUser,faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router";
+import { ProgressBar } from "react-bootstrap";
 
-function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname }) {
-
+function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions }) {
     const navigate = useNavigate()
 
     const handleViewDetails = (event) => {
@@ -28,6 +28,14 @@ function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSu
                 <p className="card-text">
                     <FontAwesomeIcon icon={faUser} /> Entrenador: <strong>{trainerName} {trainerSurname}</strong>
                 </p>
+                {numSessions ? (
+                    <p className="card-text">
+                    <FontAwesomeIcon icon={faCheckCircle} /> Sesiones completadas: <strong >0/{numSessions}</strong>
+                </p>
+                ) : (
+                    <>
+                    </>
+                )}
                 <button className="details-button" onClick={handleViewDetails}>Ver Detalles</button>
             </div>
         </div>

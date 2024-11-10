@@ -50,13 +50,13 @@ function ViewMyPlans () {
     return (
         <>
             <NavigationBar />
-            <div className="filter-container">
+            {plans.length > 0 ? (<div className="filter-container">
                 <select
                     value={selectedDistance}
                     onChange={(e) => setSelectedDistance(e.target.value)}
                     className="filter-select"
                 >
-                    <option value="">Select Distance</option>
+                    <option value="">Seleccionar distancia</option>
                     {distances.map((distance, index) => (
                         <option key={index} value={distance}>{distance}</option>
                     ))}
@@ -67,12 +67,16 @@ function ViewMyPlans () {
                     onChange={(e) => setSelectedLevel(e.target.value)}
                     className="filter-select"
                 >
-                    <option value="">Select Level</option>
+                    <option value="">Seleccionar nivel</option>
                     {levels.map((level, index) => (
                         <option key={index} value={level}>{level}</option>
                     ))}
                 </select>
-            </div>
+            </div>) : (<div className='container'>
+               <p className='text-custom'>
+                NO CREASTE NINGÚN PLAN, CREA ALGUNO!!</p>
+            </div>)}
+            
             <div className="plans-container">
                 {filteredPlans.map((plan, index) => (
                     <TrainingPlanCard

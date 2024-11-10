@@ -139,4 +139,12 @@ public class TrainingPlan {
     public void addTrainningProgress (TrainingProgress trainingProgress) {
         this.trainingProgresses.add(trainingProgress);
     }
+
+    public Integer totalSessions () {
+        Integer counter = 0;
+        for (int i = 0; i < this.trainingWeeks.size(); ++i) {
+            counter = counter + this.trainingWeeks.get(i).getNumSessions();
+        }
+        return counter;
+    }
 }

@@ -19,6 +19,7 @@ import ViewTrainingPlans from './modules/TrainingPlans/components/ViewTrainingPl
 import CreateTrainingPlan from './modules/TrainingPlans/components/CreateTrainingPlan';
 import ViewMyPlans from './modules/TrainingPlans/components/ViewMyPlans';
 import ViewDetails from './modules/TrainingPlans/components/ViewDetails';
+import ListEnrolledPlans from './modules/TrainingPlans/components/ListEnrolledPlans';
 
 
 
@@ -44,6 +45,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/enrolledplans' element={<AuthRoute element={ListEnrolledPlans} />} /> 
         <Route path='/viewplan' element={<AuthRoute element={ViewDetails} />} />
         <Route path='/myplans' element={<AuthRoute element={ViewMyPlans} />} />
         <Route path='/createtrainingplans' element={<AuthRoute element={CreateTrainingPlan} />} />

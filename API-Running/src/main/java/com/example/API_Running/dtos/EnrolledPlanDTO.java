@@ -10,6 +10,7 @@ public class EnrolledPlanDTO {
     private String trainerName;
     private String trainerSurname;
     private Float percentage;
+    private Integer numSessions;
 
     public EnrolledPlanDTO(TrainingPlan trainingPlan, Float percentage) {
         this.id = trainingPlan.getId();
@@ -19,6 +20,7 @@ public class EnrolledPlanDTO {
         this.trainerName = trainingPlan.getCreator().getName();
         this.trainerSurname = trainingPlan.getCreator().getSurname();
         this.percentage = percentage;
+        this.numSessions = trainingPlan.totalSessions();
     }
 
     public Long getId() {
@@ -75,5 +77,13 @@ public class EnrolledPlanDTO {
 
     public void setPercentage(Float percentage) {
         this.percentage = percentage;
+    }
+
+    public Integer getNumSessions() {
+        return numSessions;
+    }
+
+    public void setNumSessions(Integer numSessions) {
+        this.numSessions = numSessions;
     }
 }

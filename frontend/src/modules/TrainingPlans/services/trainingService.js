@@ -92,3 +92,74 @@ export const getPlanInfo = async (planId) => {
       throw error; 
     });
 }
+
+export const getUserEnrolledPlans = async (userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_TRAINING_PLANS}/enrolled/${userId}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}
+
+export const enrollUserToPlan = async (planId, userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_TRAINING_PLANS}/${planId}/enroll`,{
+      method: 'POST',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({userId: userId})
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}
+
+export const unenrollUserToPlan = async (planId, userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_TRAINING_PLANS}/withdraw/${planId}`,{
+      method: 'DELETE',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({userId: userId})
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}
