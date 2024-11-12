@@ -6,7 +6,8 @@ const ModalSession = ({ show, handleClose, session }) => {
   let map = {}
   map["running"] = "Carrera"
   map["strength"] = "Fuerza"
-  map["mobility"] = "Mobilidad"
+  map["mobility"] = "Movilidad"
+  map["rest"] = "Descanso"
 
   return (
     <Modal show={show} onHide={handleClose} centered>

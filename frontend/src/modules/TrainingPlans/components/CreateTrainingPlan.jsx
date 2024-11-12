@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import { createPlan } from "../services/trainingService";
 import { useNavigate } from "react-router";
+import PopUp from "../../auth/components/PopUp";
 
 function CreateTrainingPlan() {
     const navigate = useNavigate()
@@ -28,6 +29,12 @@ function CreateTrainingPlan() {
         distance: '',
         duration: ''
     }); 
+    const [show,setShow] = useState(false)
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
 
     const handleLevelChange = (event) => {
         setLevel(event.target.value); // Actualiza el valor del estado con el seleccionado
@@ -128,10 +135,19 @@ function CreateTrainingPlan() {
         console.log(level)
         console.log(objDistance)
         console.log(sessionsInfo)
-        const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
-        if (send) {
-            navigate('/myplans')
+        const allSessionsFilled = sessionsInfo.every(week =>
+            week.every(session => session !== null)
+        );
+        if (allSessionsFilled) {
+            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+            if (send) {
+                navigate('/myplans')
+            }
         }
+        else {
+            setShow(true)
+        }
+        
     }
 
     const renderTrainingRows = () => {
@@ -231,6 +247,7 @@ function CreateTrainingPlan() {
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <Button variant='primary' size='lg' className='mt-5' onClick={handleCreatePlan}>Crear plan de entrenamiento</Button>
             </div>
+            <PopUp error={"Han de estar todas las casillas llenas, en caso que quieras añadir descanso, añade una sesión de tipo descanso"} show={show} onHide={onHide} title={"Error al crear plan de entrenamiento"}/>
 
             {/* Modal para agregar sesión */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -269,6 +286,7 @@ function CreateTrainingPlan() {
                                 <option value="running">Carrera</option>
                                 <option value="strength">Fuerza</option>
                                 <option value="mobility">Movilidad</option>
+                                <option value="rest">Descanso</option>
                             </Form.Control>
                         </Form.Group>
 

@@ -66,4 +66,18 @@ public class SessionDTO {
     public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
+
+
+
+    @Override
+    public String toString() {
+        return "SessionDTO{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", runningType='" + runningType + '\'' +
+                ", distance=" + distance +
+                ", duration=" + duration +
+                '}';
+    }
 }

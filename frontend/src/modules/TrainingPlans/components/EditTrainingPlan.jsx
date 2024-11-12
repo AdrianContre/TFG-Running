@@ -8,6 +8,7 @@ import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome
 import { createPlan, editPlan } from "../services/trainingService";
 import { useLocation, useNavigate } from "react-router";
 import { getPlanInfo } from "../services/trainingService";
+import PopUp from "../../auth/components/PopUp";
 
 
 function EditTrainingPlan() {
@@ -24,6 +25,7 @@ function EditTrainingPlan() {
     const [showModal, setShowModal] = useState(false);
     const [selectedWeek, setSelectedWeek] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null); 
+    const [show, setShow] = useState(false)
     const [sessionData, setSessionData] = useState({
         name: '',
         description: '',
@@ -32,6 +34,11 @@ function EditTrainingPlan() {
         distance: '',
         duration: ''
     }); 
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
 
     useEffect(() => {
         const fetchPlan = async () => {
@@ -132,10 +139,6 @@ function EditTrainingPlan() {
     };
 
     const handleRemoveSession = (weekIndex, dayIndex) => {
-        const newSessions = [...sessions];
-        newSessions[weekIndex][dayIndex] = null;
-        setSessions(newSessions);
-    
         const newSessionsInfo = [...sessionsInfo];
         newSessionsInfo[weekIndex][dayIndex] = null;
         setSessionsInfo(newSessionsInfo);
@@ -143,6 +146,7 @@ function EditTrainingPlan() {
     };
 
     const handleEditSession = (weekIndex, dayIndex) => {
+        console.log(sessionsInfo[weekIndex][dayIndex])
         const session = sessionsInfo[weekIndex][dayIndex];
         setSessionData(session); 
         setSelectedWeek(weekIndex);
@@ -153,10 +157,21 @@ function EditTrainingPlan() {
     const handleEditPlan = async (event) => {
         const trainerId = JSON.parse(localStorage.getItem("userAuth")).id
         event.preventDefault()
-        const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
-        if (send) {
-            navigate('/viewplan', { state: {planId: planId}})
+
+        const allSessionsFilled = sessionsInfo.every(week =>
+            week.every(session => session !== null)
+        );
+        
+        if (allSessionsFilled) {
+            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+            if (send) {
+                navigate('/viewplan', { state: {planId: planId}})
+            }
         }
+        else {
+            setShow(true)
+        }
+        
     }
 
     const renderTrainingRows = () => {
@@ -257,6 +272,8 @@ function EditTrainingPlan() {
                 <Button variant='primary' size='lg' className='mt-5' onClick={handleEditPlan}>CONFIRMAR EDICIÓN</Button>
             </div>
 
+            <PopUp error={"Han de estar todas las casillas llenas, en caso que quieras añadir descanso, añade una sesión de tipo descanso"} show={show} onHide={onHide} title={"Error al editar plan de entrenamiento"}/>
+
             
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
@@ -294,6 +311,7 @@ function EditTrainingPlan() {
                                 <option value="running">Carrera</option>
                                 <option value="strength">Fuerza</option>
                                 <option value="mobility">Movilidad</option>
+                                <option value="rest">Descanso</option>
                             </Form.Control>
                         </Form.Group>
 

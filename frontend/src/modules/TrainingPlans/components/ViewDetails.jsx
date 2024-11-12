@@ -113,7 +113,7 @@ function ViewDetails () {
                 <div key={i} className="week-row-create-plan">
                     {[...Array(7)].map((_, dayIndex) => (
                         <div key={dayIndex} className="day-column-create-plan">
-                            {sessionsInfo[i][dayIndex] ? (
+                            {sessionsInfo[i] && sessionsInfo[i][dayIndex] ? (
                                 <div className="session-cell">
                                    <span
                                     className="session-name"

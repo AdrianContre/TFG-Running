@@ -21,15 +21,17 @@ public class TrainingPlanService {
     private final TrainerRepository trainerRepository;
     private final RunnerRepository runnerRepository;
     private final TrainingProgressRepository trainingProgressRepository;
+    private final RestSessionRepository restSessionRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
         this.trainerRepository = trainerRepository;
         this.runnerRepository = runnerRepository;
         this.trainingProgressRepository = trainingProgressRepository;
+        this.restSessionRepository = restSessionRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -68,6 +70,7 @@ public class TrainingPlanService {
                     String sessionName = sessionDTO.getName();
                     String sessionDescription = sessionDTO.getDescription();
                     String type = sessionDTO.getType();
+                    Integer day = j;
 
                     TrainingSession savedSession;
                     if (type.equals("running")) {
@@ -76,6 +79,7 @@ public class TrainingPlanService {
                         runningSession.setDescription(sessionDescription);
                         runningSession.setTrainingWeek(savedWeek);
                         runningSession.setResults(new ArrayList<>());
+                        runningSession.setDay(day);
                         savedSession = this.trainingSessionRepository.save(runningSession);
                     } else if (type.equals("strength")) {
                         StrengthSession strengthSession = new StrengthSession();
@@ -83,14 +87,25 @@ public class TrainingPlanService {
                         strengthSession.setDescription(sessionDescription);
                         strengthSession.setTrainingWeek(savedWeek);
                         strengthSession.setResults(new ArrayList<>());
+                        strengthSession.setDay(day);
                         savedSession = this.trainingSessionRepository.save(strengthSession);
-                    } else {
+                    } else if (type.equals("mobility")) {
                         MobilitySession mobilitySession = new MobilitySession();
                         mobilitySession.setName(sessionName);
                         mobilitySession.setDescription(sessionDescription);
                         mobilitySession.setTrainingWeek(savedWeek);
                         mobilitySession.setResults(new ArrayList<>());
+                        mobilitySession.setDay(day);
                         savedSession = this.trainingSessionRepository.save(mobilitySession);
+                    }
+                    else {
+                        RestSession restSession = new RestSession();
+                        restSession.setName(sessionName);
+                        restSession.setDescription(sessionDescription);
+                        restSession.setTrainingWeek(savedWeek);
+                        restSession.setResults(new ArrayList<>());
+                        restSession.setDay(day);
+                        savedSession = this.trainingSessionRepository.save(restSession);
                     }
                     savedWeek.getSessions().add(savedSession);
                 } else {
@@ -238,4 +253,141 @@ public class TrainingPlanService {
         data.put("data", "User unenrolled properly");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
+
+    public ResponseEntity<Object> updateTrainingPlan(Long planId, UpdateTrainingPlanDTO updateTrainingPlanDTO) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
+        if (!query.isPresent()) {
+            data.put("error", "The plan does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        TrainingPlan trainingPlan = query.get();
+        trainingPlan.setName(updateTrainingPlanDTO.getName());
+        trainingPlan.setDescription(updateTrainingPlanDTO.getDescription());
+        trainingPlan.setWeeks(updateTrainingPlanDTO.getNumWeeks());
+        trainingPlan.setLevel(updateTrainingPlanDTO.getLevel());
+        trainingPlan.setDistanceObjective(updateTrainingPlanDTO.getObjDistance());
+
+        List<TrainingWeek> trainingWeeks = trainingPlan.getTrainingWeeks();
+        List<List<SessionDTO>> sessionsDTO = updateTrainingPlanDTO.getSessions();
+        Integer numWeeks = updateTrainingPlanDTO.getNumWeeks();
+
+        if (numWeeks > trainingWeeks.size()) {
+            for (int i = trainingWeeks.size(); i < numWeeks; ++i) {
+                trainingWeeks.add(new TrainingWeek(trainingPlan, new ArrayList<>(), new ArrayList<>()));
+            }
+        } else if (numWeeks < trainingWeeks.size()) {
+            List<TrainingWeek> remainingWeeks = new ArrayList<>(trainingWeeks.subList(0, numWeeks));
+            trainingPlan.getTrainingWeeks().clear();
+            trainingPlan.getTrainingWeeks().addAll(remainingWeeks);
+            for (int i = numWeeks; i < trainingWeeks.size(); i++) {
+                TrainingWeek week = trainingWeeks.get(i);
+                for (TrainingSession sess : week.getSessions()) {
+                    sess.getResults().clear();
+                    sess.setTrainingWeek(null);
+                    this.trainingSessionRepository.delete(sess);
+                }
+                week.setTrainingPlan(null);
+                this.trainingWeekRepository.delete(week);
+            }
+        }
+
+
+
+
+        for (int i = 0; i < numWeeks; ++i) {
+            TrainingWeek currentWeek = trainingWeeks.get(i);
+            List<SessionDTO> sessionsInWeekDTO = sessionsDTO.get(i);
+            List<TrainingSession> sessions = currentWeek.getSessions();
+            List<TrainingSession> tempSessions = new ArrayList<>(7);
+
+            if (sessions.isEmpty()) {
+                for (int j = 0; j < 7; ++j) {
+                    SessionDTO sessionDTO = sessionsInWeekDTO.get(j);
+                    TrainingSession newSession = createNewSession(sessionDTO, currentWeek);
+                    newSession.setDay(j);
+                    tempSessions.add(j, newSession);
+                }
+            }
+            else {
+                for (int j = 0; j < 7; ++j) {
+                    SessionDTO sessionDTO = sessionsInWeekDTO.get(j);
+                    TrainingSession session = sessions.get(j);
+
+                    if (!isMatchingSessionType(session, sessionDTO.getType())) {
+                        session.getResults().clear();
+                        session.setTrainingWeek(null);
+                        this.trainingSessionRepository.delete(session);
+                        TrainingSession newSession = createNewSession(sessionDTO, currentWeek);
+                        newSession.setDay(j);
+                        tempSessions.add(newSession);
+                    } else if (session != null) {
+                        updateExistingSession(session, sessionDTO);
+                        session.setDay(j);
+                        tempSessions.add(j, session);
+                    } else {
+                        TrainingSession newSession = createNewSession(sessionDTO, currentWeek);
+                        newSession.setDay(j);
+                        tempSessions.add(j, newSession);
+                    }
+                }
+            }
+
+            currentWeek.getSessions().clear();
+            currentWeek.getSessions().addAll(tempSessions);
+            trainingWeeks.set(i, this.trainingWeekRepository.save(currentWeek));
+        }
+
+        this.trainingPlanRepository.save(trainingPlan);
+
+        data.put("data", "Training plan updated properly");
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+
+
+    private TrainingSession createNewSession(SessionDTO sessionDTO, TrainingWeek trainingWeek) {
+        TrainingSession newSession;
+        String type = sessionDTO.getType();
+
+        if (type.equals("running")) {
+            newSession = new RunningSession(sessionDTO.getRunningType(), sessionDTO.getDistance(), sessionDTO.getDuration());
+        } else if (type.equals("strength")) {
+            newSession = new StrengthSession();
+        } else if (type.equals("mobility")) {
+            newSession = new MobilitySession();
+        }
+        else {
+            System.out.println("creo una sesión de descanso");
+            newSession = new RestSession();
+        }
+
+        newSession.setName(sessionDTO.getName());
+        newSession.setDescription(sessionDTO.getDescription());
+        newSession.setResults(new ArrayList<>());
+        newSession.setTrainingWeek(trainingWeek);
+        return newSession;
+    }
+
+
+    private boolean isMatchingSessionType(TrainingSession session, String type) {
+        return (type.equals("running") && session instanceof RunningSession) ||
+                (type.equals("strength") && session instanceof StrengthSession) ||
+                (type.equals("mobility") && session instanceof MobilitySession) ||
+                (type.equals("rest") && session instanceof RestSession);
+    }
+
+    private void updateExistingSession(TrainingSession session, SessionDTO sessionDTO) {
+        session.setName(sessionDTO.getName());
+        session.setDescription(sessionDTO.getDescription());
+
+        if (session instanceof RunningSession) {
+            RunningSession runningSession = (RunningSession) session;
+            runningSession.setType(sessionDTO.getRunningType());
+            runningSession.setDistance(sessionDTO.getDistance());
+            runningSession.setDuration(sessionDTO.getDuration());
+        }
+    }
+
 }

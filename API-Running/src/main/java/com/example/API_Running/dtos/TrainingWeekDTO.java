@@ -1,11 +1,10 @@
 package com.example.API_Running.dtos;
 
-import com.example.API_Running.models.RunningSession;
-import com.example.API_Running.models.StrengthSession;
-import com.example.API_Running.models.TrainingSession;
-import com.example.API_Running.models.TrainingWeek;
+import com.example.API_Running.models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TrainingWeekDTO {
@@ -19,6 +18,7 @@ public class TrainingWeekDTO {
 
     public List<SessionDTO> buildSessionsList(List<TrainingSession> sessionList) {
         List<SessionDTO> list = new ArrayList<>();
+        Collections.sort(sessionList, Comparator.comparingInt(TrainingSession::getDay));
         sessionList.stream().forEach(ses -> {
             if (ses == null) {
                 list.add(null);
@@ -31,8 +31,12 @@ public class TrainingWeekDTO {
                 SessionDTO s = new SessionDTO(ses.getName(), ses.getDescription(), "strength", null, null, null);
                 list.add(s);
             }
-            else {
+            else if (ses instanceof MobilitySession) {
                 SessionDTO s = new SessionDTO(ses.getName(), ses.getDescription(), "mobility", null, null, null);
+                list.add(s);
+            }
+            else {
+                SessionDTO s = new SessionDTO(ses.getName(), ses.getDescription(), "rest", null, null, null);
                 list.add(s);
             }
 

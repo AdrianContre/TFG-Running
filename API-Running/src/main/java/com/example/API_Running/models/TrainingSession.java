@@ -26,17 +26,21 @@ public abstract class TrainingSession {
     @JoinColumn(name = "training_week_id")
     private TrainingWeek trainingWeek;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     private List<TrainingSessionResult> results = new ArrayList<>();
+
+    @Column(name = "day", nullable = false)
+    private Integer day;
 
     public TrainingSession() {}
 
-    public TrainingSession(Long id, String name, String description, TrainingWeek trainingWeek, List<TrainingSessionResult> results) {
+    public TrainingSession(Long id, String name, String description, TrainingWeek trainingWeek, List<TrainingSessionResult> results, Integer day) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.trainingWeek = trainingWeek;
         this.results = results;
+        this.day = day;
     }
 
     public Long getId() {
@@ -77,5 +81,13 @@ public abstract class TrainingSession {
 
     public void setResults(List<TrainingSessionResult> results) {
         this.results = results;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
     }
 }

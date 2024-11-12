@@ -2,9 +2,11 @@ package com.example.API_Running.controllers;
 
 import com.example.API_Running.dtos.CreateTrainingPlanDTO;
 import com.example.API_Running.dtos.EnrrollToAPlanDTO;
+import com.example.API_Running.dtos.UpdateTrainingPlanDTO;
 import com.example.API_Running.services.TrainingPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +54,10 @@ public class TrainingPlanController {
     @DeleteMapping(path= "/withdraw/{planId}")
     public ResponseEntity<Object> withDrawUserInPlan(@PathVariable Long planId, @RequestBody EnrrollToAPlanDTO body) {
         return this.trainingPlanService.withdrawUserInPlan(planId, body);
+    }
+
+    @PutMapping(path="/{planId}")
+    public ResponseEntity<Object> updateTrainingPlan(@PathVariable Long planId, @RequestBody UpdateTrainingPlanDTO updateTrainingPlanDTO) {
+        return this.trainingPlanService.updateTrainingPlan(planId, updateTrainingPlanDTO);
     }
 }
