@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { enrollUserToPlan, getPlanInfo, unenrollUserToPlan } from "../services/trainingService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faRunning, faMapMarkerAlt, faSignal, faUser} from '@fortawesome/free-solid-svg-icons';
+import { faEye, faRunning, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
 import ModalSession from "./ModalSession";
 import { Button } from "react-bootstrap";
+import { getUserResultsPlan } from "../services/trainingResultService";
 
 
 function ViewDetails () {
@@ -27,6 +28,7 @@ function ViewDetails () {
     const [hoveredSession, setHoveredSession] = useState({ weekIndex: null, dayIndex: null });
     const [userAuth, setUserAuth] = useState({})
     const[isEnrolled, setIsEnrolled] = useState(false)
+    const [hasResult, setHasResult] = useState(Array(numWeeks).fill(Array(7).fill(null)));
 
 
 
@@ -62,6 +64,12 @@ function ViewDetails () {
             });
             console.log("sessiones: "+ weeklySessionsMatrix)
             setSessionsInfo(weeklySessionsMatrix)
+
+            if (planInfo.enrolled) {
+                const results = await getUserResultsPlan(planInfo.id, user.id)
+                setHasResult(results)
+                console.log(results)
+            }
         }
         fetchPlan()
     },[])
@@ -105,6 +113,10 @@ function ViewDetails () {
         navigate('/editplan', { state: {planId: planId}})
     }
 
+    const handleCreateSessionResult = (session) => {
+        console.log(session)
+    }
+
     const renderTrainingRows = () => {
         console.log(sessionsInfo)
         let rows = [];
@@ -127,6 +139,80 @@ function ViewDetails () {
                                     >
                                     {sessionsInfo[i][dayIndex].name}
                                     </span>
+                                    {sessionsInfo[i][dayIndex].type !== "rest" ? (numWeeks === 1 ? (
+                                        trainer.id !== userAuth.id ? (
+                                            hasResult[i] === true ? (
+                                                <FontAwesomeIcon icon={faCheck} size="xl" style={{ color: "#47d13d" }} />
+                                            ) : (
+                                                <span
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        padding: "8px",
+                                                        backgroundColor: "#f0f0f0", 
+                                                        color: "#007bff", 
+                                                        border: "1px solid #007bff",
+                                                        borderRadius: "5px",
+                                                        cursor: "pointer",
+                                                        fontWeight: "bold",
+                                                        marginTop: "8px", 
+                                                        fontSize: "0.9em",
+                                                        transition: "background-color 0.3s, color 0.3s",
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#007bff";
+                                                        e.currentTarget.style.color = "#ffffff";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#f0f0f0";
+                                                        e.currentTarget.style.color = "#007bff";
+                                                    }}
+                                                    onClick={() => {handleCreateSessionResult(sessionsInfo[i][dayIndex])}}
+                                                >
+                                                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: "5px" }} /> Añadir resultado
+                                                </span>
+                                            )
+                                        ) : null
+                                    ) : (
+                                        // Caso en que numWeeks es distinto de 1
+                                        trainer.id !== userAuth.id ? (
+                                            hasResult[i][dayIndex] === true ? (
+                                                <FontAwesomeIcon icon={faCheck} size="xl" style={{ color: "#47d13d" }} />
+                                            ) : (
+                                                <span
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        padding: "8px",
+                                                        backgroundColor: "#f0f0f0", 
+                                                        color: "#007bff", 
+                                                        border: "1px solid #007bff",
+                                                        borderRadius: "5px",
+                                                        cursor: "pointer",
+                                                        fontWeight: "bold",
+                                                        marginTop: "8px", 
+                                                        fontSize: "0.9em",
+                                                        transition: "background-color 0.3s, color 0.3s",
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#007bff";
+                                                        e.currentTarget.style.color = "#ffffff";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#f0f0f0";
+                                                        e.currentTarget.style.color = "#007bff";
+                                                    }}
+                                                    onClick={() => {handleCreateSessionResult(sessionsInfo[i][dayIndex])}}
+                                                >
+                                                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: "5px" }} /> Añadir resultado
+                                                </span>
+                                            )
+                                        ) : null
+                                    )) : null}
+                                    
+
 
 
 
@@ -200,7 +286,7 @@ function ViewDetails () {
                         INSCRIBIRME
                     </Button>
                 ) : (
-                    <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleUnenroll}>
+                    <Button variant="danger" size="lg" className="mt-5 custom-button-createact" onClick={handleUnenroll}>
                         DESINSCRIBIRME
                     </Button>
                 )

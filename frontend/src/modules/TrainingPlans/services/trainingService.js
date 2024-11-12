@@ -188,3 +188,4 @@ export const editPlan = async (planId,name, description, numWeeks, objDistance, 
       throw error; 
     });
 }
+
