@@ -115,6 +115,13 @@ function ViewDetails () {
 
     const handleCreateSessionResult = (session) => {
         console.log(session)
+        console.log(planData)
+        if (session.type === "running") {
+            navigate('/createrunningsessionresult', { state: {plan: planData, session: session}})
+        }
+        else {
+            navigate('/createsessionresult', { state: {plan: planData, session: session}})
+        }
     }
 
     const renderTrainingRows = () => {

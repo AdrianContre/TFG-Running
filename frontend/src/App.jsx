@@ -21,6 +21,8 @@ import ViewMyPlans from './modules/TrainingPlans/components/ViewMyPlans';
 import ViewDetails from './modules/TrainingPlans/components/ViewDetails';
 import ListEnrolledPlans from './modules/TrainingPlans/components/ListEnrolledPlans';
 import EditTrainingPlan from './modules/TrainingPlans/components/EditTrainingPlan';
+import CreateRunningSessionResult from './modules/TrainingPlans/components/CreateRunningSessionResult';
+import CreateSessionResult from './modules/TrainingPlans/components/CreateSessionResult';
 
 
 
@@ -46,6 +48,8 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/createsessionresult' element={<AuthRoute element={CreateSessionResult} />} />
+        <Route path='/createrunningsessionresult' element={<AuthRoute element={CreateRunningSessionResult} />} /> 
         <Route path='/enrolledplans' element={<AuthRoute element={ListEnrolledPlans} />} /> 
         <Route path='/viewplan' element={<AuthRoute element={ViewDetails} />} />
         <Route path='/myplans' element={<AuthRoute element={ViewMyPlans} />} />
