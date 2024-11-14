@@ -94,4 +94,8 @@ public abstract class TrainingSession {
     public void addResult(TrainingSessionResult result) {
         this.results.add(result);
     }
+
+    public void removeResult(TrainingSessionResult result) {
+        this.results.remove(result);
+    }
 }

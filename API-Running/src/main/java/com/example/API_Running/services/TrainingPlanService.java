@@ -22,9 +22,10 @@ public class TrainingPlanService {
     private final RunnerRepository runnerRepository;
     private final TrainingProgressRepository trainingProgressRepository;
     private final RestSessionRepository restSessionRepository;
+    private final TrainingSessionResultRepository trainingSessionResultRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
@@ -32,6 +33,7 @@ public class TrainingPlanService {
         this.runnerRepository = runnerRepository;
         this.trainingProgressRepository = trainingProgressRepository;
         this.restSessionRepository = restSessionRepository;
+        this.trainingSessionResultRepository = trainingSessionResultRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -244,12 +246,21 @@ public class TrainingPlanService {
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
 
+        List<TrainingSessionResult> trainingSessionResults = this.trainingSessionResultRepository.findAllByPlanAndRunner(planId, userId);
+        for (TrainingSessionResult tsr : trainingSessionResults) {
+            TrainingSession ts = tsr.getSession();
+            ts.removeResult(tsr);
+            this.trainingSessionRepository.save(ts);
+            this.trainingSessionResultRepository.delete(tsr);
+        }
+
         Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(userId, planId);
         if (!query2.isPresent()) {
             data.put("error", "The runner is not enrolled to the plan");
         }
         TrainingProgress tp = query2.get();
         this.trainingProgressRepository.delete(tp);
+
         data.put("data", "User unenrolled properly");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
