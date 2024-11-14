@@ -21,19 +21,19 @@ public class TrainingPlanService {
     private final TrainerRepository trainerRepository;
     private final RunnerRepository runnerRepository;
     private final TrainingProgressRepository trainingProgressRepository;
-    private final RestSessionRepository restSessionRepository;
     private final TrainingSessionResultRepository trainingSessionResultRepository;
+    private final ActivityRepository activityRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
         this.trainerRepository = trainerRepository;
         this.runnerRepository = runnerRepository;
         this.trainingProgressRepository = trainingProgressRepository;
-        this.restSessionRepository = restSessionRepository;
         this.trainingSessionResultRepository = trainingSessionResultRepository;
+        this.activityRepository = activityRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -251,7 +251,7 @@ public class TrainingPlanService {
             TrainingSession ts = tsr.getSession();
             ts.removeResult(tsr);
             this.trainingSessionRepository.save(ts);
-            this.trainingSessionResultRepository.delete(tsr);
+            this.activityRepository.delete(tsr);
         }
 
         Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(userId, planId);

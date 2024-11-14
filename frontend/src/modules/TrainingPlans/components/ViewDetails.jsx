@@ -29,6 +29,7 @@ function ViewDetails () {
     const [userAuth, setUserAuth] = useState({})
     const[isEnrolled, setIsEnrolled] = useState(false)
     const [hasResult, setHasResult] = useState(Array(numWeeks).fill(Array(7).fill(false)));
+    const [change,setChange] = useState(false)
 
 
 
@@ -79,7 +80,7 @@ function ViewDetails () {
             // console.log("resultado: " + hasResult[0][1])
         }
         fetchPlan()
-    },[])
+    },[change])
 
     const viewSession = (session) => {
         console.log(session)
@@ -96,7 +97,7 @@ function ViewDetails () {
         event.preventDefault()
         try {
             const fetch = await enrollUserToPlan(planId, userAuth.id)
-            navigate('/enrolledplans')
+            setChange(!change)
         }
         catch (error) {
             alert(error)

@@ -18,6 +18,7 @@ public class ActivityController {
 
     @GetMapping(path = "/runners/{runnerId}")
     public ResponseEntity<Object> getUserManualActivities(@PathVariable Long runnerId) {
-        return this.activityService.getUserManualActivities(runnerId);
+//        return this.activityService.getUserManualActivities(runnerId);
+        return this.activityService.getUserActivities(runnerId);
     }
 }

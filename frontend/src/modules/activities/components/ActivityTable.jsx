@@ -56,9 +56,10 @@ function ActivityTable ({activities, onDeleteActivity}) {
                     {activities.map((activity) => (
                         <tr key={activity.id} style={{ borderBottom: 'none' }}>
                             <td>{activity.name}</td>
-                            <td>{activity.distance}km</td>
-                            <td>{activity.duration}</td>
+                            {activity.distance === null ? (<td> - </td>) : (<td>{activity.distance}km</td>)}
+                            {activity.duration === null ? (<td> - </td>) : (<td>{activity.duration}</td>)}
                             <td>{formatDate(activity.date)}</td>
+                            
                             <td>
                                 <input type="hidden" value={activity.id} />
                                 <input type="hidden" value={activity.type} />
