@@ -90,4 +90,8 @@ public abstract class TrainingSession {
     public void setDay(Integer day) {
         this.day = day;
     }
+
+    public void addResult(TrainingSessionResult result) {
+        this.results.add(result);
+    }
 }

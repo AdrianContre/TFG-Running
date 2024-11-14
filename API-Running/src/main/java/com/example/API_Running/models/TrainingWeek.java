@@ -68,7 +68,7 @@ public class TrainingWeek {
     public Integer getNumSessions() {
         Integer counter = 0;
         for (int i = 0; i<7; ++i) {
-            if (sessions.get(i) != null) {
+            if (!(sessions.get(i) instanceof RestSession)) {
                 counter += 1;
             }
         }

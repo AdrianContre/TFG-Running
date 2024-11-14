@@ -3,6 +3,7 @@ package com.example.API_Running.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 
 import java.time.LocalTime;
 
@@ -22,7 +23,8 @@ public class RunningSessionResult extends TrainingSessionResult{
     @Column(name="fcAvg",nullable = false)
     private Integer fcAvg;
 
-    @Column(name="route",nullable = true)
+    @Lob
+    @Column(name="route",nullable = true, columnDefinition="MEDIUMBLOB")
     private byte[] route;
 
     public RunningSessionResult() {}

@@ -13,7 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import RatingComponent from "./RatingComponent";
-import { createRunningSessionResult } from "../services/trainingResultService";
+import { createRunningSessionResult, uploadRouteToResult } from "../services/trainingResultService";
 
 function CreateRunningSessionResult () {
 
@@ -83,17 +83,20 @@ function CreateRunningSessionResult () {
             setError("Todos los campos excepto la ruta son obligatorios")
             setTitle("Error al crear actividad")
         }
+        // if (false) { 
+        //     console.log("hola")
+        // }
         else {
             try {
-                const activity = await createRunningSessionResult(plan.id, runnerId, session.id, description, rating, distance, duration, pace, fcAvg, materials, dataInfo)
+                const activity = await createRunningSessionResult(plan.id, runnerId, session.id, description, rating, distance, duration, pace, fcAvg, materialsId, dataInfo)
                 if (activity.data) {
                     if (route !== null) {
                         const id = activity.data
                         const formData = new FormData()
                         formData.append('route', route)
-                        const uploadRoute = await addRoute(formData,id)
+                        const uploadRoute = await uploadRouteToResult(formData,id)
                     }
-                    navigate('/activities')
+                    navigate('/viewplan', { state: {planId: plan.id}})
                 }
             }
             catch (Error) {

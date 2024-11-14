@@ -28,7 +28,7 @@ function ViewDetails () {
     const [hoveredSession, setHoveredSession] = useState({ weekIndex: null, dayIndex: null });
     const [userAuth, setUserAuth] = useState({})
     const[isEnrolled, setIsEnrolled] = useState(false)
-    const [hasResult, setHasResult] = useState(Array(numWeeks).fill(Array(7).fill(null)));
+    const [hasResult, setHasResult] = useState(Array(numWeeks).fill(Array(7).fill(false)));
 
 
 
@@ -49,6 +49,7 @@ function ViewDetails () {
             setTrainingWeeks(planInfo.trainingWeeks)
             setSessionsInfo(Array(numWeeks).fill(Array(7).fill(null)))
             setIsEnrolled(planInfo.enrolled)
+            //setHasResult((Array(numWeeks).fill(Array(7).fill(null))))
             
             const user = JSON.parse(localStorage.getItem("userAuth"))
             setUserAuth(user)
@@ -67,9 +68,15 @@ function ViewDetails () {
 
             if (planInfo.enrolled) {
                 const results = await getUserResultsPlan(planInfo.id, user.id)
-                setHasResult(results)
-                console.log(results)
+                const hasResultMatrix = Array.from({ length: planInfo.numWeeks }, (_, i) =>
+                    Array.from({ length: 7 }, (_, dayIndex) => results[i] ? results[i][dayIndex] : false)
+                );
+                
+                setHasResult(hasResultMatrix);
+                //setHasResult(results)
+                
             }
+            // console.log("resultado: " + hasResult[0][1])
         }
         fetchPlan()
     },[])
@@ -126,6 +133,7 @@ function ViewDetails () {
 
     const renderTrainingRows = () => {
         console.log(sessionsInfo)
+        console.log("results: " + hasResult)
         let rows = [];
         for (let i = 0; i < numWeeks; i++) {
             rows.push(
@@ -148,8 +156,8 @@ function ViewDetails () {
                                     </span>
                                     {sessionsInfo[i][dayIndex].type !== "rest" ? (numWeeks === 1 ? (
                                         trainer.id !== userAuth.id ? (
-                                            hasResult[i] === true ? (
-                                                <FontAwesomeIcon icon={faCheck} size="xl" style={{ color: "#47d13d" }} />
+                                            hasResult[i]?.[dayIndex] === true ? (
+                                                <FontAwesomeIcon icon={faCheck} size="2xl" style={{ color: "#47d13d" }} />
                                             ) : (
                                                 <span
                                                     style={{
@@ -184,7 +192,7 @@ function ViewDetails () {
                                     ) : (
                                         // Caso en que numWeeks es distinto de 1
                                         trainer.id !== userAuth.id ? (
-                                            hasResult[i][dayIndex] === true ? (
+                                            hasResult[i]?.[dayIndex] === true ? (
                                                 <FontAwesomeIcon icon={faCheck} size="xl" style={{ color: "#47d13d" }} />
                                             ) : (
                                                 <span

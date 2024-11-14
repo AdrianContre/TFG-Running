@@ -75,13 +75,13 @@ function CreateSessionResult() {
         else {
             try {
                 if (session.type === "strength") {
-                    const activity = await createStrengthSessionResult(plan.id, runnerId, session.id, description, rating, materials, dataInfo)
+                    const activity = await createStrengthSessionResult(plan.id, runnerId, session.id, description, rating, materialsId, dataInfo)
                 }
                 else {
-                    const activity = await createMobilitySessionResult(plan.id, runnerId, session.id, description, rating, materials, dataInfo)
+                    const activity = await createMobilitySessionResult(plan.id, runnerId, session.id, description, rating, materialsId, dataInfo)
                 }
                 
-                navigate('/activities')
+                navigate('/viewplan', { state: {planId: plan.id}})
             }
             catch (Error) {
                 setShow(true)
