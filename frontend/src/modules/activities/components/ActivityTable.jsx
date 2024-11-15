@@ -1,7 +1,7 @@
 import '../styles/activityTable.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash, faEye} from '@fortawesome/free-solid-svg-icons'
-import { deleteManualActivity } from '../services/activitiesService';
+import { deleteManualActivity, deleteResult } from '../services/activitiesService';
 import { useNavigate } from 'react-router';
 
 function ActivityTable ({activities, onDeleteActivity}) {
@@ -24,6 +24,10 @@ function ActivityTable ({activities, onDeleteActivity}) {
     const handleDeleteAct = async (activity) => {
         if (activity.type === "ManualActivity") {
             const deleteAct = await deleteManualActivity(activity.id)
+            onDeleteActivity(activity.id)
+        }
+        else {
+            const deleteAct = await deleteResult(activity.id)
             onDeleteActivity(activity.id)
         }
     }

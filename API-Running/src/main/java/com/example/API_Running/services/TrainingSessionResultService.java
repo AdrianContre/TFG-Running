@@ -22,15 +22,17 @@ public class TrainingSessionResultService {
     private final TrainingSessionRepository trainingSessionRepository;
     private final MaterialRepository materialRepository;
     private final TrainingProgressRepository trainingProgressRepository;
+    private final ActivityRepository activityRepository;
 
     @Autowired
-    public TrainingSessionResultService(TrainingSessionResultRepository trainingSessionResultRepository, TrainingPlanRepository trainingPlanRepository, RunnerRepository runnerRepository, TrainingSessionRepository trainingSessionRepository, MaterialRepository materialRepository, TrainingProgressRepository trainingProgressRepository) {
+    public TrainingSessionResultService(TrainingSessionResultRepository trainingSessionResultRepository, TrainingPlanRepository trainingPlanRepository, RunnerRepository runnerRepository, TrainingSessionRepository trainingSessionRepository, MaterialRepository materialRepository, TrainingProgressRepository trainingProgressRepository, ActivityRepository activityRepository) {
         this.trainingSessionResultRepository = trainingSessionResultRepository;
         this.trainingPlanRepository = trainingPlanRepository;
         this.runnerRepository = runnerRepository;
         this.trainingSessionRepository = trainingSessionRepository;
         this.materialRepository = materialRepository;
         this.trainingProgressRepository = trainingProgressRepository;
+        this.activityRepository = activityRepository;
     }
 
 
@@ -320,6 +322,23 @@ public class TrainingSessionResultService {
             MobilityResultDTO sDTO = new MobilityResultDTO(msr, planName);
             data.put("data", sDTO);
         }
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> deleteSessionResult(Long sessionId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingSessionResult> query = this.trainingSessionResultRepository.findById(sessionId);
+        if (!query.isPresent()) {
+            data.put("error", "Training Session Result does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        TrainingSessionResult tsr = query.get();
+        TrainingSession ts = tsr.getSession();
+        ts.removeResult(tsr);
+        this.trainingSessionRepository.save(ts);
+        this.activityRepository.delete(tsr);
+        data.put("data", "Session result deleted successfully");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

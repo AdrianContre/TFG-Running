@@ -51,4 +51,9 @@ public class TrainingSessionResultController {
     public ResponseEntity<Object> getTrainingSessionResult (@PathVariable Long sessionId, @RequestParam("type") String type) {
         return this.trainingSessionResultService.getTrainingResult(sessionId, type);
     }
+
+    @DeleteMapping(path= "/{sessionId}")
+    public ResponseEntity<Object> deleteSessionResult (@PathVariable Long sessionId) {
+        return this.trainingSessionResultService.deleteSessionResult(sessionId);
+    }
 }
