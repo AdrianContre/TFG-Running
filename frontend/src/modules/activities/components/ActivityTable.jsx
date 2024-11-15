@@ -32,6 +32,17 @@ function ActivityTable ({activities, onDeleteActivity}) {
         if (activity.type === "ManualActivity") {
             navigate('/viewmanualactivity',{ state: { manualActivityId: activity.id } })
         }
+        else if (activity.type === "RunningResult") {
+            navigate('/viewrunningresult',{ state: { sessionId: activity.id } })
+        }
+        else if (activity.type === "StrengthResult") {
+            navigate('/viewstrengthresult', { state: { sessionId: activity.id } })
+        }
+
+        else {
+            navigate('/viewmobilityresult', { state: { sessionId: activity.id } })
+        }
+
     }
 
     const handleEditActivity = (activity) => {

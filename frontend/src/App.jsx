@@ -23,6 +23,9 @@ import ListEnrolledPlans from './modules/TrainingPlans/components/ListEnrolledPl
 import EditTrainingPlan from './modules/TrainingPlans/components/EditTrainingPlan';
 import CreateRunningSessionResult from './modules/TrainingPlans/components/CreateRunningSessionResult';
 import CreateSessionResult from './modules/TrainingPlans/components/CreateSessionResult';
+import ViewRunningResult from './modules/activities/components/ViewRunningResult';
+import ViewStrengthResult from './modules/activities/components/ViewStrenghtResult';
+import ViewMobilityResult from './modules/activities/components/ViewMobilityResult';
 
 
 
@@ -48,6 +51,9 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/viewmobilityresult' element={<AuthRoute element={ViewMobilityResult} />} />
+        <Route path='/viewstrengthresult' element={<AuthRoute element={ViewStrengthResult} />} />
+        <Route path='/viewrunningresult' element={<AuthRoute element={ViewRunningResult} />} />
         <Route path='/createsessionresult' element={<AuthRoute element={CreateSessionResult} />} />
         <Route path='/createrunningsessionresult' element={<AuthRoute element={CreateRunningSessionResult} />} /> 
         <Route path='/enrolledplans' element={<AuthRoute element={ListEnrolledPlans} />} /> 

@@ -1,8 +1,6 @@
 package com.example.API_Running.services;
 
-import com.example.API_Running.dtos.CreateMobilitySessionResultDTO;
-import com.example.API_Running.dtos.CreateRunningSessionResultDTO;
-import com.example.API_Running.dtos.CreateStrengthSessionResultDTO;
+import com.example.API_Running.dtos.*;
 import com.example.API_Running.models.*;
 import com.example.API_Running.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,6 +291,35 @@ public class TrainingSessionResultService {
         trainingProgress.setPercentage(percentage * 100);
         this.trainingProgressRepository.save(trainingProgress);
         data.put("data", savedResult.getId());
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getTrainingResult(Long sessionId, String type) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingSessionResult> query = this.trainingSessionResultRepository.findById(sessionId);
+        if (!query.isPresent()) {
+            data.put("error", "Session does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (type.equals("RunningResult")) {
+            RunningSessionResult runningSessionResult = (RunningSessionResult) query.get();
+            String planName = runningSessionResult.getSession().getTrainingWeek().getTrainingPlan().getName();
+            RunningResultDTO rDTO = new RunningResultDTO(runningSessionResult, planName);
+            data.put("data", rDTO);
+        }
+        else if (type.equals("StrengthResult")) {
+            StrengthSessionResult ssr = (StrengthSessionResult) query.get();
+            String planName = ssr.getSession().getTrainingWeek().getTrainingPlan().getName();
+            StrengthResultDTO sDTO = new StrengthResultDTO(ssr, planName);
+            data.put("data", sDTO);
+        }
+        else {
+            MobilitySessionResult msr = (MobilitySessionResult) query.get();
+            String planName = msr.getSession().getTrainingWeek().getTrainingPlan().getName();
+            MobilityResultDTO sDTO = new MobilityResultDTO(msr, planName);
+            data.put("data", sDTO);
+        }
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

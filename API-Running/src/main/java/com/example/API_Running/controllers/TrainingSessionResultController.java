@@ -46,4 +46,9 @@ public class TrainingSessionResultController {
     public ResponseEntity<Object> createMobilitySessionResult(@RequestBody CreateMobilitySessionResultDTO createMobilitySessionResultDTO) {
         return this.trainingSessionResultService.createMobilitySessionResult(createMobilitySessionResultDTO);
     }
+
+    @GetMapping(path="/{sessionId}")
+    public ResponseEntity<Object> getTrainingSessionResult (@PathVariable Long sessionId, @RequestParam("type") String type) {
+        return this.trainingSessionResultService.getTrainingResult(sessionId, type);
+    }
 }

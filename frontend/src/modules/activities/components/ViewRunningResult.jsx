@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { getManualActivity } from "../services/activitiesService";
+import { getManualActivity, getRunningResult } from "../services/activitiesService";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import GpxViewer from "./GpxViewer";
 import "../styles/viewManualActivity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faDownload} from '@fortawesome/free-solid-svg-icons'
+import {faDownload, faSmile, faFrown, faMeh} from '@fortawesome/free-solid-svg-icons'
 
-function ViewManualActivity() {
+function ViewRunningResult () {
     const location = useLocation();
-    const { manualActivityId } = location.state;
+    const { sessionId } = location.state;
     const [activity, setActivity] = useState(null);
     const [gpxUrl, setGpxUrl] = useState(null);
 
@@ -23,13 +23,22 @@ function ViewManualActivity() {
         return finalDate;
     };
 
-    useEffect(() => {
-        const fetchManualActivity = async () => {
-            const mAct = await getManualActivity(manualActivityId);
-            setActivity(mAct.data);
+    const ratings = [
+        { value: 1, label: "Fatal", icon: faFrown },
+        { value: 2, label: "Mal", icon: faFrown },
+        { value: 3, label: "Regular", icon: faMeh },
+        { value: 4, label: "Bien", icon: faSmile },
+        { value: 5, label: "Estupendamente", icon: faSmile },
+    ];
 
-            if (mAct.data.route !== null) {
-                const route = mAct.data.route;
+    useEffect(() => {
+        const fetchActivity = async () => {
+            const session = await getRunningResult(sessionId);
+            console.log(session.data.pace.toFixed(2))
+            setActivity(session.data);
+
+            if (session.data.route !== null) {
+                const route = session.data.route;
                 const byteCharacters = atob(route);
                 const byteNumbers = new Uint8Array(byteCharacters.length);
 
@@ -42,7 +51,7 @@ function ViewManualActivity() {
                 setGpxUrl(url);
             }
         };
-        fetchManualActivity();
+        fetchActivity();
     }, []);
 
     return (
@@ -51,7 +60,7 @@ function ViewManualActivity() {
             <div className="view-activity-container">
                 {activity && (
                     <>
-                        <h2 className="view-activity-title">{activity.name}</h2>
+                        <h2 className="view-activity-title">{activity.planName}: {activity.name}</h2>
                         
                         <div className="view-activity-card">
                             <div className="view-activity-data">
@@ -77,6 +86,18 @@ function ViewManualActivity() {
                                 </div>
                             </div>
                             <div className="view-activity-description">
+                                <strong>Sensaciones:</strong> 
+                                <div style={{width: '50%'}} className="rating-container">
+                                    {ratings.map((rating) => (
+                                        <div
+                                            key={rating.value}
+                                            className={`rating-icon ${activity.effort === rating.value ? 'selected' : ''}`}
+                                        >
+                                            <FontAwesomeIcon icon={rating.icon} />
+                                            <p>{rating.label}</p>
+                                        </div>
+                                    ))}
+                                </div>
                                 <strong>Descripción:</strong><p>{activity.description}</p> 
                                 <p><strong>Materiales empleados:</strong></p>
                                 <ul className="view-activity-materials-list">
@@ -106,7 +127,7 @@ function ViewManualActivity() {
                 )}
             </div>
         </>
-    );
+    )
 }
 
-export default ViewManualActivity;
+export default ViewRunningResult;
