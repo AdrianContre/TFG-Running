@@ -4,9 +4,11 @@ package com.example.API_Running.controllers;
 import com.example.API_Running.dtos.CreateMobilitySessionResultDTO;
 import com.example.API_Running.dtos.CreateRunningSessionResultDTO;
 import com.example.API_Running.dtos.CreateStrengthSessionResultDTO;
+import com.example.API_Running.dtos.UpdateResultDTO;
 import com.example.API_Running.services.TrainingSessionResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,5 +57,10 @@ public class TrainingSessionResultController {
     @DeleteMapping(path= "/{sessionId}")
     public ResponseEntity<Object> deleteSessionResult (@PathVariable Long sessionId) {
         return this.trainingSessionResultService.deleteSessionResult(sessionId);
+    }
+
+    @PutMapping(path="/{trainingSessionResultId}")
+    public ResponseEntity<Object> updateResult (@PathVariable Long trainingSessionResultId,@RequestBody UpdateResultDTO updateResultDTO) {
+        return this.trainingSessionResultService.updateResult(trainingSessionResultId, updateResultDTO);
     }
 }

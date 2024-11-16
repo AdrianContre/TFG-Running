@@ -338,7 +338,64 @@ public class TrainingSessionResultService {
         ts.removeResult(tsr);
         this.trainingSessionRepository.save(ts);
         this.activityRepository.delete(tsr);
+
+        Integer totalSessions = 0;
+        List<TrainingWeek> weeks = tsr.getSession().getTrainingWeek().getTrainingPlan().getTrainingWeeks();
+        for (TrainingWeek week : weeks) {
+            totalSessions += week.getNumSessions();
+        }
+        List<TrainingSessionResult> userResultsInAPlan = this.trainingSessionResultRepository.findAllByPlanAndRunner(tsr.getSession().getTrainingWeek().getTrainingPlan().getId(), tsr.getRunner().getId());
+        Float percentage = (float) userResultsInAPlan.size() / totalSessions;
+        Optional<TrainingProgress> tp = this.trainingProgressRepository.findProgressByPlanAndRunner(tsr.getRunner().getId(),tsr.getSession().getTrainingWeek().getTrainingPlan().getId());
+        TrainingProgress trainingProgress = tp.get();
+        trainingProgress.setPercentage(percentage * 100);
+        this.trainingProgressRepository.save(trainingProgress);
+
         data.put("data", "Session result deleted successfully");
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> updateResult(Long trainingSessionId, UpdateResultDTO updateResultDTO) {
+        System.out.println(updateResultDTO);
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingSessionResult> query = this.trainingSessionResultRepository.findById(trainingSessionId);
+        if (!query.isPresent()) {
+            data.put("error", "The training session result does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        String type = updateResultDTO.getType();
+        TrainingSessionResult tsr = query.get();
+        tsr.setDescription(updateResultDTO.getDescription());
+        tsr.setEffort(updateResultDTO.getEffort());
+        tsr.setDate(updateResultDTO.getDate());
+
+        List<Long> materialsId = updateResultDTO.getMaterialsId();
+        Set<Material> materials = new HashSet<>();
+        materialsId.stream().forEach(materialId -> {
+            Optional<Material> query_mat = this.materialRepository.findById(materialId);
+            if (query_mat.isPresent()) {
+                Material mat = query_mat.get();
+                if (type.equals("RunningResult")) {
+                    mat.addMileage(updateResultDTO.getDistance());
+                    Material savedMat = this.materialRepository.save(mat);
+                    materials.add(savedMat);
+                }
+                else materials.add(mat);
+            }
+        });
+
+
+        if (type.equals("RunningResult")) {
+            RunningSessionResult rsr = (RunningSessionResult) tsr;
+            rsr.setDistance(updateResultDTO.getDistance());
+            rsr.setDuration(updateResultDTO.getDuration());
+            rsr.setPace(updateResultDTO.getPace());
+            rsr.setFcAvg(updateResultDTO.getFcAvg());
+
+        }
+        this.trainingSessionResultRepository.save(tsr);
+        data.put("data", tsr.getId());
+        return new ResponseEntity<>(data, HttpStatus.OK);
+
     }
 }

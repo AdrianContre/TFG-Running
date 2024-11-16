@@ -53,6 +53,12 @@ function ActivityTable ({activities, onDeleteActivity}) {
         if (activity.type === "ManualActivity") {
             navigate('/editmanualactivity', { state: {manualActivityId: activity.id}})
         }
+        else if (activity.type === "RunningResult") {
+            navigate('/editrunningresult', { state: {sesionId: activity.id}})
+        }
+        else {
+            navigate('/editgenericresult', { state: {sesionId: activity.id, type: activity.type}})
+        }
     }
 
     return (

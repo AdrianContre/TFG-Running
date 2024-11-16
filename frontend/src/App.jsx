@@ -26,6 +26,8 @@ import CreateSessionResult from './modules/TrainingPlans/components/CreateSessio
 import ViewRunningResult from './modules/activities/components/ViewRunningResult';
 import ViewStrengthResult from './modules/activities/components/ViewStrenghtResult';
 import ViewMobilityResult from './modules/activities/components/ViewMobilityResult';
+import EditRunningResult from './modules/activities/components/EditRunningResult';
+import EditGenericResult from './modules/activities/components/EditGenericResult';
 
 
 
@@ -51,6 +53,8 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/editgenericresult' element={<AuthRoute element={EditGenericResult} />} />
+        <Route path='/editrunningresult' element={<AuthRoute element={EditRunningResult} />} />
         <Route path='/viewmobilityresult' element={<AuthRoute element={ViewMobilityResult} />} />
         <Route path='/viewstrengthresult' element={<AuthRoute element={ViewStrengthResult} />} />
         <Route path='/viewrunningresult' element={<AuthRoute element={ViewRunningResult} />} />

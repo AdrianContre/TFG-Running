@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { addRoute, editManualActivity, getManualActivity } from "../services/activitiesService";
+import { addRoute, editManualActivity, editResult, getManualActivity, getRunningResult } from "../services/activitiesService";
 import Select from "react-select";
 import { getUserMaterials } from "../../profile/services/materialService";
 import Button from 'react-bootstrap/Button';
@@ -10,12 +10,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
+import RatingComponent from "../../TrainingPlans/components/RatingComponent";
+import { uploadRouteToResult } from "../../TrainingPlans/services/trainingResultService";
 
-function EditManualActivity () {
+function EditRunningResult() {
     registerLocale('es', es)
     const navigate = useNavigate()
     const location = useLocation();
-    const { manualActivityId } = location.state;
+    const { sesionId } = location.state;
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [distance, setDistance] = useState(null);
@@ -27,6 +29,7 @@ function EditManualActivity () {
     const [selectedMaterials, setSelectedMaterials] = useState([]);
     const [materialOptions, setMaterialOptions] = useState([])
     const [defaultMats, setDefault] = useState([])
+    const [rating, setRating] = useState(null);
     const [show,setShow] = useState(false)
     const [error, setError] = useState("")
     const [title, setTitle] = useState("")
@@ -34,16 +37,18 @@ function EditManualActivity () {
 
     useEffect(() => {
         const fetchInfo = async () => {
-            const manualActivity = await getManualActivity(manualActivityId);
-            setName(manualActivity.data.name);
-            setDescription(manualActivity.data.description);
-            setDistance(manualActivity.data.distance);
-            setDuration(manualActivity.data.duration);
-            setFcAvg(manualActivity.data.fcAvg);
-            setPace(manualActivity.data.pace.toFixed(2));
-            setDate(new Date(manualActivity.data.date))
+            console.log(sesionId)
+            const runningResult = await getRunningResult(sesionId);
+            setName(runningResult.data.name);
+            setDescription(runningResult.data.description);
+            setDistance(runningResult.data.distance);
+            setDuration(runningResult.data.duration);
+            setFcAvg(runningResult.data.fcAvg);
+            setPace(runningResult.data.pace.toFixed(2));
+            setDate(new Date(runningResult.data.date))
+            setRating(runningResult.data.effort)
 
-            const activityMaterialLabels = manualActivity.data.materials;
+            const activityMaterialLabels = runningResult.data.materials;
             setDefault(activityMaterialLabels)
 
             const userId = JSON.parse(localStorage.getItem("userAuth")).id;
@@ -69,6 +74,10 @@ function EditManualActivity () {
         fetchInfo();
     }, []);
 
+    const handleRatingChange = (value) => {
+        setRating(value);
+    };
+
     const updateValue = (setter) => (event) => { 
         setter(event.target.value);
     };
@@ -78,31 +87,34 @@ function EditManualActivity () {
         setShow(false);
     };
 
-    const handleEditManualActivity = async (event) => {
+    const handleEditRunningResult = async (event) => {
         event.preventDefault()
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
         })
+        console.log(materialsId)
         const dataInfo = date.toISOString() 
-        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0 || date == "") {
+        if (name == "" || description == "" || distance == "" || duration == "" || pace == "" || fcAvg == "" || materialsId.length == 0 || date == "" || rating == null) {
             setShow(true)
             setError("Todos los campos excepto la ruta son obligatorios")
             setTitle("Error al crear actividad")
         }
         else {
             try {
-                const activity = await editManualActivity(manualActivityId,name, description,distance,duration,pace,fcAvg,materialsId,dataInfo)
+                const activity = await editResult(sesionId, "RunningResult", description, rating, dataInfo, materialsId, distance, duration, pace, fcAvg)
                 if (activity.data) {
                     if (route !== null) {
+                        console.log("entro aqui")
                         const formData = new FormData()
                         formData.append('route', route)
-                        const uploadRoute = await addRoute(formData,manualActivityId)
+                        const uploadRoute = await uploadRouteToResult(formData,sesionId)
                     }
                     navigate('/activities')
                 }
             }
             catch (Error) {
+                console.log(Error)
                 setShow(true)
                 setError("Revisa el formato de los campos del formulario")
                 setTitle("Error al crear actividad")
@@ -117,14 +129,17 @@ function EditManualActivity () {
             <NavigationBar />
             <div className='d-flex align-items-center justify-content-center' style={{ marginTop: '5%' }}> 
                 <div className='container-createact d-flex'>
-                    <h1 className="custom-h1">Editar actividad</h1>
+                    <h1 className="custom-h1">Editar resultado</h1>
                     <div className='form-columns'>
                         <div className='form-column'>
                             <label className='custom-label-createact' htmlFor="brand">NOMBRE</label>
-                            <input name='brand' value={name} onChange={updateValue(setName)} className='custom-input-createact' />
+                            <input name='brand' value={name} className='custom-input-createact' disabled/>
                             
                             <label className='custom-label-createact' htmlFor="description">DESCRIPCIÓN</label>
                             <textarea name='description' value={description} onChange={updateValue(setDescription)} className='custom-textarea-createact' />
+
+                            <label className='custom-label-createact'>COMO TE SIENTES?</label>
+                            <RatingComponent onChange={handleRatingChange} />
 
                             <label className='custom-label-createact' htmlFor="distance">DISTANCIA {'(km)'}</label>
                             <input name='distance' type="number" step="0.001" value={distance} onChange={updateValue(setDistance)} className='custom-input-createact' />
@@ -163,7 +178,7 @@ function EditManualActivity () {
                             </div>
                         </div>
                     </div>
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleEditManualActivity}>EDITAR</Button>
+                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleEditRunningResult}>EDITAR</Button>
                 </div>
             </div>
             <PopUp error={error} show={show} onHide={handleHide} title={title}/>
@@ -171,5 +186,4 @@ function EditManualActivity () {
     );
 }
 
-export default EditManualActivity;
-
+export default EditRunningResult;

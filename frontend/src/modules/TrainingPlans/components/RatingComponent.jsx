@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faFrown, faMeh } from '@fortawesome/free-regular-svg-icons';
 import '../styles/rating.css'
+import { useEffect } from 'react';
 
 const RatingComponent = ({ onChange }) => {
     const [selectedRating, setSelectedRating] = useState(null);
@@ -19,6 +20,7 @@ const RatingComponent = ({ onChange }) => {
         setSelectedRating(value);
         onChange(value); // Enviar el valor seleccionado al backend
     };
+
 
     return (
         <div className="rating-container">

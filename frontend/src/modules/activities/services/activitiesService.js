@@ -247,3 +247,30 @@ export const deleteResult = async (sesionId) => {
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const editResult = async (resultId,type, description, effort, date, materialsId, distance, duration, pace, fcAvg) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  console.log(JSON.stringify({type: type, description: description, effort: effort, date: date, materialsId: materialsId, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg}))
+  return fetch(`${END_POINT_RESULTS}/${resultId}`,{
+      method: 'PUT',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({type: type, description: description, effort: effort, date: date, materialsId: materialsId, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg})
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
