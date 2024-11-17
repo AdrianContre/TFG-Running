@@ -85,6 +85,7 @@ function ListEnrolledPlans() {
                         trainerName={plan.trainerName}
                         trainerSurname={plan.trainerSurname}
                         numSessions={plan.numSessions}
+                        sessionsCompleted={plan.sessionsCompleted}
                     />
                 ))}
             </div>

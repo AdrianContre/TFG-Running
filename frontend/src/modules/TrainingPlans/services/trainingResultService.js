@@ -119,3 +119,26 @@ export const uploadRouteToResult = async (formData, resultId) => {
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const getPlanResults = async (planId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_RESULTS}/plans/${planId}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data.data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}

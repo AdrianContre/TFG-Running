@@ -132,6 +132,10 @@ function ViewDetails () {
         }
     }
 
+    const handleViewProgress = () => {
+        navigate('/trainingprogress', { state: {planId: planId}})
+    }
+
     const renderTrainingRows = () => {
         console.log(sessionsInfo)
         console.log("results: " + hasResult)
@@ -293,9 +297,14 @@ function ViewDetails () {
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
             {trainer.id === userAuth.id ? (
-                <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleEdit}>
-                    EDITAR
-                </Button>
+                <>
+                    <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleEdit}>
+                        EDITAR
+                    </Button>
+                    <Button variant="primary" size="lg" className="mt-5 custom-button-createact" style={{marginLeft: '100px'}} onClick={handleViewProgress}>
+                        PROGRESO USUARIOS
+                    </Button>
+                </>
             ) : (
                 !isEnrolled ? (
                     <Button variant="primary" size="lg" className="mt-5 custom-button-createact" onClick={handleEnroll}>

@@ -1,0 +1,31 @@
+.results-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    align-items: center;
+  }
+  
+  .result-card {
+    width: 98%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6; 
+    border-radius: 8px;
+    padding: 15px 20px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .result-card:hover {
+    background-color: #e9ecef; 
+  }
+  
+  .result-text {
+    margin: 0;
+    font-size: 1.2rem;
+    color: black;
+    line-height: 1.5;
+  }
+  

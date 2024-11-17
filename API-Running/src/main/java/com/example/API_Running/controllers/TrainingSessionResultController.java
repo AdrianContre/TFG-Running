@@ -63,4 +63,9 @@ public class TrainingSessionResultController {
     public ResponseEntity<Object> updateResult (@PathVariable Long trainingSessionResultId,@RequestBody UpdateResultDTO updateResultDTO) {
         return this.trainingSessionResultService.updateResult(trainingSessionResultId, updateResultDTO);
     }
+
+    @GetMapping(path = "/plans/{planId}")
+    public ResponseEntity<Object> getPlanResults(@PathVariable Long planId) {
+        return this.trainingSessionResultService.getPlanResults(planId);
+    }
 }

@@ -28,6 +28,7 @@ import ViewStrengthResult from './modules/activities/components/ViewStrenghtResu
 import ViewMobilityResult from './modules/activities/components/ViewMobilityResult';
 import EditRunningResult from './modules/activities/components/EditRunningResult';
 import EditGenericResult from './modules/activities/components/EditGenericResult';
+import TrainingProgress from './modules/TrainingPlans/components/TrainingProgress';
 
 
 
@@ -53,6 +54,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/trainingprogress' element={<AuthRoute element={TrainingProgress} />} />
         <Route path='/editgenericresult' element={<AuthRoute element={EditGenericResult} />} />
         <Route path='/editrunningresult' element={<AuthRoute element={EditRunningResult} />} />
         <Route path='/viewmobilityresult' element={<AuthRoute element={ViewMobilityResult} />} />

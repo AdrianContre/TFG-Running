@@ -36,6 +36,7 @@ function NavigationBar () {
             <Container>
               <Navbar.Brand as={NavLink} to="/main">Principal</Navbar.Brand>
               <Nav className="me-auto">
+                <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
                 <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
                 <Nav.Link href="#groupplans">Planes grupales</Nav.Link>
                 {userRole === "trainer" ? (
@@ -45,7 +46,6 @@ function NavigationBar () {
                 )}
                 <Nav.Link as={NavLink} to='/enrolledplans'>Planes en curso</Nav.Link>
                 <Nav.Link href="#groups">Grupos</Nav.Link>
-                <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
               </Nav>
               <Nav className="ms-auto">
                 <Dropdown align="end">

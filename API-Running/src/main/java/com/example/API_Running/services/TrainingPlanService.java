@@ -230,7 +230,9 @@ public class TrainingPlanService {
         List<EnrolledPlanDTO> info = new ArrayList<>();
         tps.stream().forEach(tp -> {
             TrainingPlan trainingPlan = tp.getTrainingPlan();
+            List<TrainingSessionResult> userResultsInAPlan = this.trainingSessionResultRepository.findAllByPlanAndRunner(trainingPlan.getId(), runnerId);
             EnrolledPlanDTO planDTO = new EnrolledPlanDTO(trainingPlan, tp.getPercentage());
+            planDTO.setSessionsCompleted(userResultsInAPlan.size());
             info.add(planDTO);
         });
         data.put("data", info);

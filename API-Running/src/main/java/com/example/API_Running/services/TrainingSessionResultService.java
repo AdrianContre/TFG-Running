@@ -398,4 +398,31 @@ public class TrainingSessionResultService {
         return new ResponseEntity<>(data, HttpStatus.OK);
 
     }
+
+    public ResponseEntity<Object> getPlanResults(Long planId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
+        if (!query.isPresent()) {
+            data.put("error", "The plan does not exist");
+        }
+
+        List<TrainingSessionResult> results = this.trainingSessionResultRepository.findAllByPlan(planId);
+        List<TrainingProgressDTO> resultsInfo = new ArrayList<>();
+        results.forEach(result -> {
+            TrainingProgressDTO tpdto = new TrainingProgressDTO(result);
+            if (result instanceof RunningSessionResult) {
+                tpdto.setType("RunningResult");
+            }
+            else if (result instanceof StrengthSessionResult) {
+                tpdto.setType("StrengthResult");
+            }
+            else {
+                tpdto.setType("MobilityResult");
+            }
+            resultsInfo.add(tpdto);
+        });
+        data.put("data", resultsInfo);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
 }

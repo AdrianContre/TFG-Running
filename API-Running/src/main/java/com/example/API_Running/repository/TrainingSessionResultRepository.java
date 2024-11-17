@@ -17,4 +17,7 @@ public interface TrainingSessionResultRepository extends JpaRepository<TrainingS
 
     @Query("SELECT tsr FROM TrainingSessionResult tsr WHERE tsr.session.trainingWeek.trainingPlan.id = :planId AND tsr.runner.id = :runnerId")
     List<TrainingSessionResult> findAllByPlanAndRunner(@Param("planId")Long planId, @Param("runnerId")Long runnerId);
+
+    @Query("SELECT tsr from TrainingSessionResult tsr where tsr.session.trainingWeek.trainingPlan.id = :planId")
+    List<TrainingSessionResult> findAllByPlan(@Param("planId") Long planId);
 }

@@ -5,7 +5,7 @@ import {faRunning, faMapMarkerAlt, faSignal, faUser,faCheckCircle} from '@fortaw
 import { useNavigate } from "react-router";
 import { ProgressBar } from "react-bootstrap";
 
-function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions }) {
+function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions, sessionsCompleted }) {
     const navigate = useNavigate()
 
     const handleViewDetails = (event) => {
@@ -30,7 +30,7 @@ function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSu
                 </p>
                 {numSessions ? (
                     <p className="card-text">
-                    <FontAwesomeIcon icon={faCheckCircle} /> Sesiones completadas: <strong >0/{numSessions}</strong>
+                    <FontAwesomeIcon icon={faCheckCircle} /> Sesiones completadas: <strong >{sessionsCompleted}/{numSessions}</strong>
                 </p>
                 ) : (
                     <>
