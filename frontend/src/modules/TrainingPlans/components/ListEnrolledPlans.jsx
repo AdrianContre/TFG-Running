@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import TrainingPlanCard from "./TrainingPlanCard"
 import NavigationBar from "../../home/components/NavigationBar";
 import { getUserEnrolledPlans } from "../services/trainingService";
+import Paginator from "../../../Paginator";
 
 function ListEnrolledPlans() {
 
@@ -10,6 +11,8 @@ function ListEnrolledPlans() {
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [plansPerPage] = useState(10); 
 
     const distances = ["5K", "10K", "21K", "42K"];
     const levels = ["Principiante", "Intermedio", "Avanzado"];
@@ -35,11 +38,17 @@ function ListEnrolledPlans() {
         }
         
         setFilteredPlans(filtered);
+        setCurrentPage(1);
     };
 
     useEffect(() => {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
+
+    const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
+    const indexOfLastPlan = currentPage * plansPerPage;
+    const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
+    const currentPlans = filteredPlans.slice(indexOfFirstPlan, indexOfLastPlan);
 
 
     return (
@@ -75,7 +84,7 @@ function ListEnrolledPlans() {
 
 
             <div className="plans-container">
-                {filteredPlans.map((plan, index) => (
+                {currentPlans.map((plan, index) => (
                     <TrainingPlanCard
                         key={index}
                         id={plan.id}
@@ -89,6 +98,11 @@ function ListEnrolledPlans() {
                     />
                 ))}
             </div>
+            <Paginator 
+                currentPage={currentPage} 
+                totalPages={totalPages} 
+                onPageChange={setCurrentPage} 
+            />
         </>
     )
 }

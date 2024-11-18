@@ -61,7 +61,7 @@ function ViewProfile () {
                         </div>
                     </div>
                     <div className="button-container-profile">
-                        <Button variant="primary" size="lg" className="custom-button-view-profile" onClick={navigateToMaterials}>Material</Button>
+                        <Button variant="primary" size="lg" className="custom-button-view-profile" onClick={navigateToMaterials}>MATERIAL</Button>
                     </div>
                     {userAuth.fcMax !== 0 ? (
                         <div>

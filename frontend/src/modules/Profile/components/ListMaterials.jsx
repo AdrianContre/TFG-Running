@@ -45,7 +45,7 @@ function ListMaterials () {
             ))}
         </div>
         <div className="title-container">
-            <Button className="custom-material-button" variant="primary" size="lg" onClick={handleCreateMaterial}>Añadir material</Button>
+            <Button className="custom-material-button" variant="primary" size="lg" onClick={handleCreateMaterial}>AÑADIR MATERIAL</Button>
         </div>
         </>
     )

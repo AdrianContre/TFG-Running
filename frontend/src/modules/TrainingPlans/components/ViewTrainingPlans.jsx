@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { getOtherUsersPlans } from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
+import Paginator from "../../../Paginator"
 
 function ViewTrainingPlans () {
     const navigate = useNavigate()
@@ -14,6 +15,8 @@ function ViewTrainingPlans () {
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [plansPerPage] = useState(10); 
 
     const distances = ["5K", "10K", "21K", "42K"];
     const levels = ["Principiante", "Intermedio", "Avanzado"];
@@ -50,11 +53,17 @@ function ViewTrainingPlans () {
         }
         
         setFilteredPlans(filtered);
+        setCurrentPage(1);
     };
 
     useEffect(() => {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
+
+    const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
+    const indexOfLastPlan = currentPage * plansPerPage;
+    const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
+    const currentPlans = filteredPlans.slice(indexOfFirstPlan, indexOfLastPlan);
 
 
     return (
@@ -114,6 +123,11 @@ function ViewTrainingPlans () {
                     />
                 ))}
             </div>
+            <Paginator 
+                currentPage={currentPage} 
+                totalPages={totalPages} 
+                onPageChange={setCurrentPage} 
+            />
             
         </>
     )
