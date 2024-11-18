@@ -1,7 +1,7 @@
 import '../styles/activityTable.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPenToSquare, faTrash, faEye} from '@fortawesome/free-solid-svg-icons'
-import { deleteManualActivity } from '../services/activitiesService';
+import { deleteManualActivity, deleteResult } from '../services/activitiesService';
 import { useNavigate } from 'react-router';
 
 function ActivityTable ({activities, onDeleteActivity}) {
@@ -26,17 +26,38 @@ function ActivityTable ({activities, onDeleteActivity}) {
             const deleteAct = await deleteManualActivity(activity.id)
             onDeleteActivity(activity.id)
         }
+        else {
+            const deleteAct = await deleteResult(activity.id)
+            onDeleteActivity(activity.id)
+        }
     }
 
     const handleViewActivity = (activity) => {
         if (activity.type === "ManualActivity") {
             navigate('/viewmanualactivity',{ state: { manualActivityId: activity.id } })
         }
+        else if (activity.type === "RunningResult") {
+            navigate('/viewrunningresult',{ state: { sessionId: activity.id } })
+        }
+        else if (activity.type === "StrengthResult") {
+            navigate('/viewstrengthresult', { state: { sessionId: activity.id } })
+        }
+
+        else {
+            navigate('/viewmobilityresult', { state: { sessionId: activity.id } })
+        }
+
     }
 
     const handleEditActivity = (activity) => {
         if (activity.type === "ManualActivity") {
             navigate('/editmanualactivity', { state: {manualActivityId: activity.id}})
+        }
+        else if (activity.type === "RunningResult") {
+            navigate('/editrunningresult', { state: {sesionId: activity.id}})
+        }
+        else {
+            navigate('/editgenericresult', { state: {sesionId: activity.id, type: activity.type}})
         }
     }
 
@@ -56,9 +77,10 @@ function ActivityTable ({activities, onDeleteActivity}) {
                     {activities.map((activity) => (
                         <tr key={activity.id} style={{ borderBottom: 'none' }}>
                             <td>{activity.name}</td>
-                            <td>{activity.distance}km</td>
-                            <td>{activity.duration}</td>
+                            {activity.distance === null ? (<td> - </td>) : (<td>{activity.distance}km</td>)}
+                            {activity.duration === null ? (<td> - </td>) : (<td>{activity.duration}</td>)}
                             <td>{formatDate(activity.date)}</td>
+                            
                             <td>
                                 <input type="hidden" value={activity.id} />
                                 <input type="hidden" value={activity.type} />

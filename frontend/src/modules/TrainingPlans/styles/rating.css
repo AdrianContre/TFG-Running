@@ -1,0 +1,23 @@
+.rating-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 3px solid black; /* Borde */
+    border-radius: 25px; /* Hace que el borde sea redondeado */
+    padding: 10px 20px; /* Espaciado interno */
+    background-color: white; /* Color de fondo opcional */
+    width: 100%; /* Ajusta el ancho según el contenido */
+    margin: 10px auto; /* Centra el contenedor horizontalmente */
+}
+
+.rating-icon {
+    cursor: pointer;
+    color: black;
+    text-align: center;
+    transition: color 0.3s; /* Añade una transición suave */
+    margin-right: 10px;
+}
+
+.rating-icon.selected {
+    color: red;
+}

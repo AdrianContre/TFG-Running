@@ -1,0 +1,43 @@
+.training-plan {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .plan-header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .plan-info, .creator-info {
+    margin-top: 10px;
+  }
+  
+  .training-week {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    margin-top: 20px;
+  }
+  
+  .session {
+    background-color: #fff;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  
+  .session h4 {
+    margin: 0 0 5px;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .session p {
+    margin: 5px 0;
+    font-size: 0.9em;
+  }
+

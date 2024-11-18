@@ -3,6 +3,9 @@ package com.example.API_Running.models;
 import jakarta.persistence.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
 @Entity
@@ -30,6 +33,9 @@ public abstract class User {
     @Lob
     @Column(name="profilePicture", nullable = true, columnDefinition = "MEDIUMBLOB")
     private byte[] profilePicture;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public User() {}
 
@@ -96,5 +102,13 @@ public abstract class User {
 
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

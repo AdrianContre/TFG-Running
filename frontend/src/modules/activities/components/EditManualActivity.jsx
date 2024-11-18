@@ -40,7 +40,7 @@ function EditManualActivity () {
             setDistance(manualActivity.data.distance);
             setDuration(manualActivity.data.duration);
             setFcAvg(manualActivity.data.fcAvg);
-            setPace(manualActivity.data.pace);
+            setPace(manualActivity.data.pace.toFixed(2));
             setDate(new Date(manualActivity.data.date))
 
             const activityMaterialLabels = manualActivity.data.materials;

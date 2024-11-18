@@ -1,0 +1,371 @@
+import React, { useState, useEffect } from "react";
+import NavigationBar from "../../home/components/NavigationBar";
+import { Modal, Button, Form } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/CreateTrainingPlan.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
+import { createPlan, editPlan } from "../services/trainingService";
+import { useLocation, useNavigate } from "react-router";
+import { getPlanInfo } from "../services/trainingService";
+import PopUp from "../../auth/components/PopUp";
+
+
+function EditTrainingPlan() {
+    const location = useLocation()
+    const {planId} = location.state
+    const navigate = useNavigate()
+    const [numWeeks, setNumWeeks] = useState(1);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [level,setLevel] = useState("Principiante")
+    const [objDistance, setObjDistance] = useState("5K")
+    const [sessionsInfo, setSessionsInfo] = useState(Array(numWeeks).fill(Array(7).fill(null)));
+    const [sessions, setSessions] = useState(Array(numWeeks).fill(Array(7).fill(null)));
+    const [showModal, setShowModal] = useState(false);
+    const [selectedWeek, setSelectedWeek] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(null); 
+    const [show, setShow] = useState(false)
+    const [sessionData, setSessionData] = useState({
+        name: '',
+        description: '',
+        type: '',
+        runningType: '',
+        distance: '',
+        duration: ''
+    }); 
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
+
+    useEffect(() => {
+        const fetchPlan = async () => {
+            const planInfo = await getPlanInfo(planId)
+            setName(planInfo.name)
+            setDescription(planInfo.description)
+            setNumWeeks(planInfo.numWeeks)
+            setObjDistance(planInfo.objDistance)
+            setLevel(planInfo.level)
+            setSessionsInfo(Array(numWeeks).fill(Array(7).fill(null)))
+            
+            
+
+            
+            const weeklySessionsMatrix = planInfo.trainingWeeks.map(week => {
+                let sessionsForWeek = Array(7).fill(null);
+                week.sessions.forEach((session, index) => {
+                    sessionsForWeek[index] = session;
+                });
+            
+                return sessionsForWeek; 
+            });
+            console.log("sessiones: "+ weeklySessionsMatrix)
+            setSessionsInfo(weeklySessionsMatrix)
+        }
+        fetchPlan()
+    },[])
+
+    const handleLevelChange = (event) => {
+        setLevel(event.target.value); // Actualiza el valor del estado con el seleccionado
+    };
+
+    const handleObjChange = (event) => {
+        setObjDistance(event.target.value); // Actualiza el valor del estado con el seleccionado
+    };
+
+    const updateNumWeeks = (increment) => {
+        const newNumWeeks = numWeeks + increment;
+        if (newNumWeeks > 0) {
+            setNumWeeks(newNumWeeks);
+            setSessions(prevSessions => {
+                const updatedSessions = [...prevSessions]; 
+                if (newNumWeeks > prevSessions.length) {
+                    updatedSessions.push(...Array(newNumWeeks - prevSessions.length).fill(Array(7).fill(null)));
+                }
+                return updatedSessions.slice(0, newNumWeeks);
+            });
+    
+            setSessionsInfo(prevSessionsInfo => {
+                const updatedSessionsInfo = [...prevSessionsInfo]; 
+                if (newNumWeeks > prevSessionsInfo.length) {
+                    updatedSessionsInfo.push(...Array(newNumWeeks - prevSessionsInfo.length).fill(Array(7).fill(null)));
+                }
+                return updatedSessionsInfo.slice(0, newNumWeeks);
+            });
+        }
+    };
+
+    const handleAddSession = (weekIndex, dayIndex) => {
+        setSessionData({
+            name: '',
+            description: '',
+            type: '',
+            runningType: '',
+            distance: '',
+            duration: ''
+        });
+        setSelectedWeek(weekIndex);
+        setSelectedDay(dayIndex);
+        setShowModal(true);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setSessionData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleCreateSession = () => {
+        const newSessions = [...sessions];
+        newSessions[selectedWeek][selectedDay] = sessionData.name; 
+        setSessions(newSessions);
+        const newSessionsInfo = [...sessionsInfo];
+        newSessionsInfo[selectedWeek][selectedDay] = sessionData;
+        setSessionsInfo(newSessionsInfo);
+        setShowModal(false); 
+        setSessionData({
+            name: '',
+            description: '',
+            type: '',
+            runningType: '',
+            distance: '',
+            duration: ''
+        }); 
+        console.log(sessionsInfo);
+    };
+
+    const handleRemoveSession = (weekIndex, dayIndex) => {
+        const newSessionsInfo = [...sessionsInfo];
+        newSessionsInfo[weekIndex][dayIndex] = null;
+        setSessionsInfo(newSessionsInfo);
+        console.log(sessionsInfo);
+    };
+
+    const handleEditSession = (weekIndex, dayIndex) => {
+        console.log(sessionsInfo[weekIndex][dayIndex])
+        const session = sessionsInfo[weekIndex][dayIndex];
+        setSessionData(session); 
+        setSelectedWeek(weekIndex);
+        setSelectedDay(dayIndex);
+        setShowModal(true); 
+    };
+
+    const handleEditPlan = async (event) => {
+        const trainerId = JSON.parse(localStorage.getItem("userAuth")).id
+        event.preventDefault()
+
+        const allSessionsFilled = sessionsInfo.every(week =>
+            week.every(session => session !== null)
+        );
+        
+        if (allSessionsFilled) {
+            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+            if (send) {
+                navigate('/viewplan', { state: {planId: planId}})
+            }
+        }
+        else {
+            setShow(true)
+        }
+        
+    }
+
+    const renderTrainingRows = () => {
+        let rows = [];
+        for (let i = 0; i < numWeeks; i++) {
+            rows.push(
+                <div key={i} className="week-row-create-plan">
+                    {[...Array(7)].map((_, dayIndex) => (
+                        <div key={dayIndex} className="day-column-create-plan">
+                            {sessionsInfo[i] && sessionsInfo[i][dayIndex] ? (
+                                <div className="session-cell">
+                                    <span className="session-name">{sessionsInfo[i][dayIndex].name}</span>
+                                    <div className="session-icons">
+                                        <FontAwesomeIcon
+                                            icon={faTrash}
+                                            style={{ color: "#f10909", cursor: 'pointer',}}
+                                            onClick={() => handleRemoveSession(i, dayIndex)}
+                                        />
+                                        <FontAwesomeIcon
+                                            icon={faPenToSquare}
+                                            style={{ cursor: 'pointer', color: '#0000ff' }}
+                                            onClick={() => handleEditSession(i, dayIndex)}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <Button
+                                    variant="primary"
+                                    className="button-create-plan"
+                                    onClick={() => handleAddSession(i, dayIndex)}
+                                >
+                                    Añadir Sesión
+                                </Button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+        return rows;
+    };
+
+    return (
+        <>
+            <NavigationBar />
+            <h1 className="custom-h1">Editar plan de entrenamiento</h1>
+            <div className="create-training-plan-container">
+                <div className="form-container-create-plan">
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Nombre:</label>
+                        <input type="text" className='custom-input-create-plan' value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Descripción:</label>
+                        <textarea className='custom-textarea-create-plan' value={description} onChange={(e) => setDescription(e.target.value)} />
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>N° de Semanas:</label>
+                        <div className="week-counter">
+                            <FontAwesomeIcon icon={faCircleMinus} size="xl" style={{color: "#ff0000",cursor: 'pointer', marginRight: '10px',}} onClick={() => updateNumWeeks(-1)}/>
+                            <span style={{fontSize: '20px', fontWeight: 'bold'}}>{numWeeks}</span>
+                            <FontAwesomeIcon icon={faCirclePlus} size="xl" style={{color: "#0000ff",cursor: 'pointer', marginLeft: '10px',}} onClick={() => updateNumWeeks(1)}/>
+                        </div>
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Distancia Objetivo:</label>
+                        <select className='custom-input-create-plan' value={objDistance} onChange={handleObjChange}>
+                            <option value="5K">5K</option>
+                            <option value="10K">10K</option>
+                            <option value="21K">21K</option>
+                            <option value="42K">42K</option>
+                        </select>
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Nivel:</label>
+                        <select className='custom-input-create-plan' value={level} onChange={handleLevelChange}>
+                            <option value="Principiante">Principiante</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="table-container-create-plan">
+                    <div className="table-header-create-plan">
+                        <div className="day-column-create-plan">Lunes</div>
+                        <div className="day-column-create-plan">Martes</div>
+                        <div className="day-column-create-plan">Miércoles</div>
+                        <div className="day-column-create-plan">Jueves</div>
+                        <div className="day-column-create-plan">Viernes</div>
+                        <div className="day-column-create-plan">Sábado</div>
+                        <div className="day-column-create-plan">Domingo</div>
+                    </div>
+                    {renderTrainingRows()}
+                </div>
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+                <Button variant='primary' size='lg' className='mt-5' onClick={handleEditPlan}>CONFIRMAR EDICIÓN</Button>
+            </div>
+
+            <PopUp error={"Han de estar todas las casillas llenas, en caso que quieras añadir descanso, añade una sesión de tipo descanso"} show={show} onHide={onHide} title={"Error al editar plan de entrenamiento"}/>
+
+            
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Crear nueva sesión</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formSessionName">
+                            <Form.Label>Nombre:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={sessionData.name}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formSessionDescription">
+                            <Form.Label>Descripción:</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                name="description"
+                                value={sessionData.description}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formSessionType">
+                            <Form.Label>Tipo:</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="type"
+                                value={sessionData.type}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Seleccione tipo</option>
+                                <option value="running">Carrera</option>
+                                <option value="strength">Fuerza</option>
+                                <option value="mobility">Movilidad</option>
+                                <option value="rest">Descanso</option>
+                            </Form.Control>
+                        </Form.Group>
+
+                        {sessionData.type === "running" && (
+                            <>
+                                <Form.Group controlId="formSessionRunningType">
+                                    <Form.Label>Tipo de sesión:</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            name="runningType"
+                                            value={sessionData.runningType}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="">Seleccione tipo</option>
+                                            <option value="Recovery">Recovery</option>
+                                            <option value="Rodaje">Rodaje</option>
+                                            <option value="Series">Series</option>
+                                            <option value="Fartlek">Fartlek</option>
+                                            <option value="Tempo">Tempo</option>
+                                        </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="formSessionDistance">
+                                    <Form.Label>Distancia: {'(Km)'}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="distance"
+                                        value={sessionData.distance}
+                                        onChange={handleInputChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formSessionDuration">
+                                    <Form.Label>Duración: {'(hh:mm:ss)'}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="duration"
+                                        value={sessionData.duration}
+                                        onChange={handleInputChange}
+                                    />
+                                </Form.Group>
+                            </>
+                        )}
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handleCreateSession}>
+                        Crear Sesión
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+}
+
+export default EditTrainingPlan;

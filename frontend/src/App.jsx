@@ -15,6 +15,20 @@ import CreateActivity from './modules/activities/components/CreateActivity';
 import ViewManualActivity from './modules/activities/components/ViewManualActivity';
 import EditManualActivity from './modules/activities/components/EditManualActivity';
 import AuthRoute from './AuthRoute';
+import ViewTrainingPlans from './modules/TrainingPlans/components/ViewTrainingPlans';
+import CreateTrainingPlan from './modules/TrainingPlans/components/CreateTrainingPlan';
+import ViewMyPlans from './modules/TrainingPlans/components/ViewMyPlans';
+import ViewDetails from './modules/TrainingPlans/components/ViewDetails';
+import ListEnrolledPlans from './modules/TrainingPlans/components/ListEnrolledPlans';
+import EditTrainingPlan from './modules/TrainingPlans/components/EditTrainingPlan';
+import CreateRunningSessionResult from './modules/TrainingPlans/components/CreateRunningSessionResult';
+import CreateSessionResult from './modules/TrainingPlans/components/CreateSessionResult';
+import ViewRunningResult from './modules/activities/components/ViewRunningResult';
+import ViewStrengthResult from './modules/activities/components/ViewStrenghtResult';
+import ViewMobilityResult from './modules/activities/components/ViewMobilityResult';
+import EditRunningResult from './modules/activities/components/EditRunningResult';
+import EditGenericResult from './modules/activities/components/EditGenericResult';
+import TrainingProgress from './modules/TrainingPlans/components/TrainingProgress';
 
 
 
@@ -40,6 +54,20 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/trainingprogress' element={<AuthRoute element={TrainingProgress} />} />
+        <Route path='/editgenericresult' element={<AuthRoute element={EditGenericResult} />} />
+        <Route path='/editrunningresult' element={<AuthRoute element={EditRunningResult} />} />
+        <Route path='/viewmobilityresult' element={<AuthRoute element={ViewMobilityResult} />} />
+        <Route path='/viewstrengthresult' element={<AuthRoute element={ViewStrengthResult} />} />
+        <Route path='/viewrunningresult' element={<AuthRoute element={ViewRunningResult} />} />
+        <Route path='/createsessionresult' element={<AuthRoute element={CreateSessionResult} />} />
+        <Route path='/createrunningsessionresult' element={<AuthRoute element={CreateRunningSessionResult} />} /> 
+        <Route path='/enrolledplans' element={<AuthRoute element={ListEnrolledPlans} />} /> 
+        <Route path='/viewplan' element={<AuthRoute element={ViewDetails} />} />
+        <Route path='/myplans' element={<AuthRoute element={ViewMyPlans} />} />
+        <Route path='/editplan' element={<AuthRoute element={EditTrainingPlan} />} />
+        <Route path='/createtrainingplans' element={<AuthRoute element={CreateTrainingPlan} />} />
+        <Route path='/trainingplans' element={<AuthRoute element={ViewTrainingPlans} />} />
         <Route path='/editmanualactivity' element={<AuthRoute element={EditManualActivity}/>} />
         <Route path='/viewmanualactivity' element={<AuthRoute element={ViewManualActivity}/>} />
         <Route path='/createactivity' element={<AuthRoute element={CreateActivity}/>} />

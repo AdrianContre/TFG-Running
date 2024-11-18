@@ -1,5 +1,6 @@
 const END_POINT_ACTIVITIES = "http://localhost:8081/api/v1/activities"
 const END_POINT_MANUAL_ACTIVITIES = "http://localhost:8081/api/v1/manualactivities"
+const END_POINT_RESULTS = "http://localhost:8081/api/v1/sessionresults"
 
 export const listActivities = async (runnerId) => {
     const authHeader = `Bearer ${localStorage.getItem('token')}`
@@ -147,3 +148,129 @@ export const editManualActivity = async (manualActId, name, description, distanc
       throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
     });
 }
+
+export const getRunningResult = async (resultId) => {
+  const type = "RunningResult"
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_RESULTS}/${resultId}?type=${type}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
+export const getStrengthResult = async (resultId) => {
+  const type = "StrengthResult"
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_RESULTS}/${resultId}?type=${type}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
+export const getMobilityResult = async (resultId) => {
+  const type = "MobilityResult"
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_RESULTS}/${resultId}?type=${type}`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
+export const deleteResult = async (sesionId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_RESULTS}/${sesionId}`,{
+      method: 'DELETE',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+
+export const editResult = async (resultId,type, description, effort, date, materialsId, distance, duration, pace, fcAvg) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  console.log(JSON.stringify({type: type, description: description, effort: effort, date: date, materialsId: materialsId, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg}))
+  return fetch(`${END_POINT_RESULTS}/${resultId}`,{
+      method: 'PUT',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({type: type, description: description, effort: effort, date: date, materialsId: materialsId, distance: distance, duration: duration, pace: pace, fcAvg: fcAvg})
+  })
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error; // Lanzar el error para que pueda ser manejado por quien llame a esta función
+    });
+}
+

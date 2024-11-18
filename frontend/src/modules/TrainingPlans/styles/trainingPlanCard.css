@@ -1,0 +1,64 @@
+.training-plan-card {
+    width: 90%;
+    background-color: #f8f9fa;
+    margin: 15px auto;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.training-plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.training-plan-card .card-body {
+    padding: 20px;
+    position: relative;
+}
+
+.training-plan-card .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.training-plan-card .card-text {
+    font-size: 1rem;
+    color: #000000;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.training-plan-card .details-button {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.training-plan-card .details-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.training-plan-card .details-button:focus {
+    outline: none;
+    background-color: #004085;
+    box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+}

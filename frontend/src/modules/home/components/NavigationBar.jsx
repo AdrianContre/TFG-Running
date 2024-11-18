@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 
 function NavigationBar () {
   const [profilePicture, setProfilePicture] = useState(null)
+  const [userRole, setUserRole] = useState("")
   const handleClick = (event) => {
     localStorage.removeItem('token')
     localStorage.removeItem('userAuth')
@@ -19,7 +20,14 @@ function NavigationBar () {
   useEffect (() => {
     const user = JSON.parse(localStorage.getItem('userAuth'))
     if (user.profilePicture !== null) {
+      console.log("entro aqui")
       setProfilePicture(`data:image;base64,${user.profilePicture}`)
+    }
+    if (user.userType === "Trainer") {
+      setUserRole("trainer")
+    }
+    else {
+      setUserRole("runner")
     }
   },[])
     return (
@@ -28,10 +36,16 @@ function NavigationBar () {
             <Container>
               <Navbar.Brand as={NavLink} to="/main">Principal</Navbar.Brand>
               <Nav className="me-auto">
-                <Nav.Link href="#plans">Planes de entrenamiento generales</Nav.Link>
-                <Nav.Link href="#MyPlans">Mis planes</Nav.Link>
-                <Nav.Link href="#groups">Grupos</Nav.Link>
                 <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
+                <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
+                <Nav.Link href="#groupplans">Planes grupales</Nav.Link>
+                {userRole === "trainer" ? (
+                  <Nav.Link as={NavLink} to='/myplans'>Mis planes</Nav.Link>
+                ) : (
+                  <></>
+                )}
+                <Nav.Link as={NavLink} to='/enrolledplans'>Planes en curso</Nav.Link>
+                <Nav.Link href="#groups">Grupos</Nav.Link>
               </Nav>
               <Nav className="ms-auto">
                 <Dropdown align="end">

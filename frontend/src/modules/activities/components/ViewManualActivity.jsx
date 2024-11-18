@@ -69,7 +69,7 @@ function ViewManualActivity() {
                                 </div>
                                 <div>
                                     <strong>Ritmo medio</strong>
-                                    <p>{activity.pace} min/km</p>
+                                    <p>{activity.pace.toFixed(2)} min/km</p>
                                 </div>
                                 <div>
                                     <strong>Frec. cardiaca media</strong>

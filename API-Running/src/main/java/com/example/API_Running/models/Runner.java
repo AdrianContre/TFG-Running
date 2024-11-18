@@ -3,7 +3,9 @@ package com.example.API_Running.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("RUNNER")
@@ -24,6 +26,12 @@ public class Runner extends User {
     @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "runners")
+    private Set<TrainingGroup> groups;
+
+    @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TrainingProgress> plansProgress = new ArrayList<>();
+
     public Runner() {}
 
     public Runner(Integer weight, Integer height, Integer fcMax,boolean isTrainer) {
@@ -31,6 +39,7 @@ public class Runner extends User {
         this.height = height;
         this.fcMax = fcMax;
         this.isTrainer = isTrainer;
+        this.groups = new HashSet<>();
     }
 
     public Integer getWeight() {
@@ -90,5 +99,30 @@ public class Runner extends User {
 
     public void addMaterial (Material material) {
         this.materials.add(material);
+    }
+
+    public boolean isTrainer() {
+        return isTrainer;
+    }
+
+    public void setTrainer(boolean trainer) {
+        isTrainer = trainer;
+    }
+
+
+    public List<TrainingProgress> getPlansProgress() {
+        return plansProgress;
+    }
+
+    public void setPlansProgress(List<TrainingProgress> plansProgress) {
+        this.plansProgress = plansProgress;
+    }
+
+    public Set<TrainingGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<TrainingGroup> groups) {
+        this.groups = groups;
     }
 }
