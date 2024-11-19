@@ -11,7 +11,7 @@ public class TrainingGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "name", nullable = false)
+    @Column(name= "name", nullable = false, unique = true)
     private String name;
 
     @ManyToOne
@@ -34,6 +34,8 @@ public class TrainingGroup {
             inverseJoinColumns = @JoinColumn(name = "training_plan_id")
     )
     private Set<TrainingPlan> trainingPlans;
+
+    public TrainingGroup(){}
 
     public TrainingGroup(String name, Trainer trainer, Set<Runner> runners, Set<TrainingPlan> trainingPlans) {
         this.name = name;

@@ -125,4 +125,8 @@ public class Runner extends User {
     public void setGroups(Set<TrainingGroup> groups) {
         this.groups = groups;
     }
+
+    public void addGroup(TrainingGroup group) {
+        this.groups.add(group);
+    }
 }
