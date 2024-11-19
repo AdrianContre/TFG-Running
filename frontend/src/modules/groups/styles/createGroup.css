@@ -1,0 +1,63 @@
+.custom-h1 {
+    margin-top: 1%;
+    margin-left: 5%;
+}
+
+.create-group-container {
+    background-color: #d3d3d3;
+    padding: 20px;
+    width: 90%;
+    margin: 20px auto;
+    border: 3px solid #000;
+    border-radius: 20px;
+}
+
+.form-container-create-group {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.form-group-create-group {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.custom-input-create-group {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px; 
+    width: 25%; 
+    height: 50px; 
+    padding: 0px; 
+    margin-top:10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.custom-label-create-group {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.custom-select-creategroup {
+    width: 25%; 
+    margin-top: 10px; 
+
+}
+
+.custom-textarea-create-group {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px; 
+    width: 100%; 
+    padding: 10px;
+    margin: 10px 0;
+    height: 100px; 
+}
+
+
+
+

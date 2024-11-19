@@ -29,6 +29,8 @@ import ViewMobilityResult from './modules/activities/components/ViewMobilityResu
 import EditRunningResult from './modules/activities/components/EditRunningResult';
 import EditGenericResult from './modules/activities/components/EditGenericResult';
 import TrainingProgress from './modules/TrainingPlans/components/TrainingProgress';
+import ListGroups from './modules/groups/components/ListGroups';
+import CreateGroup from './modules/groups/components/CreateGroup';
 
 
 
@@ -54,6 +56,8 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/creategroup' element={<AuthRoute element={CreateGroup} />} />
+        <Route path='/groups' element={<AuthRoute element={ListGroups} />} />
         <Route path='/trainingprogress' element={<AuthRoute element={TrainingProgress} />} />
         <Route path='/editgenericresult' element={<AuthRoute element={EditGenericResult} />} />
         <Route path='/editrunningresult' element={<AuthRoute element={EditRunningResult} />} />

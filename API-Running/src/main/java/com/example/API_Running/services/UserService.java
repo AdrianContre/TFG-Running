@@ -1,6 +1,7 @@
 package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.RunnerDTO;
+import com.example.API_Running.dtos.SimpleUserDTO;
 import com.example.API_Running.dtos.TrainerDTO;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.models.Trainer;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -76,5 +79,22 @@ public class UserService {
             data.put("error", "Error uploading profile picture");
             return new ResponseEntity<>(data, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public ResponseEntity<Object> getAllUsers() {
+        HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        List<SimpleUserDTO> usersDTOS = new ArrayList<>();
+        List<User> users = this.userRepository.findAll();
+        users.forEach(user -> {
+            if (userAuth.getId() != user.getId()) {
+                SimpleUserDTO userDTO = new SimpleUserDTO(user.getId(), user.getUsername());
+                usersDTOS.add(userDTO);
+            }
+        });
+        data.put("data",usersDTOS);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

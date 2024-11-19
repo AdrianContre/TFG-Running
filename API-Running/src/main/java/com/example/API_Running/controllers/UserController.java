@@ -28,4 +28,9 @@ public class UserController {
     public ResponseEntity<Object> uploadProfilePicture(@PathVariable Long userId, @RequestParam MultipartFile profilePicture) {
         return this.userService.uploadProfilePicture(userId, profilePicture);
     }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllUsers() {
+        return this.userService.getAllUsers();
+    }
 }

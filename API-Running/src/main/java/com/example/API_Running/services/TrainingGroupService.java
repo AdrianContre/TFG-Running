@@ -45,7 +45,8 @@ public class TrainingGroupService {
         List<Long> runnersId = trainingGroupDTO.getRunnersId();
         Set<Runner> runnerSet = new HashSet<>();
         Trainer trainer = trainer_query.get();
-        TrainingGroup group = new TrainingGroup(name, trainer, new HashSet<>(), new HashSet<>());
+        String description = trainingGroupDTO.getDescription();
+        TrainingGroup group = new TrainingGroup(name, description, trainer, new HashSet<>(), new HashSet<>());
         TrainingGroup savedGroup = this.trainingGroupRepository.save(group);
         for (int i = 0; i < runnersId.size(); ++i) {
             Optional<Runner> runner_query = this.runnerRepository.findById(runnersId.get(i));

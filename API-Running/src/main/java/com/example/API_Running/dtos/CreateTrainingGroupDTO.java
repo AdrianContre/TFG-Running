@@ -4,11 +4,13 @@ import java.util.List;
 
 public class CreateTrainingGroupDTO {
     private String name;
+    private String description;
     private Long trainerId;
     private List<Long> runnersId;
 
-    public CreateTrainingGroupDTO(String name, Long trainerId, List<Long> runnersId) {
+    public CreateTrainingGroupDTO(String name, String description,  Long trainerId, List<Long> runnersId) {
         this.name = name;
+        this.description = description;
         this.trainerId = trainerId;
         this.runnersId = runnersId;
     }
@@ -19,6 +21,14 @@ public class CreateTrainingGroupDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getTrainerId() {

@@ -45,7 +45,12 @@ function NavigationBar () {
                   <></>
                 )}
                 <Nav.Link as={NavLink} to='/enrolledplans'>Planes en curso</Nav.Link>
-                <Nav.Link href="#groups">Grupos</Nav.Link>
+                <Nav.Link as={NavLink} to='/groups'>Grupos</Nav.Link>
+                {userRole === "trainer" ? (
+                  <Nav.Link as={NavLink} to='/mygroups'>Mis grupos</Nav.Link>
+                ) : (
+                  <></>
+                )}
               </Nav>
               <Nav className="ms-auto">
                 <Dropdown align="end">
