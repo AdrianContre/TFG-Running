@@ -22,5 +22,15 @@ public class TrainingGroupController {
     public ResponseEntity<Object> createTrainingGroup(@RequestBody CreateTrainingGroupDTO trainingGroupDTO) {
         return this.trainingGroupService.createGroup(trainingGroupDTO);
     }
+
+    @GetMapping(path="/available")
+    public ResponseEntity<Object> getAvailableGroups() {
+        return this.trainingGroupService.getAvailableGroups();
+    }
+
+    @GetMapping(path="/trainers/{trainerId}")
+    public ResponseEntity<Object> getTrainerGroups(@PathVariable Long trainerId) {
+        return this.trainingGroupService.getTrainerGroups(trainerId);
+    }
 }
 

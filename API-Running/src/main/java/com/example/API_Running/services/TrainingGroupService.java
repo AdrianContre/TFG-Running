@@ -1,15 +1,16 @@
 package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.CreateTrainingGroupDTO;
-import com.example.API_Running.models.Runner;
-import com.example.API_Running.models.Trainer;
-import com.example.API_Running.models.TrainingGroup;
+import com.example.API_Running.dtos.GroupDTO;
+import com.example.API_Running.models.*;
 import com.example.API_Running.repository.RunnerRepository;
 import com.example.API_Running.repository.TrainerRepository;
 import com.example.API_Running.repository.TrainingGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -64,6 +65,36 @@ public class TrainingGroupService {
         this.trainerRepository.save(trainer);
         this.trainingGroupRepository.save(savedGroup);
         data.put("data", "Group created successfully");
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getAvailableGroups() {
+        HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        Runner runner = (Runner) userAuth;
+        List<TrainingGroup> groups = this.trainingGroupRepository.findAllNotCreatorAndIncluded(userAuth.getId(), runner);
+        List<GroupDTO> groupsDTO = new ArrayList<>();
+        groups.forEach(group -> {
+            String trainerName = group.getTrainer().getName() + " " + group.getTrainer().getSurname() + "(@" + group.getTrainer().getUsername() + ")";
+            GroupDTO dto = new GroupDTO(group.getName(), trainerName);
+            groupsDTO.add(dto);
+        });
+        data.put("data", groupsDTO);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getTrainerGroups(Long trainerId) {
+        HashMap<String, Object> data = new HashMap<>();
+        List<TrainingGroup> groups = this.trainingGroupRepository.findAllByCreator(trainerId);
+        List<GroupDTO> groupsDTO = new ArrayList<>();
+        groups.forEach(group -> {
+            String trainerName = group.getTrainer().getName() + " " + group.getTrainer().getSurname() + "(@" + group.getTrainer().getUsername() + ")";
+            GroupDTO dto = new GroupDTO(group.getName(), trainerName);
+            groupsDTO.add(dto);
+        });
+        data.put("data", groupsDTO);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }
