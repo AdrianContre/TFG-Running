@@ -31,6 +31,7 @@ import EditGenericResult from './modules/activities/components/EditGenericResult
 import TrainingProgress from './modules/TrainingPlans/components/TrainingProgress';
 import ListGroups from './modules/groups/components/ListGroups';
 import CreateGroup from './modules/groups/components/CreateGroup';
+import ListMyGroups from './modules/groups/components/ListMyGroups';
 
 
 
@@ -56,6 +57,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/mygroups' element={<AuthRoute element={ListMyGroups} />} />
         <Route path='/creategroup' element={<AuthRoute element={CreateGroup} />} />
         <Route path='/groups' element={<AuthRoute element={ListGroups} />} />
         <Route path='/trainingprogress' element={<AuthRoute element={TrainingProgress} />} />

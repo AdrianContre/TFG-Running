@@ -78,7 +78,7 @@ public class TrainingGroupService {
         List<GroupDTO> groupsDTO = new ArrayList<>();
         groups.forEach(group -> {
             String trainerName = group.getTrainer().getName() + " " + group.getTrainer().getSurname() + "(@" + group.getTrainer().getUsername() + ")";
-            GroupDTO dto = new GroupDTO(group.getName(), trainerName);
+            GroupDTO dto = new GroupDTO(group.getId(),group.getName(), trainerName);
             groupsDTO.add(dto);
         });
         data.put("data", groupsDTO);
@@ -91,7 +91,7 @@ public class TrainingGroupService {
         List<GroupDTO> groupsDTO = new ArrayList<>();
         groups.forEach(group -> {
             String trainerName = group.getTrainer().getName() + " " + group.getTrainer().getSurname() + "(@" + group.getTrainer().getUsername() + ")";
-            GroupDTO dto = new GroupDTO(group.getName(), trainerName);
+            GroupDTO dto = new GroupDTO(group.getId(), group.getName(), trainerName);
             groupsDTO.add(dto);
         });
         data.put("data", groupsDTO);

@@ -1,34 +1,41 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import NavigationBar from "../../home/components/NavigationBar";
+import CirclePlus from '../../../assets/images/plus-circle.png'
+import { useNavigate } from "react-router";
 import '../styles/listGroup.css'
-import { getAvailableGroups } from "../services/groupService";
+import {getTrainerGroups } from "../services/groupService";
 import GroupCard from "./GroupCard";
 import Paginator from "../../../Paginator";
 
-function ListGroups() {
+function ListMyGroups() {
     const [groups, setGroups] = useState([{}])
     const [isTrainer, setIsTrainer] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [groupsPerPage] = useState(10); 
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchInfo = async () => {
             const user = JSON.parse(localStorage.getItem('userAuth'))
             if (user.userType === "Trainer") {
                 setIsTrainer(true)
             }
-
-            const groups = await getAvailableGroups()
+            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
+            const groups = await getTrainerGroups(trainerId)
             setGroups(groups.data)
         }
         fetchInfo()
     },[])
 
+    const handleClick = (event) => {
+        event.preventDefault()
+        navigate('/creategroup')
+    }
+
     const totalPages = Math.ceil(groups.length / groupsPerPage);
     const indexOfLastPlan = currentPage * groupsPerPage;
     const indexOfFirstPlan = indexOfLastPlan - groupsPerPage;
     const currentGroups = groups.slice(indexOfFirstPlan, indexOfLastPlan);
-    console.log(currentGroups)
     return (
         <>
 
@@ -42,16 +49,22 @@ function ListGroups() {
                         trainerInfo={group.trainerName}
                     />
                 ))) : (<div className='container'>
-                <p className='text-custom'>NO ERES MIEMBRO DE NINGÚN GRUPO</p></div>)}
+                <p className='text-custom'>NO HAS CREADO NINGÚN GRUPO, CREA UNO DESDE EL ICONO DE ABAJO!!</p></div>)}
             </div>
             <Paginator 
                 currentPage={currentPage} 
                 totalPages={totalPages} 
                 onPageChange={setCurrentPage} 
             />
+            {isTrainer === true ? (<div className="image-container">
+                <div className="circle-container">
+                    <img className="circle-image" src={CirclePlus} onClick={handleClick}/>
+                    <div className="tooltip-text">Crear grupo</div>
+                </div>
+            </div>) : (null)}
         </>
     )
 }
 
 
-export default ListGroups;
+export default ListMyGroups;

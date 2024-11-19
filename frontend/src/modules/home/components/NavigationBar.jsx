@@ -26,7 +26,7 @@ function NavigationBar () {
     if (user.userType === "Trainer") {
       setUserRole("trainer")
     }
-    else {
+    else {
       setUserRole("runner")
     }
   },[])

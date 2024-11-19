@@ -50,3 +50,47 @@ export const createGroup = async (name, description, trainerId, runnersId) => {
         throw error;
       });
 }
+
+export const getAvailableGroups = async () => {
+    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${GROUP_ENDPOINT}/available`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
+
+export const getTrainerGroups = async (trainerId) => {
+    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${GROUP_ENDPOINT}/trainers/${trainerId}`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
