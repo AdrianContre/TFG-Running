@@ -32,5 +32,10 @@ public class TrainingGroupController {
     public ResponseEntity<Object> getTrainerGroups(@PathVariable Long trainerId) {
         return this.trainingGroupService.getTrainerGroups(trainerId);
     }
+
+    @GetMapping(path="/{groupId}")
+    public ResponseEntity<Object> getGroup(@PathVariable Long groupId) {
+        return this.trainingGroupService.getGroup(groupId);
+    }
 }
 

@@ -2,6 +2,7 @@ package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.CreateTrainingGroupDTO;
 import com.example.API_Running.dtos.GroupDTO;
+import com.example.API_Running.dtos.GroupDetailsDTO;
 import com.example.API_Running.models.*;
 import com.example.API_Running.repository.RunnerRepository;
 import com.example.API_Running.repository.TrainerRepository;
@@ -95,6 +96,29 @@ public class TrainingGroupService {
             groupsDTO.add(dto);
         });
         data.put("data", groupsDTO);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getGroup(Long groupId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
+        if (!query.isPresent()) {
+            data.put("error", "The training group does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        TrainingGroup tg = query.get();
+        String name = tg.getName();
+        String description = tg.getDescription();
+        Trainer trainer = tg.getTrainer();
+        String trainerFullInfo = trainer.getName() + " " + trainer.getSurname() + "(@" + trainer.getUsername() + ")";
+        Set<Runner> runners = tg.getRunners();
+        List<String> runnersInfo = new ArrayList<>();
+        runners.forEach(runner -> {
+            String fullNameRunner = runner.getName() + " " + runner.getSurname() + "(@" + runner.getUsername() + ")";
+            runnersInfo.add(fullNameRunner);
+        });
+        GroupDetailsDTO dto = new GroupDetailsDTO(tg.getId(), name, description, trainerFullInfo, runnersInfo);
+        data.put("data", dto);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }
