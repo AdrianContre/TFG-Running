@@ -32,6 +32,7 @@ import TrainingProgress from './modules/TrainingPlans/components/TrainingProgres
 import ListGroups from './modules/groups/components/ListGroups';
 import CreateGroup from './modules/groups/components/CreateGroup';
 import ListMyGroups from './modules/groups/components/ListMyGroups';
+import ViewGroup from './modules/groups/components/ViewGroup';
 
 
 
@@ -57,6 +58,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/viewgroup' element={<AuthRoute element={ViewGroup} />} />
         <Route path='/mygroups' element={<AuthRoute element={ListMyGroups} />} />
         <Route path='/creategroup' element={<AuthRoute element={CreateGroup} />} />
         <Route path='/groups' element={<AuthRoute element={ListGroups} />} />

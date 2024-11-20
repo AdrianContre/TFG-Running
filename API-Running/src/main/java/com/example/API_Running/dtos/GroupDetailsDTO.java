@@ -8,13 +8,15 @@ public class GroupDetailsDTO {
     private Long id;
     private String name;
     private String description;
+    private Long trainerId;
     private String trainerFullInfo;
     private List<String> members;
 
-    public GroupDetailsDTO(Long id, String name, String description, String trainerFullInfo, List<String> members) {
+    public GroupDetailsDTO(Long id, String name, String description, Long trainerId, String trainerFullInfo, List<String> members) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.trainerId = trainerId;
         this.trainerFullInfo = trainerFullInfo;
         this.members = members;
     }
@@ -41,6 +43,14 @@ public class GroupDetailsDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getTrainerId() {
+        return trainerId;
+    }
+
+    public void setTrainerId(Long trainerId) {
+        this.trainerId = trainerId;
     }
 
     public String getTrainerFullInfo() {

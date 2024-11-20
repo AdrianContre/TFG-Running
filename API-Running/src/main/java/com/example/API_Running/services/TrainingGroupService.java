@@ -117,7 +117,7 @@ public class TrainingGroupService {
             String fullNameRunner = runner.getName() + " " + runner.getSurname() + "(@" + runner.getUsername() + ")";
             runnersInfo.add(fullNameRunner);
         });
-        GroupDetailsDTO dto = new GroupDetailsDTO(tg.getId(), name, description, trainerFullInfo, runnersInfo);
+        GroupDetailsDTO dto = new GroupDetailsDTO(tg.getId(), name, description,trainer.getId(), trainerFullInfo, runnersInfo);
         data.put("data", dto);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

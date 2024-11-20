@@ -94,3 +94,25 @@ export const getTrainerGroups = async (trainerId) => {
         throw error;
     });
 }
+
+export const getGroup = async (groupId) => {
+    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${GROUP_ENDPOINT}/${groupId}`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}

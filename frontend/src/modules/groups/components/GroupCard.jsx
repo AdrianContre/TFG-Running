@@ -9,7 +9,7 @@ function GroupCard({ id, name, trainerInfo }) {
 
     const handleViewDetails = (event) => {
         event.preventDefault()
-        //navigate('/viewplan', { state: {planId: id}})
+        navigate('/viewgroup', { state: {groupId: id}})
     }
 
     return (
