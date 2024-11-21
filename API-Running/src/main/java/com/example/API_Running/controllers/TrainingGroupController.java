@@ -2,6 +2,7 @@ package com.example.API_Running.controllers;
 
 
 import com.example.API_Running.dtos.CreateTrainingGroupDTO;
+import com.example.API_Running.dtos.EditGroupDTO;
 import com.example.API_Running.services.TrainingGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,11 @@ public class TrainingGroupController {
     @GetMapping(path="/{groupId}")
     public ResponseEntity<Object> getGroup(@PathVariable Long groupId) {
         return this.trainingGroupService.getGroup(groupId);
+    }
+
+    @PutMapping(path="/{groupId}")
+    public ResponseEntity<Object> editGroup(@PathVariable Long groupId, @RequestBody EditGroupDTO editGroupDTO) {
+        return this.trainingGroupService.editGroup(groupId, editGroupDTO);
     }
 }
 

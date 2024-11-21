@@ -1,6 +1,7 @@
 package com.example.API_Running.services;
 
 import com.example.API_Running.dtos.CreateTrainingGroupDTO;
+import com.example.API_Running.dtos.EditGroupDTO;
 import com.example.API_Running.dtos.GroupDTO;
 import com.example.API_Running.dtos.GroupDetailsDTO;
 import com.example.API_Running.models.*;
@@ -119,6 +120,28 @@ public class TrainingGroupService {
         });
         GroupDetailsDTO dto = new GroupDetailsDTO(tg.getId(), name, description,trainer.getId(), trainerFullInfo, runnersInfo);
         data.put("data", dto);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> editGroup(Long groupId, EditGroupDTO editGroupDTO) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
+        if (!query.isPresent()) {
+            data.put("error", "Group does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        TrainingGroup tg = query.get();
+        tg.setName(editGroupDTO.getName());
+        tg.setDescription(editGroupDTO.getDescription());
+        List<Long> membersId = editGroupDTO.getMembersId();
+        Set<Runner> members = new HashSet<>();
+        List<Runner> runners = this.runnerRepository.findAllById(membersId);
+        for (Runner runner : runners) {
+            members.add(runner);
+        }
+        tg.setRunners(members);
+        TrainingGroup savedTg = this.trainingGroupRepository.save(tg);
+        data.put("data", "Edited properly");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }
