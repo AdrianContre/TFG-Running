@@ -141,4 +141,17 @@ public class TrainingGroupService {
         data.put("data", "Edited properly");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
+
+    public ResponseEntity<Object> deleteGroup(Long groupId) {
+        HashMap<String, Object> data = new HashMap<>();
+        Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
+        if (!query.isPresent()) {
+            data.put("error", "Group does not exist");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        TrainingGroup tg = query.get();
+        this.trainingGroupRepository.delete(tg);
+        data.put("data", "Group deleted successfully");
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
 }

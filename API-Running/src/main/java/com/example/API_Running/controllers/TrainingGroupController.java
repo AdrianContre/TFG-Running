@@ -43,5 +43,10 @@ public class TrainingGroupController {
     public ResponseEntity<Object> editGroup(@PathVariable Long groupId, @RequestBody EditGroupDTO editGroupDTO) {
         return this.trainingGroupService.editGroup(groupId, editGroupDTO);
     }
+
+    @DeleteMapping(path="/{groupId}")
+    public ResponseEntity<Object> deleteGroup(@PathVariable Long groupId) {
+        return this.trainingGroupService.deleteGroup(groupId);
+    }
 }
 
