@@ -10,9 +10,9 @@ public class GroupDetailsDTO {
     private String description;
     private Long trainerId;
     private String trainerFullInfo;
-    private List<String> members;
+    private List<UserDTO> members;
 
-    public GroupDetailsDTO(Long id, String name, String description, Long trainerId, String trainerFullInfo, List<String> members) {
+    public GroupDetailsDTO(Long id, String name, String description, Long trainerId, String trainerFullInfo, List<UserDTO> members) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,11 +61,11 @@ public class GroupDetailsDTO {
         this.trainerFullInfo = trainerFullInfo;
     }
 
-    public List<String> getMembers() {
+    public List<UserDTO> getMembers() {
         return members;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(List<UserDTO> members) {
         this.members = members;
     }
 }

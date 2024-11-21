@@ -33,6 +33,7 @@ import ListGroups from './modules/groups/components/ListGroups';
 import CreateGroup from './modules/groups/components/CreateGroup';
 import ListMyGroups from './modules/groups/components/ListMyGroups';
 import ViewGroup from './modules/groups/components/ViewGroup';
+import EditGroup from './modules/groups/components/EditGroup';
 
 
 
@@ -58,6 +59,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/editgroup' element={<AuthRoute element={EditGroup} />} />
         <Route path='/viewgroup' element={<AuthRoute element={ViewGroup} />} />
         <Route path='/mygroups' element={<AuthRoute element={ListMyGroups} />} />
         <Route path='/creategroup' element={<AuthRoute element={CreateGroup} />} />

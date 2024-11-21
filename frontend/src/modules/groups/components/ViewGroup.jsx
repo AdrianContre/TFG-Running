@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
 import { getGroup } from "../services/groupService";
 import { Button, Spinner } from "react-bootstrap";
@@ -11,6 +11,7 @@ function ViewGroup() {
     const {groupId} = location.state
     const [group,setGroup] = useState(null)
     const [userAuth, setUserAuth] = useState(null)
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchInfo = async () => {
             const groupInfo = await getGroup(groupId)
@@ -20,6 +21,12 @@ function ViewGroup() {
         }
         fetchInfo()
     },[])
+
+    const handleEdit = (event) => {
+        event.preventDefault()
+        navigate('/editgroup',  { state: {groupId: group.id, groupName: group.name, groupDescription: group.description, members: group.members}})
+    }
+
     if (!group || !userAuth) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
@@ -49,15 +56,18 @@ function ViewGroup() {
                         <label className="custom-label-create-group"><FontAwesomeIcon icon={faPersonRunning} />Miembros:</label>
                         {group.members?.length > 0 ? (
                             group.members.map((member, index) => (
-                                <span key={index}>{member}</span>
+                                <span key={index}>{member.name} {member.surname} {'(@'}{member.username}{')'}</span>
                             ))
                             ) : null}
                     </div>
                 </div>
             </div>
             {userAuth?.id === group?.trainerId ? (<div style={{ display: "flex", justifyContent: "center" }}>
-                <Button variant="primary" size="lg" className="mt-5">
+                <Button variant="primary" size="lg" className="mt-5" onClick={handleEdit}>
                     EDITAR GRUPO
+                </Button>
+                <Button variant="danger" size="lg" className="mt-5" style={{marginLeft: '100px'}}>
+                    ELIMINAR GRUPO
                 </Button>
             </div>) : (null)}
             

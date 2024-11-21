@@ -1,9 +1,6 @@
 package com.example.API_Running.services;
 
-import com.example.API_Running.dtos.CreateTrainingGroupDTO;
-import com.example.API_Running.dtos.EditGroupDTO;
-import com.example.API_Running.dtos.GroupDTO;
-import com.example.API_Running.dtos.GroupDetailsDTO;
+import com.example.API_Running.dtos.*;
 import com.example.API_Running.models.*;
 import com.example.API_Running.repository.RunnerRepository;
 import com.example.API_Running.repository.TrainerRepository;
@@ -113,10 +110,10 @@ public class TrainingGroupService {
         Trainer trainer = tg.getTrainer();
         String trainerFullInfo = trainer.getName() + " " + trainer.getSurname() + "(@" + trainer.getUsername() + ")";
         Set<Runner> runners = tg.getRunners();
-        List<String> runnersInfo = new ArrayList<>();
+        List<UserDTO> runnersInfo = new ArrayList<>();
         runners.forEach(runner -> {
-            String fullNameRunner = runner.getName() + " " + runner.getSurname() + "(@" + runner.getUsername() + ")";
-            runnersInfo.add(fullNameRunner);
+            UserDTO userDTO = new UserDTO(runner.getId(), runner.getName(), runner.getSurname(), runner.getUsername());
+            runnersInfo.add(userDTO);
         });
         GroupDetailsDTO dto = new GroupDetailsDTO(tg.getId(), name, description,trainer.getId(), trainerFullInfo, runnersInfo);
         data.put("data", dto);

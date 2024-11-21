@@ -116,3 +116,26 @@ export const getGroup = async (groupId) => {
         throw error;
     });
 }
+
+export const editGroup = async (groupId, name, description, membersId) => {
+    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${GROUP_ENDPOINT}/${groupId}`,{
+        method: 'PUT',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({name: name, description: description, membersId: membersId})
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}

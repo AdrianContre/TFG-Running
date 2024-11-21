@@ -1,35 +1,51 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
+import { useState, useEffect, memo } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import "../styles/createGroup.css";
-import { Button } from "react-bootstrap";
-import { createGroup, getAllUsers } from "../services/groupService";
+import { Spinner, Button } from "react-bootstrap";
 import PopUp from "../../auth/components/PopUp";
-import { useNavigate } from "react-router";
+import { editGroup, getAllUsers } from "../services/groupService";
+import Select from "react-select";
 
-function CreateGroup() {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [userOptions, setUserOptions] = useState([]);
-    const [filteredOptions, setFilteredOptions] = useState([]);
+function EditGroup() {
+    const location = useLocation()
+    const [id, setId] = useState(null)
+    const [name, setName] = useState(null)
+    const [description, setDescription] = useState(null)
+    const [groupMembers, setGroupMembers] = useState(null)
+    const {groupId, groupName, groupDescription, members} = location.state
+    const [show, setShow] = useState(false)
+    const [error, setError] = useState(null)
     const [selectedUsers, setSelectedUsers] = useState(null);
     const [searchInput, setSearchInput] = useState(""); 
-    const [show, setShow] = useState(false)
-    const [error, setError] = useState("")
-
+    const [userOptions, setUserOptions] = useState([]);
+    const [filteredOptions, setFilteredOptions] = useState([]);
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const fetchUsers = async () => {
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
+
+    useEffect(()=> {
+        const getInfo = async () => {
             const users = await getAllUsers();
             const options = users.data.map((user) => ({
                 value: user.id,
                 label: user.username,
             }));
             setUserOptions(options);
-        };
-        fetchUsers();
-    }, []);
+            setId(groupId)
+            setName(groupName)
+            setDescription(groupDescription)
+            setGroupMembers(members)
+            const selected_options = members.map((user) => ({
+                value: user.id,
+                label: user.username,
+            }));
+            setSelectedUsers(selected_options)
+        }
+        getInfo()
+    },[])
 
     const handleInputChange = (inputValue) => {
         setSearchInput(inputValue);
@@ -45,39 +61,36 @@ function CreateGroup() {
         }
     };
 
-    const handleCreateGroup = async (event) => {
+    const handleSend = async (event) => {
         event.preventDefault()
-        let runnersId = []
-        const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
-        selectedUsers.map(user => {
-            runnersId.push(user.value)
-        })
-        if (runnersId.length == 0 || name === "" || description === "") {
-            setError("Todos los campos han de estar llenos, añadiendo almenos un usuario")
-        }
-        try {
-            const send = await createGroup(name, description, trainerId, runnersId)
-            navigate('groups')
-        }
-        catch (Error) {
-            if (Error.status === 409) {
-                setError(`El grupo con el nombre "${name}" ya existe`);
-            }
+        if (selectedUsers.length == 0) {
+            setError("Tiene que haber minimo un usuario en el grupo")
             setShow(true)
-            
+        } 
+        else if (name === "" || description === "") {
+            setError("Todos los campos son obligatorios")
+            setShow(true)
         }
-        
+        let membersId = []
+        selectedUsers.map(user =>{
+            membersId.push(user.value)
+        })
+        const editgroup = await editGroup(id, name, description, membersId);
+        if (editgroup.data) {
+            navigate('/viewgroup',{ state: {groupId: id}})
+        }
     }
 
-    const onHide = (event) => {
-        event.preventDefault()
-        setShow(false)
+    if (id === null ||name === null|| description === null|| groupMembers === null || selectedUsers === null) {
+        console.log(description)
+        return (<div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                    <Spinner animation="border" role="status"/>
+                </div>)
     }
-
     return (
         <>
-            <NavigationBar />
-            <h1 className="custom-h1">Crear grupo:</h1>
+            <NavigationBar/>
+            <h1 className="custom-h1">Editar grupo:</h1>
             <div className="create-group-container">
                 <div className="form-container-create-group">
                     <div className="form-group-create-group">
@@ -93,6 +106,7 @@ function CreateGroup() {
                         <Select
                             isMulti
                             options={filteredOptions}
+                            value={selectedUsers}
                             onChange={(selected) => setSelectedUsers(selected)}
                             onInputChange={handleInputChange} 
                             placeholder="Escribe para buscar usuarios..."
@@ -107,13 +121,13 @@ function CreateGroup() {
                 </div>
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <Button variant="primary" size="lg" className="mt-5" onClick={handleCreateGroup}>
-                    CREAR GRUPO
+                <Button variant="primary" size="lg" className="mt-5" onClick={handleSend}>
+                    CONFIRMAR EDICIÓN
                 </Button>
             </div>
-            <PopUp error={error} show={show} onHide={onHide} title={"Error al crear grupo"}/>
+            <PopUp error={error} show={show} onHide={onHide} title={"Error al editar grupo"}/>
         </>
-    );
+    )
 }
 
-export default CreateGroup;
+export default EditGroup;
