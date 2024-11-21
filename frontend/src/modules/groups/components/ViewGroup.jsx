@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { getGroup } from "../services/groupService";
+import { deleteGroup, getGroup } from "../services/groupService";
 import { Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserGroup, faPersonRunning} from '@fortawesome/free-solid-svg-icons';
+import {faPersonRunning} from '@fortawesome/free-solid-svg-icons';
 
 function ViewGroup() {
     const location = useLocation()
@@ -25,6 +25,14 @@ function ViewGroup() {
     const handleEdit = (event) => {
         event.preventDefault()
         navigate('/editgroup',  { state: {groupId: group.id, groupName: group.name, groupDescription: group.description, members: group.members}})
+    }
+
+    const handleDelete = async (event) => {
+        event.preventDefault()
+        const request = await deleteGroup(group.id)
+        if (request.data) {
+            navigate('/mygroups')
+        }
     }
 
     if (!group || !userAuth) {
@@ -66,7 +74,7 @@ function ViewGroup() {
                 <Button variant="primary" size="lg" className="mt-5" onClick={handleEdit}>
                     EDITAR GRUPO
                 </Button>
-                <Button variant="danger" size="lg" className="mt-5" style={{marginLeft: '100px'}}>
+                <Button variant="danger" size="lg" className="mt-5" style={{marginLeft: '100px'}} onClick={handleDelete}>
                     ELIMINAR GRUPO
                 </Button>
             </div>) : (null)}
