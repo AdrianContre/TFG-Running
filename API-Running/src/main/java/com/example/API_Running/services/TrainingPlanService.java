@@ -449,4 +449,21 @@ public class TrainingPlanService {
         }
     }
 
+    public ResponseEntity<Object> getElegibleTrainingPlans() {
+        HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        Long userId = user.getId();
+
+        //List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
+        List<TrainingPlan> plans = this.trainingPlanRepository.findEligibleTrainingPlans(userId);
+        List<ListPlansDTO> plansDTO = new ArrayList<>();
+        plans.stream().forEach(plan -> {
+            ListPlansDTO p = new ListPlansDTO(plan);
+            plansDTO.add(p);
+        });
+        data.put("data", plansDTO);
+        return new ResponseEntity<>(data,HttpStatus.OK);
+    }
 }
