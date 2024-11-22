@@ -1,6 +1,7 @@
 package com.example.API_Running.dtos;
 
 import java.util.List;
+import java.util.Set;
 
 public class UpdateTrainingPlanDTO {
     private String name;
@@ -9,14 +10,16 @@ public class UpdateTrainingPlanDTO {
     private String objDistance;
     private String level;
     private List<List<SessionDTO>> sessions;
+    private List<Long> groupsId;
 
-    public UpdateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions) {
+    public UpdateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions, List<Long> groupsId) {
         this.name = name;
         this.description = description;
         this.numWeeks = numWeeks;
         this.objDistance = objDistance;
         this.level = level;
         this.sessions = sessions;
+        this.groupsId = groupsId;
     }
 
     public String getName() {
@@ -65,6 +68,14 @@ public class UpdateTrainingPlanDTO {
 
     public void setSessions(List<List<SessionDTO>> sessions) {
         this.sessions = sessions;
+    }
+
+    public List<Long> getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(List<Long> groupsId) {
+        this.groupsId = groupsId;
     }
 
     @Override

@@ -319,9 +319,6 @@ public class TrainingPlanService {
             }
         }
 
-
-
-
         for (int i = 0; i < numWeeks; ++i) {
             TrainingWeek currentWeek = trainingWeeks.get(i);
             List<SessionDTO> sessionsInWeekDTO = sessionsDTO.get(i);
@@ -364,7 +361,43 @@ public class TrainingPlanService {
             currentWeek.getSessions().addAll(tempSessions);
             trainingWeeks.set(i, this.trainingWeekRepository.save(currentWeek));
         }
+        List<Long> newGroupsId = updateTrainingPlanDTO.getGroupsId();
+        if (!newGroupsId.isEmpty()) {
+            List<TrainingGroup> newGroups = this.trainingGroupRepository.findAllById(newGroupsId);
+            Set<TrainingGroup> newGroupsSet = new HashSet<>();
+            for (TrainingGroup tg : newGroups) {
+                newGroupsSet.add(tg);
+            }
+            Set<TrainingGroup> currentGroups = trainingPlan.getGroups();
+            Set<TrainingGroup> removedGroups = new HashSet<>(currentGroups);
+            removedGroups.removeAll(newGroupsSet);
+            trainingPlan.setGroups(newGroupsSet);
 
+            Set<Runner> runnersOutOfPlan = new HashSet<>();
+            for (TrainingGroup trainingGroup : removedGroups) {
+                for (Runner runner : trainingGroup.getRunners()) {
+                    runnersOutOfPlan.add(runner);
+                }
+            }
+            for (Runner r : runnersOutOfPlan) {
+                List<TrainingSessionResult> trainingSessionResults = this.trainingSessionResultRepository.findAllByPlanAndRunner(planId, r.getId());
+                for (TrainingSessionResult tsr : trainingSessionResults) {
+                    TrainingSession ts = tsr.getSession();
+                    ts.removeResult(tsr);
+                    this.trainingSessionRepository.save(ts);
+                    this.activityRepository.delete(tsr);
+                }
+
+                Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(r.getId(), planId);
+                if (!query2.isPresent()) {
+                    data.put("error", "The runner is not enrolled to the plan");
+                }
+                TrainingProgress tp = query2.get();
+                this.trainingProgressRepository.delete(tp);
+            }
+
+
+        }
         this.trainingPlanRepository.save(trainingPlan);
 
         data.put("data", "Training plan updated properly");
