@@ -57,7 +57,7 @@ function CreateGroup() {
         }
         try {
             const send = await createGroup(name, description, trainerId, runnersId)
-            navigate('groups')
+            navigate('/mygroups')
         }
         catch (Error) {
             if (Error.status === 409) {

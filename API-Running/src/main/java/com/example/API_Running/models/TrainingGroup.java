@@ -95,4 +95,8 @@ public class TrainingGroup {
     public void setTrainingPlans(Set<TrainingPlan> trainingPlans) {
         this.trainingPlans = trainingPlans;
     }
+
+    public void addTrainingPlan(TrainingPlan tp) {
+        this.trainingPlans.add(tp);
+    }
 }

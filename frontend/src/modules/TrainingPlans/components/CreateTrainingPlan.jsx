@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import NavigationBar from "../../home/components/NavigationBar";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/CreateTrainingPlan.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,9 @@ import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome
 import { createPlan } from "../services/trainingService";
 import { useNavigate } from "react-router";
 import PopUp from "../../auth/components/PopUp";
+import Select from "react-select";
+import { useEffect } from "react";
+import { getTrainerGroups } from "../../groups/services/groupService";
 
 function CreateTrainingPlan() {
     const navigate = useNavigate()
@@ -30,6 +33,8 @@ function CreateTrainingPlan() {
         duration: ''
     }); 
     const [show,setShow] = useState(false)
+    const [selectedGroups, setSelectedGroups] = useState([]);
+    const [groupOptions, setGroupOptions] = useState(null);
 
     const onHide = (event) => {
         event.preventDefault()
@@ -138,8 +143,12 @@ function CreateTrainingPlan() {
         const allSessionsFilled = sessionsInfo.every(week =>
             week.every(session => session !== null)
         );
-        if (allSessionsFilled) {
-            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+        if (allSessionsFilled && name !== "" && description !== "") {
+            let groupsId = []
+            selectedGroups.map(group => {
+                groupsId.push(group.value)
+            })
+            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId, groupsId)
             if (send) {
                 navigate('/myplans')
             }
@@ -190,6 +199,28 @@ function CreateTrainingPlan() {
         return rows;
     };
 
+    useEffect(() => {
+        const fetchGroups = async () => {
+            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
+            const groups = await getTrainerGroups(trainerId)
+            console.log(groups)
+            const options = groups.data.map((group) => ({
+                value: group.id,
+                label: group.name,
+            }));
+            setGroupOptions(options)
+        }
+        fetchGroups()
+    },[])
+
+    if (!groupOptions) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+      )
+    }
+
     return (
         <>
             <NavigationBar />
@@ -229,6 +260,15 @@ function CreateTrainingPlan() {
                             <option value="Avanzado">Avanzado</option>
                         </select>
                     </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Grupos {'(Opcional)'}:</label>
+                        <Select
+                            isMulti
+                            options={groupOptions}
+                            onChange={(selected) => setSelectedGroups(selected)}
+                            className="custom-select-createact"
+                        />
+                    </div>
                 </div>
 
                 <div className="table-container-create-plan">
@@ -247,7 +287,7 @@ function CreateTrainingPlan() {
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <Button variant='primary' size='lg' className='mt-5' onClick={handleCreatePlan}>Crear plan de entrenamiento</Button>
             </div>
-            <PopUp error={"Han de estar todas las casillas llenas, en caso que quieras añadir descanso, añade una sesión de tipo descanso"} show={show} onHide={onHide} title={"Error al crear plan de entrenamiento"}/>
+            <PopUp error={"Todos los campos son obligatorios excepto Grupos. En caso que quieras añadir descanso, añade una sesión de tipo descanso"} show={show} onHide={onHide} title={"Error al crear plan de entrenamiento"}/>
 
             {/* Modal para agregar sesión */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>

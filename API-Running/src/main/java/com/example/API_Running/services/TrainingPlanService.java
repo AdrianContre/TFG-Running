@@ -54,16 +54,18 @@ public class TrainingPlanService {
         String level = trainingPlanDTO.getLevel();
         List<TrainingWeek> trainingWeekList = new ArrayList<>();
         List<TrainingProgress> trainingProgressesList = new ArrayList<>();
+        TrainingPlan trainingPlan = new TrainingPlan(name, description, weeks, objDistance, level, trainer, trainingWeekList, trainingProgressesList);
         Set<TrainingGroup> groups = new HashSet<>();
         for (Long groupId : trainingPlanDTO.getGroupsId()) {
-           Optional<TrainingGroup> query_group =  this.trainingGroupRepository.findById(groupId);
-           if (!query_group.isPresent()) {
-               data.put("error", "Group not found");
-               return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-           }
-           groups.add(query_group.get());
+            Optional<TrainingGroup> query_group =  this.trainingGroupRepository.findById(groupId);
+            if (!query_group.isPresent()) {
+                data.put("error", "Group not found");
+                return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+            }
+            TrainingGroup tg = query_group.get();
+            tg.addTrainingPlan(trainingPlan);
+            groups.add(tg);
         }
-        TrainingPlan trainingPlan = new TrainingPlan(name, description, weeks, objDistance, level, trainer, trainingWeekList, trainingProgressesList);
         trainingPlan.setGroups(groups);
         TrainingPlan savedTrainingPlan = this.trainingPlanRepository.save(trainingPlan);
 
