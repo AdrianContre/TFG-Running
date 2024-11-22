@@ -10,8 +10,9 @@ public class CreateTrainingPlanDTO {
     private String level;
     private List<List<SessionDTO>> sessions;
     private Long trainerId;
+    private List<Long> groupsId;
 
-    public CreateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions, Long trainerId) {
+    public CreateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions, Long trainerId, List<Long> groupsId) {
         this.name = name;
         this.description = description;
         this.numWeeks = numWeeks;
@@ -19,6 +20,7 @@ public class CreateTrainingPlanDTO {
         this.level = level;
         this.sessions = sessions;
         this.trainerId = trainerId;
+        this.groupsId = groupsId;
     }
 
     public String getName() {
@@ -75,5 +77,13 @@ public class CreateTrainingPlanDTO {
 
     public void setTrainerId(Long trainerId) {
         this.trainerId = trainerId;
+    }
+
+    public List<Long> getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(List<Long> groupsId) {
+        this.groupsId = groupsId;
     }
 }

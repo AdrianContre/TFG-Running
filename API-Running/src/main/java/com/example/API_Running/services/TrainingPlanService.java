@@ -23,9 +23,10 @@ public class TrainingPlanService {
     private final TrainingProgressRepository trainingProgressRepository;
     private final TrainingSessionResultRepository trainingSessionResultRepository;
     private final ActivityRepository activityRepository;
+    private final TrainingGroupRepository trainingGroupRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository, TrainingGroupRepository trainingGroupRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
@@ -34,6 +35,7 @@ public class TrainingPlanService {
         this.trainingProgressRepository = trainingProgressRepository;
         this.trainingSessionResultRepository = trainingSessionResultRepository;
         this.activityRepository = activityRepository;
+        this.trainingGroupRepository = trainingGroupRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -52,8 +54,17 @@ public class TrainingPlanService {
         String level = trainingPlanDTO.getLevel();
         List<TrainingWeek> trainingWeekList = new ArrayList<>();
         List<TrainingProgress> trainingProgressesList = new ArrayList<>();
+        Set<TrainingGroup> groups = new HashSet<>();
+        for (Long groupId : trainingPlanDTO.getGroupsId()) {
+           Optional<TrainingGroup> query_group =  this.trainingGroupRepository.findById(groupId);
+           if (!query_group.isPresent()) {
+               data.put("error", "Group not found");
+               return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+           }
+           groups.add(query_group.get());
+        }
         TrainingPlan trainingPlan = new TrainingPlan(name, description, weeks, objDistance, level, trainer, trainingWeekList, trainingProgressesList);
-        trainingPlan.setGroups(new HashSet<>());
+        trainingPlan.setGroups(groups);
         TrainingPlan savedTrainingPlan = this.trainingPlanRepository.save(trainingPlan);
 
         List<List<SessionDTO>> sessionsDTO = trainingPlanDTO.getSessions();
