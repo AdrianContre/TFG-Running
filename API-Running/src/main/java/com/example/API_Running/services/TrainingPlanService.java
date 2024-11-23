@@ -193,6 +193,13 @@ public class TrainingPlanService {
             enrolled = true;
         }
         TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan,enrolled);
+        List<GroupDTO> groupsDTO = new ArrayList<>();
+        Set<TrainingGroup> groups = plan.getGroups();
+        for (TrainingGroup group : groups) {
+            GroupDTO dto = new GroupDTO(group.getId(), group.getName(), group.getTrainer().getName());
+            groupsDTO.add(dto);
+        }
+        info.setGroups(groupsDTO);
         data.put("data", info);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

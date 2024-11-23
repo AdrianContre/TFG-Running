@@ -7,12 +7,13 @@ import { useNavigate } from "react-router"
 import { getOtherUsersGroupPlans} from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 import Paginator from "../../../Paginator"
+import { Spinner } from "react-bootstrap";
 
 function ListGroupPlans () {
     const navigate = useNavigate()
     const [isTrainer, setIsTrainer] = useState(null)
-    const [plans,setPlans] = useState([])
-    const [filteredPlans, setFilteredPlans] = useState([]);
+    const [plans,setPlans] = useState(null)
+    const [filteredPlans, setFilteredPlans] = useState(null);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -60,12 +61,20 @@ function ListGroupPlans () {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
 
+    
+
+    if (!plans) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
+    
     const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
     const indexOfLastPlan = currentPage * plansPerPage;
     const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
     const currentPlans = filteredPlans.slice(indexOfFirstPlan, indexOfLastPlan);
-
-
     return (
         <>
             <NavigationBar />
