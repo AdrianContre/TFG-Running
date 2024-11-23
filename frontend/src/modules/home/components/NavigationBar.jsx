@@ -38,7 +38,7 @@ function NavigationBar () {
               <Nav className="me-auto">
                 <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
                 <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
-                <Nav.Link href="#groupplans">Planes grupales</Nav.Link>
+                <Nav.Link as={NavLink} to='/groupplans'>Planes grupales</Nav.Link>
                 {userRole === "trainer" ? (
                   <Nav.Link as={NavLink} to='/myplans'>Mis planes</Nav.Link>
                 ) : (

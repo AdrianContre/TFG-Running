@@ -189,3 +189,26 @@ export const editPlan = async (planId,name, description, numWeeks, objDistance, 
     });
 }
 
+export const getOtherUsersGroupPlans = async () => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  return fetch(`${END_POINT_TRAINING_PLANS}/group`,{
+      method: 'GET',
+      headers: {
+      'Authorization': authHeader,
+      'Content-Type': 'application/json',
+      },
+  })
+  .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      return data.data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log(error)
+      throw error; 
+    });
+}
+

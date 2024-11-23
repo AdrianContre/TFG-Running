@@ -4,11 +4,11 @@ import CirclePlus from '../../../assets/images/plus-circle.png'
 import '../styles/viewTrainingPlans.css'
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { getOtherUsersPlans } from "../services/trainingService"
+import { getOtherUsersGroupPlans} from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 import Paginator from "../../../Paginator"
 
-function ViewTrainingPlans () {
+function ListGroupPlans () {
     const navigate = useNavigate()
     const [isTrainer, setIsTrainer] = useState(null)
     const [plans,setPlans] = useState([])
@@ -29,7 +29,7 @@ function ViewTrainingPlans () {
             else {
                 setIsTrainer(true)
             }
-            const trainersPlans = await getOtherUsersPlans();
+            const trainersPlans = await getOtherUsersGroupPlans();
             setPlans(trainersPlans)
             setFilteredPlans(trainersPlans)
         }
@@ -95,7 +95,7 @@ function ViewTrainingPlans () {
             </div>
             ) : (<div className='container'>
             <p className='text-custom'>
-             NO HAY PLANES DISPONIBLES</p>
+             NO HAY PLANES GRUPALES DISPONIBLES</p>
          </div>)}
             
 
@@ -133,4 +133,4 @@ function ViewTrainingPlans () {
     )
 }
 
-export default ViewTrainingPlans;
+export default ListGroupPlans;
