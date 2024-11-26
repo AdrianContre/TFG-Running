@@ -22,4 +22,16 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan,Long>
             "AND (tpProg.runner.id <> :userId OR tpProg IS NULL)")
     List<TrainingPlan> findAvailableTrainingPlans(@Param("userId") Long userId);
 
+
+    @Query("""
+    SELECT tp
+    FROM TrainingPlan tp
+    JOIN tp.groups g
+    JOIN g.runners r
+    WHERE r.id = :runnerId
+      AND tp.creator.id <> :runnerId
+      AND tp.trainingProgresses IS EMPTY
+""")
+    List<TrainingPlan> findEligibleTrainingPlans(@Param("runnerId") Long runnerId);
+
 }

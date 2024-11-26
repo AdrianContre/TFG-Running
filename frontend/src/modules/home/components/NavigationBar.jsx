@@ -26,7 +26,7 @@ function NavigationBar () {
     if (user.userType === "Trainer") {
       setUserRole("trainer")
     }
-    else {
+    else {
       setUserRole("runner")
     }
   },[])
@@ -38,14 +38,19 @@ function NavigationBar () {
               <Nav className="me-auto">
                 <Nav.Link as={NavLink} to='/activities'>Actividades</Nav.Link>
                 <Nav.Link as={NavLink} to='/trainingplans'>Planes de entrenamiento</Nav.Link>
-                <Nav.Link href="#groupplans">Planes grupales</Nav.Link>
+                <Nav.Link as={NavLink} to='/groupplans'>Planes grupales</Nav.Link>
                 {userRole === "trainer" ? (
                   <Nav.Link as={NavLink} to='/myplans'>Mis planes</Nav.Link>
                 ) : (
                   <></>
                 )}
                 <Nav.Link as={NavLink} to='/enrolledplans'>Planes en curso</Nav.Link>
-                <Nav.Link href="#groups">Grupos</Nav.Link>
+                <Nav.Link as={NavLink} to='/groups'>Grupos</Nav.Link>
+                {userRole === "trainer" ? (
+                  <Nav.Link as={NavLink} to='/mygroups'>Mis grupos</Nav.Link>
+                ) : (
+                  <></>
+                )}
               </Nav>
               <Nav className="ms-auto">
                 <Dropdown align="end">

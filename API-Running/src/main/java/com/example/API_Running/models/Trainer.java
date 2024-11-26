@@ -51,4 +51,8 @@ public class Trainer extends Runner {
     public void setManagedGroups(Set<TrainingGroup> managedGroups) {
         this.managedGroups = managedGroups;
     }
+
+    public void addManagedGroups(TrainingGroup group) {
+        this.managedGroups.add(group);
+    }
 }

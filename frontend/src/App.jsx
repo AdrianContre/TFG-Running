@@ -29,6 +29,12 @@ import ViewMobilityResult from './modules/activities/components/ViewMobilityResu
 import EditRunningResult from './modules/activities/components/EditRunningResult';
 import EditGenericResult from './modules/activities/components/EditGenericResult';
 import TrainingProgress from './modules/TrainingPlans/components/TrainingProgress';
+import ListGroups from './modules/groups/components/ListGroups';
+import CreateGroup from './modules/groups/components/CreateGroup';
+import ListMyGroups from './modules/groups/components/ListMyGroups';
+import ViewGroup from './modules/groups/components/ViewGroup';
+import EditGroup from './modules/groups/components/EditGroup';
+import ListGroupPlans from './modules/TrainingPlans/components/ListGroupPlans';
 
 
 
@@ -54,6 +60,12 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/groupplans' element={<AuthRoute element={ListGroupPlans} />} />
+        <Route path='/editgroup' element={<AuthRoute element={EditGroup} />} />
+        <Route path='/viewgroup' element={<AuthRoute element={ViewGroup} />} />
+        <Route path='/mygroups' element={<AuthRoute element={ListMyGroups} />} />
+        <Route path='/creategroup' element={<AuthRoute element={CreateGroup} />} />
+        <Route path='/groups' element={<AuthRoute element={ListGroups} />} />
         <Route path='/trainingprogress' element={<AuthRoute element={TrainingProgress} />} />
         <Route path='/editgenericresult' element={<AuthRoute element={EditGenericResult} />} />
         <Route path='/editrunningresult' element={<AuthRoute element={EditRunningResult} />} />

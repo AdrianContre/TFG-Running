@@ -11,8 +11,11 @@ public class TrainingGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "name", nullable = false)
+    @Column(name= "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name= "description", nullable = false)
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "trainer_id", nullable = false)
@@ -35,8 +38,11 @@ public class TrainingGroup {
     )
     private Set<TrainingPlan> trainingPlans;
 
-    public TrainingGroup(String name, Trainer trainer, Set<Runner> runners, Set<TrainingPlan> trainingPlans) {
+    public TrainingGroup(){}
+
+    public TrainingGroup(String name, String description,  Trainer trainer, Set<Runner> runners, Set<TrainingPlan> trainingPlans) {
         this.name = name;
+        this.description = description;
         this.trainer = trainer;
         this.runners = runners;
         this.trainingPlans = trainingPlans;
@@ -56,6 +62,14 @@ public class TrainingGroup {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Trainer getTrainer() {
@@ -80,5 +94,13 @@ public class TrainingGroup {
 
     public void setTrainingPlans(Set<TrainingPlan> trainingPlans) {
         this.trainingPlans = trainingPlans;
+    }
+
+    public void addTrainingPlan(TrainingPlan tp) {
+        this.trainingPlans.add(tp);
+    }
+
+    public void removeTrainingPlan(TrainingPlan tp) {
+        this.trainingPlans.remove(tp);
     }
 }

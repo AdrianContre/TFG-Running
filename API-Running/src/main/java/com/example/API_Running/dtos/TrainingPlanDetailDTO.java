@@ -16,6 +16,7 @@ public class TrainingPlanDetailDTO {
     private PlanCreatorDTO creator;
     private List<TrainingWeekDTO> trainingWeeks;
     private boolean enrolled;
+    private List<GroupDTO> groups;
 
     public TrainingPlanDetailDTO(TrainingPlan trainingPlan, boolean enrolled) {
         this.id = trainingPlan.getId();
@@ -107,5 +108,13 @@ public class TrainingPlanDetailDTO {
 
     public void setEnrolled(boolean enrolled) {
         this.enrolled = enrolled;
+    }
+
+    public List<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<GroupDTO> groups) {
+        this.groups = groups;
     }
 }

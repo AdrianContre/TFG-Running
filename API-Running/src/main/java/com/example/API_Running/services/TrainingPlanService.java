@@ -23,9 +23,10 @@ public class TrainingPlanService {
     private final TrainingProgressRepository trainingProgressRepository;
     private final TrainingSessionResultRepository trainingSessionResultRepository;
     private final ActivityRepository activityRepository;
+    private final TrainingGroupRepository trainingGroupRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository, TrainingGroupRepository trainingGroupRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
@@ -34,6 +35,7 @@ public class TrainingPlanService {
         this.trainingProgressRepository = trainingProgressRepository;
         this.trainingSessionResultRepository = trainingSessionResultRepository;
         this.activityRepository = activityRepository;
+        this.trainingGroupRepository = trainingGroupRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -53,7 +55,18 @@ public class TrainingPlanService {
         List<TrainingWeek> trainingWeekList = new ArrayList<>();
         List<TrainingProgress> trainingProgressesList = new ArrayList<>();
         TrainingPlan trainingPlan = new TrainingPlan(name, description, weeks, objDistance, level, trainer, trainingWeekList, trainingProgressesList);
-        trainingPlan.setGroups(new HashSet<>());
+        Set<TrainingGroup> groups = new HashSet<>();
+        for (Long groupId : trainingPlanDTO.getGroupsId()) {
+            Optional<TrainingGroup> query_group =  this.trainingGroupRepository.findById(groupId);
+            if (!query_group.isPresent()) {
+                data.put("error", "Group not found");
+                return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+            }
+            TrainingGroup tg = query_group.get();
+            tg.addTrainingPlan(trainingPlan);
+            groups.add(tg);
+        }
+        trainingPlan.setGroups(groups);
         TrainingPlan savedTrainingPlan = this.trainingPlanRepository.save(trainingPlan);
 
         List<List<SessionDTO>> sessionsDTO = trainingPlanDTO.getSessions();
@@ -180,6 +193,13 @@ public class TrainingPlanService {
             enrolled = true;
         }
         TrainingPlanDetailDTO info = new TrainingPlanDetailDTO(plan,enrolled);
+        List<GroupDTO> groupsDTO = new ArrayList<>();
+        Set<TrainingGroup> groups = plan.getGroups();
+        for (TrainingGroup group : groups) {
+            GroupDTO dto = new GroupDTO(group.getId(), group.getName(), group.getTrainer().getName());
+            groupsDTO.add(dto);
+        }
+        info.setGroups(groupsDTO);
         data.put("data", info);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
@@ -306,9 +326,6 @@ public class TrainingPlanService {
             }
         }
 
-
-
-
         for (int i = 0; i < numWeeks; ++i) {
             TrainingWeek currentWeek = trainingWeeks.get(i);
             List<SessionDTO> sessionsInWeekDTO = sessionsDTO.get(i);
@@ -350,6 +367,42 @@ public class TrainingPlanService {
             currentWeek.getSessions().clear();
             currentWeek.getSessions().addAll(tempSessions);
             trainingWeeks.set(i, this.trainingWeekRepository.save(currentWeek));
+        }
+
+        List<Long> newGroupsId = updateTrainingPlanDTO.getGroupsId();
+        List<TrainingGroup> newGroups = this.trainingGroupRepository.findAllById(newGroupsId);
+        Set<TrainingGroup> newGroupsSet = new HashSet<>();
+        for (TrainingGroup tg : newGroups) {
+            newGroupsSet.add(tg);
+            tg.addTrainingPlan(trainingPlan);
+        }
+        Set<TrainingGroup> currentGroups = trainingPlan.getGroups();
+        Set<TrainingGroup> removedGroups = new HashSet<>(currentGroups);
+        removedGroups.removeAll(newGroupsSet);
+        trainingPlan.setGroups(newGroupsSet);
+
+        Set<Runner> runnersOutOfPlan = new HashSet<>();
+        for (TrainingGroup trainingGroup : removedGroups) {
+            trainingGroup.removeTrainingPlan(trainingPlan);
+            for (Runner runner : trainingGroup.getRunners()) {
+                runnersOutOfPlan.add(runner);
+            }
+        }
+        for (Runner r : runnersOutOfPlan) {
+            List<TrainingSessionResult> trainingSessionResults = this.trainingSessionResultRepository.findAllByPlanAndRunner(planId, r.getId());
+            for (TrainingSessionResult tsr : trainingSessionResults) {
+                TrainingSession ts = tsr.getSession();
+                ts.removeResult(tsr);
+                this.trainingSessionRepository.save(ts);
+                this.activityRepository.delete(tsr);
+            }
+
+            Optional<TrainingProgress> query2 = this.trainingProgressRepository.findProgressByPlanAndRunner(r.getId(), planId);
+            if (query2.isPresent()) {
+                TrainingProgress tp = query2.get();
+                this.trainingProgressRepository.delete(tp);
+            }
+
         }
 
         this.trainingPlanRepository.save(trainingPlan);
@@ -403,4 +456,21 @@ public class TrainingPlanService {
         }
     }
 
+    public ResponseEntity<Object> getElegibleTrainingPlans() {
+        HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        Long userId = user.getId();
+
+        //List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
+        List<TrainingPlan> plans = this.trainingPlanRepository.findEligibleTrainingPlans(userId);
+        List<ListPlansDTO> plansDTO = new ArrayList<>();
+        plans.stream().forEach(plan -> {
+            ListPlansDTO p = new ListPlansDTO(plan);
+            plansDTO.add(p);
+        });
+        data.put("data", plansDTO);
+        return new ResponseEntity<>(data,HttpStatus.OK);
+    }
 }

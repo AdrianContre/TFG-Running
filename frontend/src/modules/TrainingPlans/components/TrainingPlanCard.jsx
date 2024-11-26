@@ -3,7 +3,6 @@ import '../styles/trainingPlanCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faRunning, faMapMarkerAlt, faSignal, faUser,faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router";
-import { ProgressBar } from "react-bootstrap";
 
 function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions, sessionsCompleted }) {
     const navigate = useNavigate()

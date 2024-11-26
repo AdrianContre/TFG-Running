@@ -60,4 +60,9 @@ public class TrainingPlanController {
     public ResponseEntity<Object> updateTrainingPlan(@PathVariable Long planId, @RequestBody UpdateTrainingPlanDTO updateTrainingPlanDTO) {
         return this.trainingPlanService.updateTrainingPlan(planId, updateTrainingPlanDTO);
     }
+
+    @GetMapping(path="/group")
+    public ResponseEntity<Object> getElegibleTrainingPlans() {
+        return this.trainingPlanService.getElegibleTrainingPlans();
+    }
 }

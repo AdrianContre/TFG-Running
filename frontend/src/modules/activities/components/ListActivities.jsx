@@ -5,11 +5,14 @@ import '../styles/listActivities.css'
 import ActivityTable from "./ActivityTable";
 import CirclePlus from '../../../assets/images/plus-circle.png'
 import { useNavigate } from "react-router";
+import Paginator from "../../../Paginator";
 
 
 
 function ListActivities () {
     const [activities, setActivities] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const [activitiesPerPage] = useState(12);
     const [show, setShow] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
@@ -35,6 +38,13 @@ function ListActivities () {
         setActivities(activities.filter(activity => activity.id !== deletedActivityId))
         
     };
+
+    const totalPages = Math.ceil(activities.length / activitiesPerPage);
+    const indexOfLastActivity = currentPage * activitiesPerPage;
+    const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
+    const currentActivities = activities.slice(indexOfFirstActivity, indexOfLastActivity);
+
+
     return (
         <>
             <NavigationBar />
@@ -45,7 +55,12 @@ function ListActivities () {
                     <div className="list-activities-container">
                         <h1>Actividades recientes:</h1>
                     </div>
-                    <ActivityTable activities={activities} onDeleteActivity={handleDeleteActivity}/>
+                    <ActivityTable activities={currentActivities} onDeleteActivity={handleDeleteActivity}/>
+                    <Paginator
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
                 </>
             )}
             <div className="image-container">

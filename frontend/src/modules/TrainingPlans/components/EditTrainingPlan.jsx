@@ -9,6 +9,8 @@ import { createPlan, editPlan } from "../services/trainingService";
 import { useLocation, useNavigate } from "react-router";
 import { getPlanInfo } from "../services/trainingService";
 import PopUp from "../../auth/components/PopUp";
+import { getTrainerGroups } from "../../groups/services/groupService";
+import Select from "react-select";
 
 
 function EditTrainingPlan() {
@@ -34,6 +36,9 @@ function EditTrainingPlan() {
         distance: '',
         duration: ''
     }); 
+    const [groups, setGroups] = useState(null)
+    const [selectedGroups, setSelectedGroups] = useState([]);
+    const [groupOptions, setGroupOptions] = useState(null);
 
     const onHide = (event) => {
         event.preventDefault()
@@ -43,12 +48,14 @@ function EditTrainingPlan() {
     useEffect(() => {
         const fetchPlan = async () => {
             const planInfo = await getPlanInfo(planId)
+            console.log(planInfo)
             setName(planInfo.name)
             setDescription(planInfo.description)
             setNumWeeks(planInfo.numWeeks)
             setObjDistance(planInfo.objDistance)
             setLevel(planInfo.level)
             setSessionsInfo(Array(numWeeks).fill(Array(7).fill(null)))
+            setGroups(planInfo.groups)
             
             
 
@@ -61,8 +68,28 @@ function EditTrainingPlan() {
             
                 return sessionsForWeek; 
             });
-            console.log("sessiones: "+ weeklySessionsMatrix)
+            //console.log("sessiones: "+ weeklySessionsMatrix)
             setSessionsInfo(weeklySessionsMatrix)
+
+            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
+            const groups = await getTrainerGroups(trainerId)
+            console.log(groups)
+            const options = groups.data.map((group) => ({
+                value: group.id,
+                label: group.name,
+            }));
+            setGroupOptions(options)
+
+            let selected = []
+            console.log(planInfo.groups)
+            planInfo.groups.map(group => {
+                selected.push({
+                    value: group.id,
+                    label: group.name
+                })
+            })
+            console.log(selected)
+            setSelectedGroups(selected)
         }
         fetchPlan()
     },[])
@@ -162,8 +189,13 @@ function EditTrainingPlan() {
             week.every(session => session !== null)
         );
         
+        let groupsId = []
+        console.log("selected: ",selectedGroups)
+        selectedGroups.map(selected => {
+            groupsId.push(selected.value)
+        })
         if (allSessionsFilled) {
-            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, trainerId)
+            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, groupsId)
             if (send) {
                 navigate('/viewplan', { state: {planId: planId}})
             }
@@ -171,6 +203,7 @@ function EditTrainingPlan() {
         else {
             setShow(true)
         }
+        console.log("groupsId: ", groupsId);
         
     }
 
@@ -254,6 +287,16 @@ function EditTrainingPlan() {
                         </select>
                     </div>
                 </div>
+                <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Grupos {'(Opcional)'}:</label>
+                        <Select
+                            isMulti
+                            value={selectedGroups}
+                            options={groupOptions}
+                            onChange={(selected) => setSelectedGroups(selected || [])}
+                            className="custom-select-createact"
+                        />
+                    </div>
 
                 <div className="table-container-create-plan">
                     <div className="table-header-create-plan">
