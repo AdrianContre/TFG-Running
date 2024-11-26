@@ -99,4 +99,8 @@ public class TrainingGroup {
     public void addTrainingPlan(TrainingPlan tp) {
         this.trainingPlans.add(tp);
     }
+
+    public void removeTrainingPlan(TrainingPlan tp) {
+        this.trainingPlans.remove(tp);
+    }
 }

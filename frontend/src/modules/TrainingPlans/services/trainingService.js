@@ -164,16 +164,16 @@ export const unenrollUserToPlan = async (planId, userId) => {
     });
 }
 
-export const editPlan = async (planId,name, description, numWeeks, objDistance, level, sessions) => {
+export const editPlan = async (planId,name, description, numWeeks, objDistance, level, sessions, groupsId) => {
   const authHeader = `Bearer ${localStorage.getItem('token')}`
-  console.log(JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions}))
+  console.log(JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId}))
   return fetch(`${END_POINT_TRAINING_PLANS}/${planId}`,{
       method: 'PUT',
       headers: {
       'Authorization': authHeader,
       'Content-Type': 'application/json',
       },
-      body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions})
+      body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId: groupsId})
   })
   .then(response => {
       return response.json();
