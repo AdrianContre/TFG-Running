@@ -111,4 +111,12 @@ public abstract class User {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    public void removeComment(Comment comment) {
+        this.comments.remove(comment);
+    }
 }

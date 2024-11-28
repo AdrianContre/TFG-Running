@@ -54,7 +54,7 @@ function CommentScreen() {
                 <div key={index} className={`comment ${isUserMessage ? 'user-comment' : 'other-comment'}`}>
                     <div className="comment-bubble">
                         <div className="comment-author">
-                            {isUserMessage ? 'Tú' : `${message.author.fullName}(@${message.author.username})`}
+                            {isUserMessage ? 'Tú' : `${message.author.name} ${message.author.surname}(@${message.author.username})`}
                         </div>
                         <div className="comment-content">
                             {message.content}
