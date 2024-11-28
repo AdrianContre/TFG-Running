@@ -3,36 +3,45 @@ import { useState, useRef, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import '../styles/commentScreen.css';
 import { useLocation } from "react-router";
+import { createComment, getTrainingWeekComments } from "../services/commentsService";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCertificate} from '@fortawesome/free-solid-svg-icons';
 
 function CommentScreen() {
     const location  = useLocation()
-    const {planName, num_week, trainingWeekId} = location.state
+    const {planName, num_week, trainingWeekId, planCreatorId} = location.state
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const messageContainerRef = useRef(null);
-    const userId = JSON.parse(localStorage.getItem('userAuth')).id;
     const [userAuth, setUserAuth] = useState(null)
 
     useEffect(() => {
+        console.log(planCreatorId)
         const fetchInfo = async () => {
-            //aqui me queda cargar los mensajes con el trainingWeekId
+            const comments = await getTrainingWeekComments(trainingWeekId)
+            setMessages(comments)
             if (messageContainerRef.current) {
                 messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
             }
             setUserAuth(JSON.parse(localStorage.getItem('userAuth')))
         }
         fetchInfo()
-    }, [messages]); 
+    }, []); 
 
     const handleSendComment = async () => {
         const messageToSend = {
             content: newMessage,
-            author: userId,
+            author: {
+                "id": userAuth.id, 
+                "name": userAuth.name,
+                "surname": userAuth.surname,
+                "username": userAuth.username
+            },
             date: new Date().toISOString(),
         };
 
         try {
-            //aqui falta enviar el mensaje al backend
+            const sendComment = await createComment(userAuth.id, newMessage, trainingWeekId);
             setMessages((prevMessages) => [...prevMessages, messageToSend]);
             setNewMessage('');
         } catch (error) {
@@ -50,23 +59,37 @@ function CommentScreen() {
                 day: 'numeric',
                 month: 'short',
             });
+    
+            // Comparar con el comentario anterior
+            const previousMessage = messages[index - 1];
+            const isSameAuthorAsPrevious = previousMessage?.author.id === message.author.id;
+    
             return (
                 <div key={index} className={`comment ${isUserMessage ? 'user-comment' : 'other-comment'}`}>
                     <div className="comment-bubble">
-                        <div className="comment-author">
-                            {isUserMessage ? 'Tú' : `${message.author.name} ${message.author.surname}(@${message.author.username})`}
-                        </div>
-                        <div className="comment-content">
-                            {message.content}
-                        </div>
-                        <div className="comment-date">
-                            {formattedDate}
-                        </div>
+                        {/* Mostrar autor solo si no es el mismo que el anterior */}
+                        {!isSameAuthorAsPrevious && (
+                            <div className="comment-author">
+                                <strong>
+                                    {isUserMessage
+                                        ? 'Tú'
+                                        : `${message.author.name} ${message.author.surname}(@${message.author.username})`}
+                                </strong>
+                                <span style={{ marginLeft: '2px' }}>
+                                    {planCreatorId === message.author.id ? (
+                                        <FontAwesomeIcon icon={faCertificate} />
+                                    ) : null}
+                                </span>
+                            </div>
+                        )}
+                        <div className="comment-content">{message.content}</div>
+                        <div className="comment-date">{formattedDate}</div>
                     </div>
                 </div>
             );
         });
     };
+    
 
     if (!userAuth) {
         return (
@@ -92,7 +115,11 @@ function CommentScreen() {
                         placeholder="Escribe un comentario..."
                         className="comment-input"
                         value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
+                        onChange={(e) => {
+                            if (e.target.value.length <= 1000) {
+                                setNewMessage(e.target.value);
+                            }
+                        }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault();
@@ -100,6 +127,9 @@ function CommentScreen() {
                             }
                         }}
                     />
+                    <div className={`character-counter ${newMessage.length === 1000 ? 'exceeded' : ''}`}>
+                        {newMessage.length}/1000
+                    </div>
                     <button className="send-button" onClick={handleSendComment}>
                         Enviar
                     </button>

@@ -103,4 +103,16 @@
   .send-button:hover {
     background-color: #0056b3;
   }
+
+  .character-counter {
+    font-size: 0.9rem; 
+    color: #000;
+    text-align: right;
+    margin-top: 10px; 
+    margin-left: 5px; 
+}
+.character-counter.exceeded {
+    color: #ff0000; 
+    font-weight: bold; 
+}
   

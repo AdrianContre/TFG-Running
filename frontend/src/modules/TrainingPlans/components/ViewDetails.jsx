@@ -140,7 +140,8 @@ function ViewDetails () {
     const handleComment = (event, num_week, trainingWeekId) => {
         event.preventDefault()
         console.log("trainingWeekId: ", trainingWeekId)
-        navigate('/comment', {state: {planName: name, num_week: num_week, trainingWeekId: trainingWeekId}})
+        console.log(trainer.id)
+        navigate('/comment', {state: {planName: name, num_week: num_week, trainingWeekId: trainingWeekId, planCreatorId: trainer.id}})
     }
 
     const renderTrainingRows = () => {
