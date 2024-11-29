@@ -59,15 +59,12 @@ function CommentScreen() {
                 day: 'numeric',
                 month: 'short',
             });
-    
-            // Comparar con el comentario anterior
             const previousMessage = messages[index - 1];
             const isSameAuthorAsPrevious = previousMessage?.author.id === message.author.id;
     
             return (
                 <div key={index} className={`comment ${isUserMessage ? 'user-comment' : 'other-comment'}`}>
                     <div className="comment-bubble">
-                        {/* Mostrar autor solo si no es el mismo que el anterior */}
                         {!isSameAuthorAsPrevious && (
                             <div className="comment-author">
                                 <strong>
