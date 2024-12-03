@@ -8,6 +8,7 @@ import { faUserGroup, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus} from '@
 import ModalSession from "./ModalSession";
 import { Button, Spinner } from "react-bootstrap";
 import { getUserResultsPlan } from "../services/trainingResultService";
+import { ChartNoAxesColumnDecreasing } from "lucide-react";
 
 
 function ViewDetails () {
@@ -136,6 +137,13 @@ function ViewDetails () {
         navigate('/trainingprogress', { state: {planId: planId}})
     }
 
+    const handleComment = (event, num_week, trainingWeekId) => {
+        event.preventDefault()
+        console.log("trainingWeekId: ", trainingWeekId)
+        console.log(trainer.id)
+        navigate('/comment', {state: {planName: name, num_week: num_week, trainingWeekId: trainingWeekId, planCreatorId: trainer.id}})
+    }
+
     const renderTrainingRows = () => {
         // console.log(sessionsInfo)
         // console.log("results: " + hasResult)
@@ -239,6 +247,12 @@ function ViewDetails () {
                             )}
                         </div>
                     ))}
+                    {JSON.parse(localStorage.getItem('userAuth')).id === trainer.id ? (<div className="day-column-create-plan">
+                            <Button variant="primary" onClick={(event) => handleComment(event, i+1, trainingWeeks[i].id)}>Ver comentarios</Button>
+                    </div>) : (isEnrolled === true ? (<div className="day-column-create-plan">
+                            <Button variant="primary" onClick={(event) => handleComment(event, i+1, trainingWeeks[i].id)}>Comentar</Button>
+                    </div>) : (null))}
+                    
                 </div>
             );
         }
@@ -304,6 +318,8 @@ function ViewDetails () {
                         <div className="day-column-create-plan">Viernes</div>
                         <div className="day-column-create-plan">Sábado</div>
                         <div className="day-column-create-plan">Domingo</div>
+                        {JSON.parse(localStorage.getItem('userAuth')).id === trainer.id ? (<div className="day-column-create-plan">Comentarios</div>) : (isEnrolled === true ? (<div className="day-column-create-plan">Comentarios</div>) : (null))}
+                        
                     </div>
                     {renderTrainingRows()}
                 </div>

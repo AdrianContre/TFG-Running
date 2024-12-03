@@ -35,6 +35,7 @@ import ListMyGroups from './modules/groups/components/ListMyGroups';
 import ViewGroup from './modules/groups/components/ViewGroup';
 import EditGroup from './modules/groups/components/EditGroup';
 import ListGroupPlans from './modules/TrainingPlans/components/ListGroupPlans';
+import CommentScreen from './modules/comments/components/CommentScreen';
 
 
 
@@ -60,6 +61,7 @@ function Home() {
 function App() {
   return (
       <Routes>
+        <Route path='/comment' element={<AuthRoute element={CommentScreen} />} />
         <Route path='/groupplans' element={<AuthRoute element={ListGroupPlans} />} />
         <Route path='/editgroup' element={<AuthRoute element={EditGroup} />} />
         <Route path='/viewgroup' element={<AuthRoute element={ViewGroup} />} />

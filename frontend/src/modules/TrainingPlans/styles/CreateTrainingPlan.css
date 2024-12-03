@@ -55,10 +55,13 @@
     flex-direction: column;
     gap: 10px;
     margin-top: 20px;
+    overflow-x: auto; 
 }
 
 .table-header-create-plan, .week-row-create-plan {
     display: flex;
+    min-width: 800px;
+    flex-wrap: nowrap;
     
 }
 
@@ -72,6 +75,7 @@
     justify-content: center;
     flex-direction: column;
     font-weight: bold;
+    min-width: 200px;
     
 }
 
@@ -150,5 +154,3 @@
     align-items: center;
     gap: 20px;
 }
-
-

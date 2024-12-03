@@ -24,9 +24,10 @@ public class TrainingPlanService {
     private final TrainingSessionResultRepository trainingSessionResultRepository;
     private final ActivityRepository activityRepository;
     private final TrainingGroupRepository trainingGroupRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository, TrainingGroupRepository trainingGroupRepository) {
+    public TrainingPlanService(TrainingPlanRepository trainingPlanRepository, TrainingWeekRepository trainingWeekRepository, TrainingSessionRepository trainingSessionRepository, TrainerRepository trainerRepository, RunnerRepository runnerRepository, TrainingProgressRepository trainingProgressRepository, RestSessionRepository restSessionRepository, TrainingSessionResultRepository trainingSessionResultRepository, ActivityRepository activityRepository, TrainingGroupRepository trainingGroupRepository, CommentRepository commentRepository) {
         this.trainingPlanRepository = trainingPlanRepository;
         this.trainingWeekRepository = trainingWeekRepository;
         this.trainingSessionRepository = trainingSessionRepository;
@@ -36,6 +37,7 @@ public class TrainingPlanService {
         this.trainingSessionResultRepository = trainingSessionResultRepository;
         this.activityRepository = activityRepository;
         this.trainingGroupRepository = trainingGroupRepository;
+        this.commentRepository = commentRepository;
     }
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
@@ -320,6 +322,12 @@ public class TrainingPlanService {
                     sess.getResults().clear();
                     sess.setTrainingWeek(null);
                     this.trainingSessionRepository.delete(sess);
+                }
+                for (Comment comment : week.getComments()) {
+                    comment.setTrainingWeek(null);
+                    User u = comment.getSender();
+                    u.removeComment(comment);
+                    this.commentRepository.delete(comment);
                 }
                 week.setTrainingPlan(null);
                 this.trainingWeekRepository.delete(week);

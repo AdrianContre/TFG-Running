@@ -13,7 +13,7 @@ public class Comment {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="content", nullable = false)
+    @Column(name="content", nullable = false, length = 1000)
     private String content;
 
     @CreationTimestamp
@@ -30,10 +30,8 @@ public class Comment {
 
     public Comment() {}
 
-    public Comment(Long id, String content, LocalDateTime sendDate, User sender, TrainingWeek trainingWeek) {
-        this.id = id;
+    public Comment(String content, User sender, TrainingWeek trainingWeek) {
         this.content = content;
-        this.sendDate = sendDate;
         this.sender = sender;
         this.trainingWeek = trainingWeek;
     }
