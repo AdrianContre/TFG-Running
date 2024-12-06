@@ -5,7 +5,9 @@ import com.example.API_Running.dtos.UpdateTrainerDTO;
 import com.example.API_Running.dtos.UserZonesDTO;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.models.Trainer;
+import com.example.API_Running.models.User;
 import com.example.API_Running.repository.TrainerRepository;
+import com.example.API_Running.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +15,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class TrainerService {
 
     private final TrainerRepository trainerRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TrainerService (TrainerRepository trainerRepository) {
+    public TrainerService (TrainerRepository trainerRepository, UserRepository userRepository) {
         this.trainerRepository = trainerRepository;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity<Object> updateTrainer(Long trainerId, UpdateTrainerDTO updateTrainerDTO) {
@@ -30,6 +35,16 @@ public class TrainerService {
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (query.isPresent()) {
             Trainer trainer = query.get();
+            Optional<User> username_query = this.userRepository.findByUsername(updateTrainerDTO.getUsername());
+            if (username_query.isPresent() && !Objects.equals(username_query.get().getId(), trainerId)) {
+                data.put("error", "There's another user with this username");
+                return new ResponseEntity<>(data, HttpStatus.CONFLICT);
+            }
+            Optional<User> mail_query = this.userRepository.findByMail(updateTrainerDTO.getMail());
+            if (mail_query.isPresent() && !Objects.equals(mail_query.get().getId(), trainerId)) {
+                data.put("error", "There's another user with this mail");
+                return new ResponseEntity<>(data, HttpStatus.CONFLICT);
+            }
             trainer.setName(updateTrainerDTO.getName());
             trainer.setSurname(updateTrainerDTO.getSurname());
             trainer.setUsername(updateTrainerDTO.getUsername());

@@ -29,29 +29,59 @@ function EditProfile () {
     const [file, setFile] = useState(null)
     const navigate = useNavigate()
     const fileInputRef = useRef(null);
+    const [error, setError] = useState('')
+    const [title,setTitle] = useState('')
 
     const handleClick = async (event) => {
         event.preventDefault()
         let userUpdated;
         if (name === "" || surname === "" || username === "" || mail === "" || height === "" || weight === "" || fcMax === "" || experience === "") {
+            setError("Han de estar todos los campos llenos")
+            setTitle("Error al editar perfil")
             setShow(true)
         }
+        let updateError = false
+        let errorMessage = ""
         if (profileData.userType == "Runner") {
             userUpdated = await updateRunnerProfile(profileData.id, name, surname, username, mail, height, weight, fcMax);
+            if (userUpdated.error) {
+                updateError = true
+                errorMessage = userUpdated.error
+            }
         }
         else {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
+            if (userUpdated.error) {
+                updateError = true
+                errorMessage = userUpdated.error
+            }
         }
-        if (modified) {
-            let formData = new FormData()
-            formData.append('profilePicture', file)
-            const upload = await uploadPicture(profileData.id,formData)
-            console.log(upload)
+        if (updateError === true) {
+            const user = await getUserLogged();
+            setTitle("Error al editar perfil")
+            if (errorMessage.includes("username")) {
+                setError("Ya existe un usuario con ese nombre de usuario")
+                setUsername(profileData.username)
+            }
+            else {
+                setError("Ya existe un usuario con ese correo electrónico")
+                setMail(profileData.mail)
+            }
+            setShow(true)
         }
-        const user = await getUserLogged();
-        setProfileData(user)
-        localStorage.setItem('userAuth', JSON.stringify(user));
-        navigate('/profile')
+        else {
+            if (modified) {
+                let formData = new FormData()
+                formData.append('profilePicture', file)
+                const upload = await uploadPicture(profileData.id,formData)
+                console.log(upload)
+            }
+            const user = await getUserLogged();
+            setProfileData(user)
+            localStorage.setItem('userAuth', JSON.stringify(user));
+            navigate('/profile')
+        }
+        
     }
 
     useEffect (() => {
@@ -198,7 +228,7 @@ function EditProfile () {
             <div className='button-container-edit-profile'>
                 <Button className='save-button' onClick={handleClick}>GUARDAR CAMBIOS</Button>
             </div>
-            <PopUp error={"Han de estar todos los campos llenos"} show={show} onHide={onHide} title={"Error al editar perfil"} />
+            <PopUp error={error} show={show} onHide={onHide} title={title} />
         </>
       )
     }
