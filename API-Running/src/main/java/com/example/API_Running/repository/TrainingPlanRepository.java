@@ -16,11 +16,14 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan,Long>
 
     @Query("SELECT tp FROM TrainingPlan tp " +
             "LEFT JOIN tp.groups tg " +
-            "LEFT JOIN tp.trainingProgresses tpProg " +
             "WHERE tp.creator.id <> :userId " +
             "AND (tg IS NULL OR tp.groups IS EMPTY) " +
-            "AND (tpProg.runner.id <> :userId OR tpProg IS NULL)")
+            "AND NOT EXISTS (" +
+            "    SELECT tpProg FROM tp.trainingProgresses tpProg " +
+            "    WHERE tpProg.runner.id = :userId" +
+            ")")
     List<TrainingPlan> findAvailableTrainingPlans(@Param("userId") Long userId);
+
 
 
     @Query("""
