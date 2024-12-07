@@ -5,14 +5,16 @@ import '../styles/viewProfile.css'
 import Button from 'react-bootstrap/Button';
 import Zones from "./zones";
 import { useEffect } from "react";
-import { getRunnerZones, getTrainerZones } from "../services/profileService";
+import { deleteProfile, getRunnerZones, getTrainerZones } from "../services/profileService";
 import { Navigate, useNavigate } from "react-router";
+import Modal from 'react-bootstrap/Modal';
 
 function ViewProfile () {
     const userAuth = JSON.parse(localStorage.getItem("userAuth"))
 
     const [heartZones, setHeartZones] = useState({})
     const [picture, setPicture] = useState(null)
+    const [show,setShow] = useState(false)
 
     const navigate = useNavigate()
 
@@ -43,6 +45,31 @@ function ViewProfile () {
     const navigateToMaterials = (event) => {
         event.preventDefault()
         navigate('/listmaterials')
+    }
+
+    const onHide = (event) => {
+        event.preventDefault()
+        setShow(false)
+    }
+
+    const handleDeleteProfile = (event) => {
+        event.preventDefault()
+        setShow(true)
+    }
+
+    const handleDeleteProfileAPI = async (event) => {
+        event.preventDefault()
+        try {
+            const deleteProf = await deleteProfile(userAuth.id)
+            localStorage.removeItem('token')
+            localStorage.removeItem('userAuth')
+            navigate('/')
+        }
+        catch (error) {
+            alert(error)
+            console.log(error)
+        }
+        
     }
 
     return (
@@ -79,6 +106,28 @@ function ViewProfile () {
                     {/* En un futuro aqui habrán las estadísticas del usuario */}    
                 </div>
             </div>
+            <div className="delete-button-container">
+                <Button variant="danger" size="lg" className="button-delete" onClick={handleDeleteProfile}>ELIMINAR PERFIL</Button>
+            </div>
+
+            <Modal show={show} onHide={onHide} backdrop="static" keyboard={false}>
+                <Modal.Header>
+                <Modal.Title>Eliminar perfil</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                Estás seguro que quieres eliminar el perfil ? 
+                </Modal.Body>
+                <Modal.Footer>
+                <div className="pop-up-buttons">
+                    <Button variant="danger" size="lg" onClick={handleDeleteProfileAPI}>
+                        OK
+                    </Button>
+                    <Button variant="secondary" size="lg" onClick={onHide}>
+                        CANCELAR
+                    </Button>
+                </div>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }

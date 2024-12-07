@@ -108,5 +108,25 @@ export const uploadPicture = async (id, formData) => {
       });
 }
 
+export const deleteProfile = async (userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${END_POINT_USERS}/${userId}`,{
+        method: 'DELETE',
+        headers: {
+        'Authorization': authHeader,
+        },
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error;
+      });
+}
+
 
 
