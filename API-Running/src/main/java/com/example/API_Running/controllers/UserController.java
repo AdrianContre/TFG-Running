@@ -29,8 +29,15 @@ public class UserController {
         return this.userService.uploadProfilePicture(userId, profilePicture);
     }
 
+    @DeleteMapping(path = "/{userId}")
+    public ResponseEntity<Object> deleteUser (@PathVariable Long userId) {
+        return this.userService.deleteUser(userId);
+    }
+
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
         return this.userService.getAllUsers();
     }
+
+
 }

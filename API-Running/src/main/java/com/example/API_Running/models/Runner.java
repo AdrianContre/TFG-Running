@@ -129,4 +129,12 @@ public class Runner extends User {
     public void addGroup(TrainingGroup group) {
         this.groups.add(group);
     }
+
+    public void removeGroup(TrainingGroup g) {
+        this.groups.remove(g);
+    }
+
+    public void removeTrainingProgress(TrainingProgress tp) {
+        this.plansProgress.remove(tp);
+    }
 }

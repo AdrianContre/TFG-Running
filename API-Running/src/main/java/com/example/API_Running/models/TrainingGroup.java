@@ -103,4 +103,8 @@ public class TrainingGroup {
     public void removeTrainingPlan(TrainingPlan tp) {
         this.trainingPlans.remove(tp);
     }
+
+    public void removeUser(Runner r) {
+        this.runners.remove(r);
+    }
 }

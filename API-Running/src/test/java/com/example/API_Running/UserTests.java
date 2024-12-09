@@ -65,10 +65,10 @@ public class UserTests {
 
     @TestConfiguration
     static class UserTestConfiguration {
-        @Bean
-        public UserService userService (UserRepository userRepository, RunnerRepository runnerRepository, TrainerRepository trainerRepository) {
-            return new UserService(userRepository, runnerRepository, trainerRepository);
-        }
+//        @Bean
+//        public UserService userService (UserRepository userRepository, RunnerRepository runnerRepository, TrainerRepository trainerRepository) {
+//            return new UserService(userRepository, runnerRepository, trainerRepository);
+//        }
 
         @Bean
         public AuthService authService (UserRepository userRepository,JwtService jwtService, AuthenticationManager authenticationManager ) {

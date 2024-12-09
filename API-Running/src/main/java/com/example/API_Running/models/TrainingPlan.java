@@ -147,4 +147,16 @@ public class TrainingPlan {
         }
         return counter;
     }
+
+    public void removeGroup(TrainingGroup group) {
+        this.groups.remove(group);
+    }
+
+    public void removeProgress(TrainingProgress tp) {
+        this.trainingProgresses.remove(tp);
+    }
+
+    public void removeWeek(TrainingWeek week) {
+        this.trainingWeeks.remove(week);
+    }
 }

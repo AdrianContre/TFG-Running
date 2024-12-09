@@ -55,4 +55,12 @@ public class Trainer extends Runner {
     public void addManagedGroups(TrainingGroup group) {
         this.managedGroups.add(group);
     }
+
+    public void removeManagedGroups(TrainingGroup group) {
+        this.managedGroups.remove(group);
+    }
+
+    public void removeTrainingPlan(TrainingPlan plan) {
+        plans.remove(plan);
+    }
 }
