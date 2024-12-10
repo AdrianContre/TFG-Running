@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { deleteProfile, getRunnerZones, getTrainerZones } from "../services/profileService";
 import { Navigate, useNavigate } from "react-router";
 import Modal from 'react-bootstrap/Modal';
+import UserStats from "./UserStats";
 
 function ViewProfile () {
     const userAuth = JSON.parse(localStorage.getItem("userAuth"))
@@ -103,7 +104,7 @@ function ViewProfile () {
                 </div>
 
                 <div className="profile-right">
-                    {/* En un futuro aqui habrán las estadísticas del usuario */}    
+                    <UserStats />
                 </div>
             </div>
             <div className="delete-button-container">
