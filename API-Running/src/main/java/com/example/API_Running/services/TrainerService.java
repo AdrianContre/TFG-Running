@@ -5,6 +5,7 @@ import com.example.API_Running.dtos.UpdateTrainerDTO;
 import com.example.API_Running.dtos.UserZonesDTO;
 import com.example.API_Running.models.Runner;
 import com.example.API_Running.models.Trainer;
+import com.example.API_Running.models.TrainingPlan;
 import com.example.API_Running.models.User;
 import com.example.API_Running.repository.TrainerRepository;
 import com.example.API_Running.repository.UserRepository;
@@ -13,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TrainerService {
@@ -86,5 +84,25 @@ public class TrainerService {
                 data,
                 HttpStatus.OK
         );
+    }
+
+    public ResponseEntity<Object> getTrainerStats(Long trainerId) {
+        HashMap<String,Object> data = new HashMap<>();
+        Optional<Trainer> query = this.trainerRepository.findById(trainerId);
+        if (!query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        Trainer trainer = query.get();
+        int usersEnrolled = 0;
+        List<TrainingPlan> plans = trainer.getPlans();
+        for (TrainingPlan plan : plans) {
+            usersEnrolled += plan.getTrainingProgresses().size();
+        }
+        data.put("data", usersEnrolled);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

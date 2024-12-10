@@ -27,4 +27,9 @@ public class RunnerController {
     public ResponseEntity<Object> getZones (@PathVariable Long runnerId) {
         return this.runnerService.getZones(runnerId);
     }
+
+    @GetMapping(path="/{runnerId}/stats")
+    public ResponseEntity<Object> getRunnerStats(@PathVariable Long runnerId) {
+        return this.runnerService.getRunnerStats(runnerId);
+    }
 }

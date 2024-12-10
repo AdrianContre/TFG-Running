@@ -2,10 +2,7 @@ package com.example.API_Running.models;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @DiscriminatorValue("RUNNER")
@@ -136,5 +133,23 @@ public class Runner extends User {
 
     public void removeTrainingProgress(TrainingProgress tp) {
         this.plansProgress.remove(tp);
+    }
+
+    public HashMap<String, Float> getMostUsedMaterial() {
+        HashMap<String, Float> material = new HashMap<>();
+        Float max = (float) 0;
+        Material m = null;
+        for (Material mat : this.materials) {
+            if (mat.getWear() > max) {
+                max = mat.getWear();
+                m = mat;
+            }
+        }
+        if (m == null) {
+            return null;
+        }
+        String materialName = m.getBrand() + " " + m.getModel();
+        material.put(materialName, max);
+        return material;
     }
 }
