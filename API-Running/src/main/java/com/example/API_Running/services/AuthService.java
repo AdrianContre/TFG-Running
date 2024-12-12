@@ -45,6 +45,15 @@ public class AuthService {
         Integer height = request.getHeight();
         Integer fcMax = request.getFcMax();
         boolean isTrainer = request.getTrainer();
+        boolean termsAccepted = request.getTermsAccepted();
+
+        if (!termsAccepted) {
+            data.put("error", "You must accept the terms of conditions");
+            return new ResponseEntity<>(
+                    data,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
 
         if (name == null || surname == null || username == null || mail == null || password == null || weight == null || height == null || fcMax == null) {
@@ -89,6 +98,7 @@ public class AuthService {
             trainer.setHeight(height);
             trainer.setFcMax(fcMax);
             trainer.setIsTrainer(true);
+            trainer.setTermsAccepted(true);
             savedUser = userRepository.save(trainer);
         }
         else {
@@ -102,6 +112,7 @@ public class AuthService {
             runner.setWeight(weight);
             runner.setFcMax(fcMax);
             runner.setIsTrainer(false);
+            runner.setTermsAccepted(true);
             savedUser = userRepository.save(runner);
         }
         UserDetailsImplementation u = new UserDetailsImplementation(savedUser);

@@ -36,6 +36,8 @@ import ViewGroup from './modules/groups/components/ViewGroup';
 import EditGroup from './modules/groups/components/EditGroup';
 import ListGroupPlans from './modules/TrainingPlans/components/ListGroupPlans';
 import CommentScreen from './modules/comments/components/CommentScreen';
+import TermsConditions from './modules/terms/components/TermsConditions';
+import PrivacyPolitic from './modules/terms/components/PrivacyPolitic';
 
 
 
@@ -91,6 +93,8 @@ function App() {
         <Route path='/listmaterials' element={<AuthRoute element={ListMaterials}/>} />
         <Route path='/profile' element={<AuthRoute element={ViewProfile}/>} />
         <Route path='/editprofile' element={<AuthRoute element={EditProfile}/>} />
+        <Route path='/privacy' element={<PrivacyPolitic/>} />
+        <Route path='/terms' element={<TermsConditions/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
         <Route path='/main' element={<AuthRoute element={Main}/>} />

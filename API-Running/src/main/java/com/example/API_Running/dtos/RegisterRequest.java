@@ -12,6 +12,7 @@ public class RegisterRequest {
     private Integer fcMax;
     private boolean trainer;
     private Integer experience;
+    private Boolean termsAccepted;
 
     public RegisterRequest() {}
 
@@ -106,5 +107,13 @@ public class RegisterRequest {
 
     public void setExperience (Integer experience) {
         this.experience = experience;
+    }
+
+    public Boolean getTermsAccepted() {
+        return termsAccepted;
+    }
+
+    public void setTermsAccepted(Boolean termsAccepted) {
+        this.termsAccepted = termsAccepted;
     }
 }
