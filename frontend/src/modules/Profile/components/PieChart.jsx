@@ -1,12 +1,13 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import '../styles/pieChart.css'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ distribution }) => {
   const data = {
-    labels: ['Actividades de Running', 'Actividades de Fuerza', 'Otras Actividades'],
+    labels: ['Actividades de Running', 'Actividades de Fuerza', 'Actividades de Movilidad'],
     datasets: [
       {
         data: distribution,
@@ -33,14 +34,7 @@ const PieChart = ({ distribution }) => {
   };
 
   return (
-    <div style={{ 
-        height: '300px', 
-        width: '100%', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        marginBottom: '20px' 
-      }}>
+    <div className='pie-container'>
         <Pie data={data} options={options} />
       </div>
       

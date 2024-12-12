@@ -49,7 +49,8 @@ function UserStats() {
             ) : (null)}
             <div className="chart-container">
                 <LineChart last4Weeks={runnerData.last4Weeks} />
-                <PieChart distribution={runnerData.distribution} />
+                {runnerData.distribution.every(item => item === 0) ? (null) : <PieChart distribution={runnerData.distribution} />}
+                
             </div>
         </div>
     )

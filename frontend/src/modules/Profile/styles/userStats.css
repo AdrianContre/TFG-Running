@@ -1,11 +1,3 @@
-.profile-right {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 20px;
-    width: 50%;
-  }
-  
   .stats-container {
     display: flex;
     flex-direction: column;

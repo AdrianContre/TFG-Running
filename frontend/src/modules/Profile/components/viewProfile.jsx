@@ -92,7 +92,7 @@ function ViewProfile () {
                         <Button variant="primary" size="lg" className="custom-button-view-profile" onClick={navigateToMaterials}>MATERIAL</Button>
                     </div>
                     {userAuth.fcMax !== 0 ? (
-                        <div>
+                        <div className="container-zones">
                             <p style={{fontWeight: 'bold', fontSize: '16px', marginTop: '30px', marginLeft: '50px'}}>Zonas de frecuencia cardiaca basadas en tu fcMax:</p>
                             <Zones zones={heartZones}/>
                         </div>
