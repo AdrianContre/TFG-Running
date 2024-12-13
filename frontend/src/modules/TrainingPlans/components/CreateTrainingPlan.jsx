@@ -19,6 +19,7 @@ function CreateTrainingPlan() {
     const [description, setDescription] = useState('');
     const [level,setLevel] = useState("Principiante")
     const [objDistance, setObjDistance] = useState("5K")
+    const [wearMaterial, setWearMaterial] = useState("< 300km")
     const [sessionsInfo, setSessionsInfo] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [sessions, setSessions] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [showModal, setShowModal] = useState(false);
@@ -48,6 +49,10 @@ function CreateTrainingPlan() {
     const handleObjChange = (event) => {
         setObjDistance(event.target.value); // Actualiza el valor del estado con el seleccionado
     };
+
+    const handleWearChange = (event) => {
+        setWearMaterial(event.target.value)
+    }
 
     const updateNumWeeks = (increment) => {
         const newNumWeeks = numWeeks + increment;
@@ -148,7 +153,7 @@ function CreateTrainingPlan() {
             selectedGroups.map(group => {
                 groupsId.push(group.value)
             })
-            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId, groupsId)
+            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId, groupsId, wearMaterial)
             if (send) {
                 navigate('/myplans')
             }
@@ -255,9 +260,17 @@ function CreateTrainingPlan() {
                     <div className="form-group-create-plan">
                         <label className='custom-label-create-plan'>Nivel:</label>
                         <select className='custom-input-create-plan' value={level} onChange={handleLevelChange}>
-                            <option value="Principiante">Principiante</option>
-                            <option value="Intermedio">Intermedio</option>
-                            <option value="Avanzado">Avanzado</option>
+                            <option value="low">Principiante</option>
+                            <option value="medium">Intermedio</option>
+                            <option value="high">Avanzado</option>
+                        </select>
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Desgaste de material:</label>
+                        <select className='custom-input-create-plan' value={wearMaterial} onChange={handleWearChange}>
+                            <option value="Principiante">{'< 300km'}</option>
+                            <option value="Intermedio">300-500km</option>
+                            <option value="Avanzado">{'> 500km'}</option>
                         </select>
                     </div>
                     <div className="form-group-create-plan">

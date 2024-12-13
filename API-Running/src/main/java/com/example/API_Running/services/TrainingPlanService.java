@@ -54,9 +54,11 @@ public class TrainingPlanService {
         Integer weeks = trainingPlanDTO.getNumWeeks();
         String objDistance = trainingPlanDTO.getObjDistance();
         String level = trainingPlanDTO.getLevel();
+        String wearMaterial = trainingPlanDTO.getWearMaterial();
         List<TrainingWeek> trainingWeekList = new ArrayList<>();
         List<TrainingProgress> trainingProgressesList = new ArrayList<>();
         TrainingPlan trainingPlan = new TrainingPlan(name, description, weeks, objDistance, level, trainer, trainingWeekList, trainingProgressesList);
+        trainingPlan.setWearMaterial(wearMaterial);
         Set<TrainingGroup> groups = new HashSet<>();
         for (Long groupId : trainingPlanDTO.getGroupsId()) {
             Optional<TrainingGroup> query_group =  this.trainingGroupRepository.findById(groupId);
@@ -303,6 +305,7 @@ public class TrainingPlanService {
         trainingPlan.setWeeks(updateTrainingPlanDTO.getNumWeeks());
         trainingPlan.setLevel(updateTrainingPlanDTO.getLevel());
         trainingPlan.setDistanceObjective(updateTrainingPlanDTO.getObjDistance());
+        trainingPlan.setWearMaterial(updateTrainingPlanDTO.getWearMaterial());
 
         List<TrainingWeek> trainingWeeks = trainingPlan.getTrainingWeeks();
         List<List<SessionDTO>> sessionsDTO = updateTrainingPlanDTO.getSessions();

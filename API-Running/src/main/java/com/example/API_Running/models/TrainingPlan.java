@@ -43,6 +43,9 @@ public class TrainingPlan {
     @ManyToMany(mappedBy = "trainingPlans")
     private Set<TrainingGroup> groups;
 
+    @Column(name="wearMaterial",nullable = false)
+    private String wearMaterial;
+
     public TrainingPlan() {}
 
     public TrainingPlan(String name, String description, Integer weeks, String distanceObjective, String level, Trainer creator, List<TrainingWeek> trainingWeeks, List<TrainingProgress> trainingProgresses) {
@@ -158,5 +161,13 @@ public class TrainingPlan {
 
     public void removeWeek(TrainingWeek week) {
         this.trainingWeeks.remove(week);
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
     }
 }

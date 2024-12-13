@@ -1,6 +1,6 @@
 const END_POINT_TRAINING_PLANS = "http://localhost:8081/api/v1/trainingplans"
 
-export const createPlan = async (name, description, numWeeks, objDistance, level, sessions, trainerId, groupsId) => {
+export const createPlan = async (name, description, numWeeks, objDistance, level, sessions, trainerId, groupsId, wearMaterial) => {
     const authHeader = `Bearer ${localStorage.getItem('token')}`
     return fetch(`${END_POINT_TRAINING_PLANS}`,{
         method: 'POST',
@@ -8,7 +8,7 @@ export const createPlan = async (name, description, numWeeks, objDistance, level
         'Authorization': authHeader,
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, trainerId: trainerId, groupsId: groupsId})
+        body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, trainerId: trainerId, groupsId: groupsId, wearMaterial: wearMaterial})
     })
     .then(response => {
         return response.json();
@@ -164,16 +164,16 @@ export const unenrollUserToPlan = async (planId, userId) => {
     });
 }
 
-export const editPlan = async (planId,name, description, numWeeks, objDistance, level, sessions, groupsId) => {
+export const editPlan = async (planId,name, description, numWeeks, objDistance, level, sessions, groupsId, wearMaterial) => {
   const authHeader = `Bearer ${localStorage.getItem('token')}`
-  console.log(JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId}))
+  console.log(JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId, wearMaterial: wearMaterial}))
   return fetch(`${END_POINT_TRAINING_PLANS}/${planId}`,{
       method: 'PUT',
       headers: {
       'Authorization': authHeader,
       'Content-Type': 'application/json',
       },
-      body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId: groupsId})
+      body: JSON.stringify({name: name, description: description, numWeeks: numWeeks, objDistance: objDistance, level: level, sessions: sessions, groupsId: groupsId, wearMaterial: wearMaterial})
   })
   .then(response => {
       return response.json();

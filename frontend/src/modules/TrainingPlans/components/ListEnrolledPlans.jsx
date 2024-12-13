@@ -25,6 +25,7 @@ function ListEnrolledPlans() {
             setFilteredPlans(trainersPlans)
         }
         fetchData()
+        console.log("planes: " + filteredPlans)
     },[])
 
     const handleFilterChange = () => {
@@ -95,6 +96,7 @@ function ListEnrolledPlans() {
                         trainerSurname={plan.trainerSurname}
                         numSessions={plan.numSessions}
                         sessionsCompleted={plan.sessionsCompleted}
+                        wearMaterial={plan.wearMaterial}
                     />
                 ))}
             </div>

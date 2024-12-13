@@ -17,6 +17,7 @@ public class TrainingPlanDetailDTO {
     private List<TrainingWeekDTO> trainingWeeks;
     private boolean enrolled;
     private List<GroupDTO> groups;
+    private String wearMaterial;
 
     public TrainingPlanDetailDTO(TrainingPlan trainingPlan, boolean enrolled) {
         this.id = trainingPlan.getId();
@@ -28,6 +29,7 @@ public class TrainingPlanDetailDTO {
         this.creator = new PlanCreatorDTO(trainingPlan.getCreator());
         this.trainingWeeks = buildTrainingWeek(trainingPlan.getTrainingWeeks());
         this.enrolled = enrolled;
+        this.wearMaterial = trainingPlan.getWearMaterial();
     }
 
     public List<TrainingWeekDTO> buildTrainingWeek (List<TrainingWeek> trainingWeek) {
@@ -116,5 +118,13 @@ public class TrainingPlanDetailDTO {
 
     public void setGroups(List<GroupDTO> groups) {
         this.groups = groups;
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
     }
 }

@@ -1,11 +1,12 @@
 import React from "react";
 import '../styles/trainingPlanCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faRunning, faMapMarkerAlt, faSignal, faUser,faCheckCircle} from '@fortawesome/free-solid-svg-icons'
+import {faRunning, faMapMarkerAlt, faSignal, faUser,faCheckCircle, faShirt} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router";
 
-function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions, sessionsCompleted }) {
+function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSurname, numSessions, sessionsCompleted, wearMaterial }) {
     const navigate = useNavigate()
+    console.log("wear material: " +wearMaterial)
 
     const handleViewDetails = (event) => {
         event.preventDefault()
@@ -23,6 +24,9 @@ function TrainingPlanCard({ id, name, objDistance, level, trainerName, trainerSu
                 </p>
                 <p className="card-text">
                     <FontAwesomeIcon icon={faSignal} /> Nivel: <strong>{level}</strong>
+                </p>
+                <p className="card-text">
+                    <FontAwesomeIcon icon={faShirt} /> Desgaste de material: <strong style={{marginLeft: '3px'}}>{wearMaterial === "low" ? (" < 300km") : (wearMaterial === "medium" ? ('300-500km') : ('> 500km'))}</strong>
                 </p>
                 <p className="card-text">
                     <FontAwesomeIcon icon={faUser} /> Entrenador: <strong>{trainerName} {trainerSurname}</strong>

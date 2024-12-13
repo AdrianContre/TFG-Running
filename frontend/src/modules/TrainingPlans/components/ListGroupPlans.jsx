@@ -129,6 +129,7 @@ function ListGroupPlans () {
                         level={plan.level}
                         trainerName={plan.trainerName}
                         trainerSurname={plan.trainerSurname}
+                        wearMaterial={plan.wearMaterial}
                     />
                 ))}
             </div>

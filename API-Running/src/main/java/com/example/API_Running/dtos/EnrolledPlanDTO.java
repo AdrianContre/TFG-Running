@@ -12,6 +12,7 @@ public class EnrolledPlanDTO {
     private Float percentage;
     private Integer numSessions;
     private Integer sessionsCompleted;
+    private String wearMaterial;
 
     public EnrolledPlanDTO(TrainingPlan trainingPlan, Float percentage) {
         this.id = trainingPlan.getId();
@@ -22,6 +23,7 @@ public class EnrolledPlanDTO {
         this.trainerSurname = trainingPlan.getCreator().getSurname();
         this.percentage = percentage;
         this.numSessions = trainingPlan.totalSessions();
+        this.wearMaterial = trainingPlan.getWearMaterial();
     }
 
     public Long getId() {
@@ -94,5 +96,13 @@ public class EnrolledPlanDTO {
 
     public void setSessionsCompleted(Integer sessionsCompleted) {
         this.sessionsCompleted = sessionsCompleted;
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
     }
 }
