@@ -17,9 +17,6 @@ public class Runner extends User {
     @Column(name="fcMax",nullable = false)
     private Integer fcMax;
 
-    @Column(name="isTrainer", nullable = false)
-    private boolean isTrainer;
-
     @OneToMany(mappedBy = "runner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials = new ArrayList<>();
 
@@ -31,11 +28,10 @@ public class Runner extends User {
 
     public Runner() {}
 
-    public Runner(Integer weight, Integer height, Integer fcMax,boolean isTrainer) {
+    public Runner(Integer weight, Integer height, Integer fcMax) {
         this.weight = weight;
         this.height = height;
         this.fcMax = fcMax;
-        this.isTrainer = isTrainer;
         this.groups = new HashSet<>();
     }
 
@@ -61,14 +57,6 @@ public class Runner extends User {
 
     public void setFcMax(Integer fcMax) {
         this.fcMax = fcMax;
-    }
-
-    public boolean getIsTrainer() {
-        return this.isTrainer;
-    }
-
-    public void setIsTrainer (boolean isTrainer) {
-        this.isTrainer = isTrainer;
     }
 
     public ArrayList<Integer> getZones() {
@@ -97,15 +85,6 @@ public class Runner extends User {
     public void addMaterial (Material material) {
         this.materials.add(material);
     }
-
-    public boolean isTrainer() {
-        return isTrainer;
-    }
-
-    public void setTrainer(boolean trainer) {
-        isTrainer = trainer;
-    }
-
 
     public List<TrainingProgress> getPlansProgress() {
         return plansProgress;

@@ -82,10 +82,10 @@ public class UserTests {
     @Autowired
     private AuthService authService;
 
-    /*
+
     @BeforeEach
     public void setUp () {
-        Runner user = new Runner(0,0,0,false);
+        Runner user = new Runner(0,0,0/*,false*/);
         user.setUsername("test");
         user.setPassword("1234");
         user.setName("test");
@@ -98,13 +98,13 @@ public class UserTests {
         LoginRequest request2 = new LoginRequest("test","1234");
         authService.login(request2);
     }
-    */
+
 
 
     @Test
     public void whoAmI () {
         System.out.println("Iniciando prueba whoAmI");
-        Runner user = new Runner(0,0,0,false);
+        Runner user = new Runner(0,0,0/*,false*/);
         user.setUsername("test");
         user.setPassword("1234");
         user.setName("test");

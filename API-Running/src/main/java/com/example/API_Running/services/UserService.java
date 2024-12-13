@@ -52,7 +52,6 @@ public class UserService {
     }
 
 
-
     public ResponseEntity<Object> whoAmI() {
         HashMap<String, Object> data = new HashMap<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

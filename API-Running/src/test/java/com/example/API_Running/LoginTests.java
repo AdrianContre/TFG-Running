@@ -65,7 +65,7 @@ public class LoginTests {
         testUser.setWeight(70);
         testUser.setHeight(180);
         testUser.setFcMax(200);
-        testUser.setIsTrainer(false);
+        //testUser.setIsTrainer(false);
     }
 
     @Test

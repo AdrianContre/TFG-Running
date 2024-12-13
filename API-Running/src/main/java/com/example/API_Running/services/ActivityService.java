@@ -30,27 +30,6 @@ public class ActivityService {
         this.manualActivityRepository = manualActivityRepository;
     }
 
-//    public ResponseEntity<Object> getUserManualActivities(Long runnerId) {
-//        HashMap<String,Object> data = new HashMap<>();
-//        Optional<Runner> query = this.runnerRepository.findById(runnerId);
-//        if (!query.isPresent()) {
-//            data.put("error", "Runner not found");
-//            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-//        }
-//        List<Activity> activities = this.activityRepository.findActivitiesByRunnerId(runnerId);
-//        List<Activity> sortedAct = activities.stream().sorted((a1, a2) -> a2.getDate().compareTo(a1.getDate())).collect(Collectors.toList());
-//        List<ActivityDTO> activitiesDTO =  new ArrayList<>();
-//        sortedAct.stream().forEach(activity -> {
-//            if (activity instanceof ManualActivity) {
-//                Optional<ManualActivity> manAct = this.manualActivityRepository.findById(activity.getId());
-//                ManualActivity mAct = manAct.get();
-//                ActivityDTO actDTO = new ActivityDTO(mAct.getId(), mAct.getName(), mAct.getDistance(), mAct.getDuration(), mAct.getDate(), "ManualActivity");
-//                activitiesDTO.add(actDTO);
-//            }
-//        });
-//        data.put("data",activitiesDTO);
-//        return new ResponseEntity<>(data, HttpStatus.OK);
-//    }
 
     public ResponseEntity<Object> getUserActivities(Long runnerId) {
         HashMap<String,Object> data = new HashMap<>();

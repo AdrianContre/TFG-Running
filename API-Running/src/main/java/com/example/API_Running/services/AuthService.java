@@ -97,7 +97,6 @@ public class AuthService {
             trainer.setWeight(weight);
             trainer.setHeight(height);
             trainer.setFcMax(fcMax);
-            trainer.setIsTrainer(true);
             trainer.setTermsAccepted(true);
             savedUser = userRepository.save(trainer);
         }
@@ -111,7 +110,6 @@ public class AuthService {
             runner.setHeight(height);
             runner.setWeight(weight);
             runner.setFcMax(fcMax);
-            runner.setIsTrainer(false);
             runner.setTermsAccepted(true);
             savedUser = userRepository.save(runner);
         }

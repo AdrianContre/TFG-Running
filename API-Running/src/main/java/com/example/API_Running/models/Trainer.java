@@ -22,8 +22,8 @@ public class Trainer extends Runner {
 
     public Trainer() {}
 
-    public Trainer(Integer weight, Integer height, Integer fcMax, Integer experience,boolean isTrainer) {
-        super(weight, height, fcMax,isTrainer);
+    public Trainer(Integer weight, Integer height, Integer fcMax, Integer experience) {
+        super(weight, height, fcMax);
         this.experience = experience;
         this.managedGroups = new HashSet<>();
     }
