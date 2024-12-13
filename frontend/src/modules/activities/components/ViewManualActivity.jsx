@@ -8,6 +8,7 @@ import GpxViewer from "./GpxViewer";
 import "../styles/viewManualActivity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faDownload} from '@fortawesome/free-solid-svg-icons'
+import { Spinner } from "react-bootstrap";
 
 function ViewManualActivity() {
     const location = useLocation();
@@ -45,6 +46,14 @@ function ViewManualActivity() {
         fetchManualActivity();
     }, []);
 
+    if (!activity) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
+
     return (
         <>
             <NavigationBar />
@@ -78,7 +87,7 @@ function ViewManualActivity() {
                             </div>
                             <div className="view-activity-description">
                                 <strong>Descripción:</strong><p>{activity.description}</p> 
-                                <p><strong>Materiales empleados:</strong></p>
+                                <strong>Materiales empleados:</strong>
                                 <ul className="view-activity-materials-list">
                                     {activity.materials.map((material, index) => (
                                         <li key={index}>{material}</li>

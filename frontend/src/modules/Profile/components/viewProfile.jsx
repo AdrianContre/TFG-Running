@@ -9,11 +9,12 @@ import { deleteProfile, getRunnerZones, getTrainerZones } from "../services/prof
 import { Navigate, useNavigate } from "react-router";
 import Modal from 'react-bootstrap/Modal';
 import UserStats from "./UserStats";
+import { Spinner } from "react-bootstrap";
 
 function ViewProfile () {
     const userAuth = JSON.parse(localStorage.getItem("userAuth"))
 
-    const [heartZones, setHeartZones] = useState({})
+    const [heartZones, setHeartZones] = useState(null)
     const [picture, setPicture] = useState(null)
     const [show,setShow] = useState(false)
 
@@ -71,6 +72,14 @@ function ViewProfile () {
             console.log(error)
         }
         
+    }
+
+    if (!heartZones) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
     }
 
     return (

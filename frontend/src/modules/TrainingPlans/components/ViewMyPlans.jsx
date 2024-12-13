@@ -3,14 +3,15 @@ import NavigationBar from "../../home/components/NavigationBar"
 import CirclePlus from '../../../assets/images/plus-circle.png'
 import '../styles/viewTrainingPlans.css'
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
-import { getMyPlans, getOtherUsersPlans } from "../services/trainingService"
+import { getMyPlans} from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 import Paginator from "../../../Paginator"
+import { Spinner } from "react-bootstrap"
+import { useNavigate } from "react-router"
 
 function ViewMyPlans () {
     const navigate = useNavigate()
-    const [plans,setPlans] = useState([])
+    const [plans,setPlans] = useState(null)
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
@@ -47,14 +48,28 @@ function ViewMyPlans () {
         setCurrentPage(1);
     };
 
+    const handleClick = (event) => {
+        event.preventDefault();
+        navigate('/createtrainingplans')
+    }
+
     useEffect(() => {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
+
+    if (!plans) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
 
     const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
     const indexOfLastPlan = currentPage * plansPerPage;
     const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
     const currentPlans = filteredPlans.slice(indexOfFirstPlan, indexOfLastPlan);
+
 
 
     return (
@@ -106,7 +121,12 @@ function ViewMyPlans () {
                 totalPages={totalPages} 
                 onPageChange={setCurrentPage} 
             />
-            
+            <div className="image-container">
+                <div className="circle-container">
+                    <img className="circle-image" src={CirclePlus} onClick={handleClick}/>
+                    <div className="tooltip-text-view-training-plans">Crear plan de entrenamiento</div>
+                </div>
+            </div> 
         </>
     )
 }

@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
 import { registerService } from "../services/authService";
 import PopUp from './PopUp'
+import { getUserLogged } from "../../home/services/mainService";
 
 
 
@@ -69,7 +70,11 @@ function Register () {
                     localStorage.setItem('token', data.token)
                     console.log(data.token)
                     console.log('Registration successful:', data);
-                    navigate('/main')
+
+                    const user = await getUserLogged();
+                    localStorage.setItem('userAuth', JSON.stringify(user))
+                    navigate('/activities')
+                    //navigate('/main')
                 }
                 else {
                     if (data.error) {

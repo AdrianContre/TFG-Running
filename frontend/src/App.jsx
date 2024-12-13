@@ -4,7 +4,6 @@ import './App.css'
 import {Link, Route, Routes} from 'react-router-dom'
 import Login from './modules/auth/components/Login';
 import Register from './modules/auth/components/Register';
-import Main from './modules/home/components/Main';
 import EditProfile from './modules/profile/components/editProfile';
 import ViewProfile from './modules/profile/components/viewProfile';
 import ListMaterials from './modules/profile/components/ListMaterials';
@@ -97,7 +96,6 @@ function App() {
         <Route path='/terms' element={<TermsConditions/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
-        <Route path='/main' element={<AuthRoute element={Main}/>} />
         <Route path='/' element={<Home/>} />
       </Routes>
   )

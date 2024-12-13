@@ -5,6 +5,7 @@ import "../styles/viewManualActivity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faSmile, faFrown, faMeh} from '@fortawesome/free-solid-svg-icons'
 import { getMobilityResult } from "../services/activitiesService";
+import { Spinner } from "react-bootstrap";
 
 function ViewMobilityResult () {
     const location = useLocation();
@@ -34,6 +35,16 @@ function ViewMobilityResult () {
         };
         fetchActivity();
     }, []);
+
+    if (!activity) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
+
+
     return  (
         <>
              <NavigationBar />

@@ -4,12 +4,13 @@ import NavigationBar from "../../home/components/NavigationBar";
 import { deleteMaterial, getUserMaterials } from "../services/materialService";
 import MaterialCard from "./MaterialCard";
 import '../styles/listMaterials.css'
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router";
+
 
 function ListMaterials () {
 
-    const [materials,setMaterials] = useState([])
+    const [materials,setMaterials] = useState(null)
 
     const navigate = useNavigate()
 
@@ -32,6 +33,14 @@ function ListMaterials () {
         navigate('/creatematerial')
     }
 
+
+    if (!materials) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
 
     return (
         <>

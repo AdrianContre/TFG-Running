@@ -7,6 +7,7 @@ import LineChart from "./LineChart";
 import PieChart from "./PieChart";
 import '../styles/userStats.css'
 
+
 function UserStats() {
     const [runnerData, setRunnerData] = useState(null)
     const [trainerData, setTrainerData] = useState(null)
@@ -31,8 +32,9 @@ function UserStats() {
     
     if (!user) {
         return (
-            <>
-            </>
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
         )
     }
 
