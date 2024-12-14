@@ -3,24 +3,21 @@ package com.example.API_Running.services;
 import com.example.API_Running.dtos.CreateMaterialDTO;
 import com.example.API_Running.dtos.MaterialDTO;
 import com.example.API_Running.dtos.ModifyMaterialDTO;
-import com.example.API_Running.models.Activity;
-import com.example.API_Running.models.Material;
-import com.example.API_Running.models.Runner;
+import com.example.API_Running.models.*;
 import com.example.API_Running.repository.ActivityRepository;
 import com.example.API_Running.repository.MaterialRepository;
 import com.example.API_Running.repository.RunnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MaterialService {
@@ -42,6 +39,14 @@ public class MaterialService {
         String description = createMaterialDTO.getDescription();
         Float wear = createMaterialDTO.getWear();
         Long runnerId = createMaterialDTO.getRunnerId();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not create materials on behalf other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
 
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
@@ -74,6 +79,13 @@ public class MaterialService {
             );
         }
         Material material = query.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), material.getRunner().getId())) {
+            data.put("error", "You can not delete materials on behalf other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         List<Activity> activitiesWithMaterial = activityRepository.findAllByMaterialsContains(material);
 
         for (Activity activity : activitiesWithMaterial) {
@@ -91,6 +103,13 @@ public class MaterialService {
 
     public ResponseEntity<Object> getUserMaterial(Long runnerId) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not get the materials of other runners");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
             data.put("error", "User not found");
@@ -120,6 +139,13 @@ public class MaterialService {
             );
         }
         Material material = query.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), material.getRunner().getId())) {
+            data.put("error", "You can not get material from other runners");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         MaterialDTO materialDTO = new MaterialDTO(material);
         data.put("data", materialDTO);
         return new ResponseEntity<>(
@@ -139,6 +165,13 @@ public class MaterialService {
             );
         }
         Material material = query.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), material.getRunner().getId())) {
+            data.put("error", "You can not edit materials from other runners");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         material.setBrand(modifyMaterialDTO.getBrand());
         material.setModel(modifyMaterialDTO.getModel());
         material.setDescription(modifyMaterialDTO.getDescription());
@@ -158,6 +191,13 @@ public class MaterialService {
         if (!query.isPresent()) {
             data.put("error", "Material not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), query.get().getRunner().getId())) {
+            data.put("error", "You can not upload photo to other runner materials");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         try {
             byte[] photoBytes = photo.getBytes();

@@ -30,6 +30,14 @@ public class TrainingGroupService {
 
     public ResponseEntity<Object> createGroup(CreateTrainingGroupDTO trainingGroupDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), trainingGroupDTO.getTrainerId())) {
+            data.put("error", "You can not create group on behalf other user");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
         String name = trainingGroupDTO.getName();
         Optional<TrainingGroup> query = this.trainingGroupRepository.findByName(name);
         if (query.isPresent()) {
@@ -86,6 +94,13 @@ public class TrainingGroupService {
 
     public ResponseEntity<Object> getTrainerGroups(Long trainerId) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), trainerId)) {
+            data.put("error", "You can not get other trainer plans");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         List<TrainingGroup> groups = this.trainingGroupRepository.findAllByCreator(trainerId);
         List<GroupDTO> groupsDTO = new ArrayList<>();
         groups.forEach(group -> {
@@ -99,12 +114,19 @@ public class TrainingGroupService {
 
     public ResponseEntity<Object> getGroup(Long groupId) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
         Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
         if (!query.isPresent()) {
             data.put("error", "The training group does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
         TrainingGroup tg = query.get();
+        if ((userAuth.getId() != tg.getTrainer().getId()) && !(tg.belongsUser(userAuth.getId()))) {
+            data.put("error", "You are not the creator of the group or you do not belong to the group");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         String name = tg.getName();
         String description = tg.getDescription();
         Trainer trainer = tg.getTrainer();
@@ -122,12 +144,19 @@ public class TrainingGroupService {
 
     public ResponseEntity<Object> editGroup(Long groupId, EditGroupDTO editGroupDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
         Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
         if (!query.isPresent()) {
             data.put("error", "Group does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
         TrainingGroup tg = query.get();
+        if (!Objects.equals(tg.getTrainer().getId(), userAuth.getId())) {
+            data.put("error", "You are not the creator of the group");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         tg.setName(editGroupDTO.getName());
         tg.setDescription(editGroupDTO.getDescription());
         List<Long> membersId = editGroupDTO.getMembersId();
@@ -144,12 +173,19 @@ public class TrainingGroupService {
 
     public ResponseEntity<Object> deleteGroup(Long groupId) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
         Optional<TrainingGroup> query = this.trainingGroupRepository.findById(groupId);
         if (!query.isPresent()) {
             data.put("error", "Group does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
         TrainingGroup tg = query.get();
+        if (!Objects.equals(tg.getTrainer().getId(), userAuth.getId())) {
+            data.put("error", "You are not the creator of the group");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         this.trainingGroupRepository.delete(tg);
         data.put("data", "Group deleted successfully");
         return new ResponseEntity<>(data, HttpStatus.OK);

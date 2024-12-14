@@ -9,6 +9,8 @@ import com.example.API_Running.repository.RunnerRepository;
 import com.example.API_Running.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -32,6 +34,13 @@ public class RunnerService {
 
     public ResponseEntity<Object> updateRunner(Long runnerId, UpdateRunnerDTO updateRunnerDTO) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not modify other runner profile that is not you");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (query.isPresent()) {
             Runner runner = query.get();
@@ -69,6 +78,13 @@ public class RunnerService {
 
     public ResponseEntity<Object> getZones(Long runnerId) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not get the training zones of other trainers");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
             data.put("error", "User not found");
@@ -90,6 +106,13 @@ public class RunnerService {
     public ResponseEntity<Object> getRunnerStats(Long runnerId) {
         HashMap<String,Object> data = new HashMap<>();
         HashMap<String, Object> info = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not get the stats of other runners");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
             data.put("error", "The runner does not exist");

@@ -42,11 +42,18 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> createTrainingPlan(CreateTrainingPlanDTO trainingPlanDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Long trainerId = trainingPlanDTO.getTrainerId();
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (!query.isPresent()) {
             data.put("error", "Trainer not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        if (!Objects.equals(user.getId(), trainerId)) {
+            data.put("error", "You cannot create training plans on behalf of other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         Trainer trainer = query.get();
         String name = trainingPlanDTO.getName();
@@ -150,7 +157,6 @@ public class TrainingPlanService {
         User user = u.getUser();
         Long userId = user.getId();
 
-        //List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
         List<TrainingPlan> plans = this.trainingPlanRepository.findAvailableTrainingPlans(userId);
         List<ListPlansDTO> plansDTO = new ArrayList<>();
         plans.stream().forEach(plan -> {
@@ -164,10 +170,17 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> getTrainerPlans(Long trainerId) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (!query.isPresent()) {
             data.put("error", "Trainer not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        if (!trainerId.equals(user.getId())) {
+            data.put("error", "You can not get other trainer plans");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerId(trainerId);
         List<ListPlansDTO> plansDTOS = new ArrayList<>();
@@ -210,10 +223,19 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> enrollUserToAPlan(Long planId, EnrrollToAPlanDTO body) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        Long userId = user.getId();
         Optional<Runner> query = this.runnerRepository.findById(body.getUserId());
         if (!query.isPresent()) {
             data.put("error", "User not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (!Objects.equals(userId, body.getUserId())) {
+            data.put("error", "You can not enroll other users to a plan");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         Optional<TrainingPlan> query2 = this.trainingPlanRepository.findById(planId);
@@ -241,10 +263,18 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> getRunnerEnrolledPlans(Long runnerId) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        Long userId = user.getId();
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
             data.put("error", "User not found");
             return new ResponseEntity<>(data, HttpStatus.OK);
+        }
+        if (!Objects.equals(userId, runnerId)) {
+            data.put("error", "You can not get other users enrolled plans");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         List<TrainingProgress> tps = this.trainingProgressRepository.findAllUserProgress(runnerId);
         if (tps.isEmpty()) {
@@ -265,11 +295,19 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> withdrawUserInPlan(Long planId, EnrrollToAPlanDTO body) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Long userId = body.getUserId();
         Optional<Runner> query = this.runnerRepository.findById(userId);
         if (!query.isPresent()) {
             data.put("error", "Runner not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (!userId.equals(user.getId())) {
+            data.put("error", "You can not withdraw other users to a plan");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         List<TrainingSessionResult> trainingSessionResults = this.trainingSessionResultRepository.findAllByPlanAndRunner(planId, userId);
@@ -293,10 +331,19 @@ public class TrainingPlanService {
 
     public ResponseEntity<Object> updateTrainingPlan(Long planId, UpdateTrainingPlanDTO updateTrainingPlanDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation udp = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = udp.getUser();
+        Long userId = user.getId();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
         if (!query.isPresent()) {
             data.put("error", "The plan does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (!Objects.equals(userId, query.get().getCreator().getId())) {
+            data.put("error", "You can only edit a plan you have created");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         TrainingPlan trainingPlan = query.get();
@@ -436,7 +483,6 @@ public class TrainingPlanService {
             newSession = new MobilitySession();
         }
         else {
-            System.out.println("creo una sesión de descanso");
             newSession = new RestSession();
         }
 
@@ -474,7 +520,6 @@ public class TrainingPlanService {
         User user = u.getUser();
         Long userId = user.getId();
 
-        //List<TrainingPlan> plans = this.trainingPlanRepository.findAllByTrainerIdNot(userId);
         List<TrainingPlan> plans = this.trainingPlanRepository.findEligibleTrainingPlans(userId);
         List<ListPlansDTO> plansDTO = new ArrayList<>();
         plans.stream().forEach(plan -> {

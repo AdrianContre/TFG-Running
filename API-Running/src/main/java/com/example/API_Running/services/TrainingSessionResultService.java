@@ -6,6 +6,8 @@ import com.example.API_Running.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +25,10 @@ public class TrainingSessionResultService {
     private final MaterialRepository materialRepository;
     private final TrainingProgressRepository trainingProgressRepository;
     private final ActivityRepository activityRepository;
+    private final TrainerRepository trainerRepository;
 
     @Autowired
-    public TrainingSessionResultService(TrainingSessionResultRepository trainingSessionResultRepository, TrainingPlanRepository trainingPlanRepository, RunnerRepository runnerRepository, TrainingSessionRepository trainingSessionRepository, MaterialRepository materialRepository, TrainingProgressRepository trainingProgressRepository, ActivityRepository activityRepository) {
+    public TrainingSessionResultService(TrainingSessionResultRepository trainingSessionResultRepository, TrainingPlanRepository trainingPlanRepository, RunnerRepository runnerRepository, TrainingSessionRepository trainingSessionRepository, MaterialRepository materialRepository, TrainingProgressRepository trainingProgressRepository, ActivityRepository activityRepository, TrainerRepository trainerRepository) {
         this.trainingSessionResultRepository = trainingSessionResultRepository;
         this.trainingPlanRepository = trainingPlanRepository;
         this.runnerRepository = runnerRepository;
@@ -33,16 +36,31 @@ public class TrainingSessionResultService {
         this.materialRepository = materialRepository;
         this.trainingProgressRepository = trainingProgressRepository;
         this.activityRepository = activityRepository;
+        this.trainerRepository = trainerRepository;
     }
 
 
 
     public ResponseEntity<Object> getHasResultsUserInAPlan(Long userId, Long planId) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(planId);
         if (!query.isPresent()) {
             data.put("error", "Plan not exists");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (user.getId() != userId) {
+            data.put("error", "You can not get the results of other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
+        Optional<TrainingProgress> progress_query = this.trainingProgressRepository.findProgressByPlanAndRunner(userId,planId);
+        if (!progress_query.isPresent()) {
+            data.put("error", "You are not enrolled in this plan");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         TrainingPlan tp = query.get();
@@ -75,6 +93,9 @@ public class TrainingSessionResultService {
 
     public ResponseEntity<Object> createRunningSessionResult(CreateRunningSessionResultDTO createRunningSessionResultDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(createRunningSessionResultDTO.getPlanId());
         if (!query.isPresent()) {
             data.put("error", "The plan does not exist");
@@ -89,6 +110,17 @@ public class TrainingSessionResultService {
         if (!query3.isPresent()) {
             data.put("error", "The session does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (query2.get().getId() != user.getId()) {
+            data.put("error", "You can not create a mobility result for other user");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
+        Optional<TrainingProgress> progress_query = this.trainingProgressRepository.findProgressByPlanAndRunner(createRunningSessionResultDTO.getUserId(),createRunningSessionResultDTO.getPlanId());
+        if (!progress_query.isPresent()) {
+            data.put("error", "You can not create a result in a plan you are not enrolled");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         TrainingPlan trainingPlan = query.get();
@@ -149,10 +181,17 @@ public class TrainingSessionResultService {
 
     public ResponseEntity<Object> addRouteToRunningSessionResult(Long trainingSessionResultId, MultipartFile route) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingSessionResult> query = this.trainingSessionResultRepository.findById(trainingSessionResultId);
         if (!query.isPresent()) {
             data.put("error", "Training session result does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        if (user.getId() != query.get().getRunner().getId()) {
+            data.put("error", "You can not add a route to a result that is not yours");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         RunningSessionResult rsr = (RunningSessionResult) query.get();
         try {
@@ -170,6 +209,9 @@ public class TrainingSessionResultService {
 
     public ResponseEntity<Object> createStrengthSessionResult(CreateStrengthSessionResultDTO createStrengthSessionResult) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(createStrengthSessionResult.getPlanId());
         if (!query.isPresent()) {
             data.put("error", "The plan does not exist");
@@ -184,6 +226,17 @@ public class TrainingSessionResultService {
         if (!query3.isPresent()) {
             data.put("error", "The session does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (query2.get().getId() != user.getId()) {
+            data.put("error", "You can not create a mobility result for other user");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
+        Optional<TrainingProgress> progress_query = this.trainingProgressRepository.findProgressByPlanAndRunner(createStrengthSessionResult.getUserId(),createStrengthSessionResult.getPlanId());
+        if (!progress_query.isPresent()) {
+            data.put("error", "You can not create a result in a plan you are not enrolled");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         TrainingPlan trainingPlan = query.get();
@@ -234,6 +287,9 @@ public class TrainingSessionResultService {
 
     public ResponseEntity<Object> createMobilitySessionResult(CreateMobilitySessionResultDTO createMobilitySessionResultDTO) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingPlan> query = this.trainingPlanRepository.findById(createMobilitySessionResultDTO.getPlanId());
         if (!query.isPresent()) {
             data.put("error", "The plan does not exist");
@@ -248,6 +304,17 @@ public class TrainingSessionResultService {
         if (!query3.isPresent()) {
             data.put("error", "The session does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if (query2.get().getId() != user.getId()) {
+            data.put("error", "You can not create a mobility result for other user");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
+        Optional<TrainingProgress> progress_query = this.trainingProgressRepository.findProgressByPlanAndRunner(createMobilitySessionResultDTO.getUserId(),createMobilitySessionResultDTO.getPlanId());
+        if (!progress_query.isPresent()) {
+            data.put("error", "You can not create a result in a plan you are not enrolled");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         TrainingPlan trainingPlan = query.get();
@@ -298,10 +365,18 @@ public class TrainingSessionResultService {
 
     public ResponseEntity<Object> getTrainingResult(Long sessionId, String type) {
         HashMap<String, Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
         Optional<TrainingSessionResult> query = this.trainingSessionResultRepository.findById(sessionId);
         if (!query.isPresent()) {
             data.put("error", "Session does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+
+        if ((!Objects.equals(query.get().getRunner().getId(), user.getId())) && !Objects.equals(query.get().getSession().getTrainingWeek().getTrainingPlan().getCreator().getId(), user.getId())) {
+            data.put("error", "This session result is not yours or you aren't the creator of the training session associated to the result");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
         if (type.equals("RunningResult")) {
@@ -332,8 +407,15 @@ public class TrainingSessionResultService {
             data.put("error", "Training Session Result does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
 
         TrainingSessionResult tsr = query.get();
+        if (!Objects.equals(tsr.getRunner().getId(), user.getId())) {
+            data.put("error", "You are not the runner who uploaded this result");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         TrainingSession ts = tsr.getSession();
         ts.removeResult(tsr);
         this.trainingSessionRepository.save(ts);
@@ -363,8 +445,18 @@ public class TrainingSessionResultService {
             data.put("error", "The training session result does not exist");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
-        String type = updateResultDTO.getType();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+
         TrainingSessionResult tsr = query.get();
+        if (tsr.getRunner().getId() != user.getId()) {
+            data.put("error", "You are not the runner who uploaded this result");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
+        String type = updateResultDTO.getType();
         tsr.setDescription(updateResultDTO.getDescription());
         tsr.setEffort(updateResultDTO.getEffort());
         tsr.setDate(updateResultDTO.getDate());
@@ -406,6 +498,13 @@ public class TrainingSessionResultService {
             data.put("error", "The plan does not exist");
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = u.getUser();
+        if (!Objects.equals(user.getId(), query.get().getCreator().getId())) {
+            data.put("error", "You are not the creator of this plan");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         List<TrainingSessionResult> results = this.trainingSessionResultRepository.findAllByPlan(planId);
         List<TrainingProgressDTO> resultsInfo = new ArrayList<>();
         results.forEach(result -> {

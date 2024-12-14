@@ -4,15 +4,15 @@ package com.example.API_Running.services;
 import com.example.API_Running.dtos.CreateManualActivityDTO;
 import com.example.API_Running.dtos.ManualActivityDTO;
 import com.example.API_Running.dtos.ModifyManualActivityDTO;
-import com.example.API_Running.models.ManualActivity;
-import com.example.API_Running.models.Material;
-import com.example.API_Running.models.Runner;
+import com.example.API_Running.models.*;
 import com.example.API_Running.repository.ManualActivityRepository;
 import com.example.API_Running.repository.MaterialRepository;
 import com.example.API_Running.repository.RunnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +44,15 @@ public class ManualActivityService {
         Integer fcAvg = createManualActivityDTO.getFcAvg();
         LocalDateTime date = createManualActivityDTO.getDate();
         Long runnerId = createManualActivityDTO.getRunnerId();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), runnerId)) {
+            data.put("error", "You can not create activities on behalf of other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
         if (!query.isPresent()) {
             data.put("error", "Runner not found");
@@ -81,6 +90,14 @@ public class ManualActivityService {
         }
         ManualActivity manualActivity = query.get();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), manualActivity.getRunner().getId())) {
+            data.put("error", "You can not delete an activity that is not yours");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
         Set<Material> mats = manualActivity.getMaterials();
         mats.stream().forEach(mat -> {
             Float actWear = mat.getWear();
@@ -100,6 +117,13 @@ public class ManualActivityService {
         if (!query.isPresent()) {
             data.put("error", "Manual activity not found");
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), query.get().getRunner().getId())) {
+            data.put("error", "You can not create activities on behalf of other users");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         try {
             byte[] routeBytes = route.getBytes();
@@ -124,6 +148,13 @@ public class ManualActivityService {
             return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
         }
         ManualActivity manualActivity = query.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), manualActivity.getRunner().getId())) {
+            data.put("error", "You can not get other runner's activities");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         ManualActivityDTO info = new ManualActivityDTO(manualActivity);
         data.put("data", info);
         return new ResponseEntity<>(data,HttpStatus.OK);
@@ -136,6 +167,14 @@ public class ManualActivityService {
             data.put("error", "Manual activity not found");
         }
         ManualActivity mAct = query.get();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), mAct.getRunner().getId())) {
+            data.put("error", "You can not update other runner's activities");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
 
         Set<Material> mats = mAct.getMaterials();
         mats.stream().forEach(mat -> {

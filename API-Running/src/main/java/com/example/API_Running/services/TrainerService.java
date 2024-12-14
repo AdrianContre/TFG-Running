@@ -3,15 +3,14 @@ package com.example.API_Running.services;
 import com.example.API_Running.dtos.TrainerDTO;
 import com.example.API_Running.dtos.UpdateTrainerDTO;
 import com.example.API_Running.dtos.UserZonesDTO;
-import com.example.API_Running.models.Runner;
-import com.example.API_Running.models.Trainer;
-import com.example.API_Running.models.TrainingPlan;
-import com.example.API_Running.models.User;
+import com.example.API_Running.models.*;
 import com.example.API_Running.repository.TrainerRepository;
 import com.example.API_Running.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,6 +29,13 @@ public class TrainerService {
 
     public ResponseEntity<Object> updateTrainer(Long trainerId, UpdateTrainerDTO updateTrainerDTO) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), trainerId)) {
+            data.put("error", "You can not update other trainer profile that is not yours");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (query.isPresent()) {
             Trainer trainer = query.get();
@@ -68,6 +74,13 @@ public class TrainerService {
 
     public ResponseEntity<Object> getZones(Long trainerId) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), trainerId)) {
+            data.put("error", "You can not get the training zones of other trainers");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (!query.isPresent()) {
             data.put("error", "User not found");
@@ -88,6 +101,13 @@ public class TrainerService {
 
     public ResponseEntity<Object> getTrainerStats(Long trainerId) {
         HashMap<String,Object> data = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
+        User userAuth = u.getUser();
+        if (!Objects.equals(userAuth.getId(), trainerId)) {
+            data.put("error", "You can not get the stats of other trainers");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
         Optional<Trainer> query = this.trainerRepository.findById(trainerId);
         if (!query.isPresent()) {
             data.put("error", "User not found");

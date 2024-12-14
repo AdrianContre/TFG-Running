@@ -77,6 +77,15 @@ public class UserService {
 
     public ResponseEntity<Object> uploadProfilePicture(Long userId, MultipartFile profilePicture) {
         HashMap<String,Object> data = new HashMap<>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImplementation udp = (UserDetailsImplementation) authentication.getPrincipal();
+        User user = udp.getUser();
+        if (user.getId().equals(userId)) {
+            data.put("error", "You can not edit a profile that is not yours");
+            return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
+        }
+
         Optional<User> query = this.userRepository.findById(userId);
         if (!query.isPresent()) {
             data.put("error", "User not found");
@@ -123,10 +132,13 @@ public class UserService {
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
+        Optional<User> user_query = this.userRepository.findById(userId);
+        if (!user_query.isPresent()) {
+            data.put("error", "User not found");
+            return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
+        User user = user_query.get();
         
         List<Comment> user_comments = new ArrayList<>(user.getComments());
         for (Comment c : user_comments) {

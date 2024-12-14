@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -170,4 +171,5 @@ public class TrainingPlan {
     public void setWearMaterial(String wearMaterial) {
         this.wearMaterial = wearMaterial;
     }
+
 }
