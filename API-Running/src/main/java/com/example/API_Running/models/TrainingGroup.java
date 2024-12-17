@@ -2,6 +2,7 @@ package com.example.API_Running.models;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -102,5 +103,19 @@ public class TrainingGroup {
 
     public void removeTrainingPlan(TrainingPlan tp) {
         this.trainingPlans.remove(tp);
+    }
+
+    public void removeUser(Runner r) {
+        this.runners.remove(r);
+    }
+
+    public Boolean belongsUser(Long userId) {
+        Boolean belongs = false;
+        for (Runner runner : this.runners) {
+            if (Objects.equals(runner.getId(), userId)) {
+                belongs = true;
+            }
+        }
+        return belongs;
     }
 }

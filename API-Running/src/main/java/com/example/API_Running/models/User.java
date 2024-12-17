@@ -37,6 +37,9 @@ public abstract class User {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Column(name="termsAccepted")
+    private Boolean termsAccepted;
+
     public User() {}
 
     public User(Long id, String name, String surname, String mail, String username, String password) {
@@ -118,5 +121,13 @@ public abstract class User {
 
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
+    }
+
+    public Boolean getTermsAccepted() {
+        return termsAccepted;
+    }
+
+    public void setTermsAccepted(Boolean termsAccepted) {
+        this.termsAccepted = termsAccepted;
     }
 }

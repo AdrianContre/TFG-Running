@@ -18,7 +18,7 @@ export const loginService = async (username, password) => {
     });
   };
 
-export const registerService = async (name, surname, mail, username, password, isTrainer) => {
+export const registerService = async (name, surname, mail, username, password, isTrainer, isTermsAccepted) => {
   return fetch ("http://localhost:8081/api/v1/auth/register", {
     method: 'POST', 
     headers: {
@@ -34,7 +34,8 @@ export const registerService = async (name, surname, mail, username, password, i
       height: 0,
       fcMax: 0,
       trainer: isTrainer,
-      experience: 0
+      experience: 0,
+      termsAccepted: isTermsAccepted
     })
   })
   .then(response => {

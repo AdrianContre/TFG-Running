@@ -108,5 +108,69 @@ export const uploadPicture = async (id, formData) => {
       });
 }
 
+export const deleteProfile = async (userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${END_POINT_USERS}/${userId}`,{
+        method: 'DELETE',
+        headers: {
+        'Authorization': authHeader,
+        },
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error;
+      });
+}
+
+export const getRunnerStats = async (runnerId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${END_POINT_RUNNER}/${runnerId}/stats`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log(data)
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error; 
+      });
+}
+
+export const getTrainerStats = async (userId) => {
+  const authHeader = `Bearer ${localStorage.getItem('token')}`
+    return fetch(`${END_POINT_TRAINER}/${userId}/stats`,{
+        method: 'GET',
+        headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log(data)
+        return data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        throw error; 
+      });
+}
+
 
 

@@ -9,6 +9,7 @@ public class ListPlansDTO {
     private String level;
     private String trainerName;
     private String trainerSurname;
+    private String wearMaterial;
 
     public ListPlansDTO(TrainingPlan trainingPlan) {
         this.id = trainingPlan.getId();
@@ -17,6 +18,7 @@ public class ListPlansDTO {
         this.level = trainingPlan.getLevel();
         this.trainerName = trainingPlan.getCreator().getName();
         this.trainerSurname = trainingPlan.getCreator().getSurname();
+        this.wearMaterial = trainingPlan.getWearMaterial();
     }
 
     public Long getId() {
@@ -65,6 +67,14 @@ public class ListPlansDTO {
 
     public void setTrainerSurname(String trainerSurname) {
         this.trainerSurname = trainerSurname;
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
     }
 }
 

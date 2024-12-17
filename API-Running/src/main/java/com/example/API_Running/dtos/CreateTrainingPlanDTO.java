@@ -11,8 +11,9 @@ public class CreateTrainingPlanDTO {
     private List<List<SessionDTO>> sessions;
     private Long trainerId;
     private List<Long> groupsId;
+    private String wearMaterial;
 
-    public CreateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions, Long trainerId, List<Long> groupsId) {
+    public CreateTrainingPlanDTO(String name, String description, Integer numWeeks, String objDistance, String level, List<List<SessionDTO>> sessions, Long trainerId, List<Long> groupsId, String wearMaterial) {
         this.name = name;
         this.description = description;
         this.numWeeks = numWeeks;
@@ -21,6 +22,7 @@ public class CreateTrainingPlanDTO {
         this.sessions = sessions;
         this.trainerId = trainerId;
         this.groupsId = groupsId;
+        this.wearMaterial = wearMaterial;
     }
 
     public String getName() {
@@ -85,5 +87,13 @@ public class CreateTrainingPlanDTO {
 
     public void setGroupsId(List<Long> groupsId) {
         this.groupsId = groupsId;
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
     }
 }

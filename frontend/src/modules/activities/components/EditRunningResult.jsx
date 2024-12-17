@@ -12,6 +12,7 @@ import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import RatingComponent from "../../TrainingPlans/components/RatingComponent";
 import { uploadRouteToResult } from "../../TrainingPlans/services/trainingResultService";
+import { Spinner } from "react-bootstrap";
 
 function EditRunningResult() {
     registerLocale('es', es)
@@ -34,6 +35,7 @@ function EditRunningResult() {
     const [error, setError] = useState("")
     const [title, setTitle] = useState("")
     const [date,setDate] = useState(new Date())
+    const [activity, setActivity] = useState(null)
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -68,6 +70,7 @@ function EditRunningResult() {
                 })
             })
             setSelectedMaterials(selected); 
+            setActivity(runningResult.data)
         };
 
 
@@ -124,6 +127,14 @@ function EditRunningResult() {
 
     }
 
+    if (!activity) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
+
     return (
         <>
             <NavigationBar />
@@ -161,7 +172,7 @@ function EditRunningResult() {
                             <Select
                                 isMulti
                                 options={materialOptions}
-                                value={selectedMaterials} // Preselecciona los materiales de la actividad
+                                value={selectedMaterials}
                                 onChange={(selected) => setSelectedMaterials(selected)}
                                 className="custom-select-createact"
                             />

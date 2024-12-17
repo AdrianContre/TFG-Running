@@ -12,6 +12,9 @@ public interface TrainingProgressRepository extends JpaRepository<TrainingProgre
     @Query("SELECT tp FROM TrainingProgress tp WHERE tp.runner.id = :userId and tp.trainingPlan.id = :planId")
     Optional<TrainingProgress> findProgressByPlanAndRunner(@Param("userId") Long userId, @Param("planId") Long planId);
 
+    @Query("SELECT tp FROM TrainingProgress tp WHERE tp.trainingPlan.id = :planId")
+    List<TrainingProgress> findProgressesByPlanId(@Param("planId") Long planId);
+
     @Query("SELECT tp FROM TrainingProgress tp WHERE tp.runner.id = :userId")
     List<TrainingProgress> findAllUserProgress(@Param("userId") Long userId);
 }

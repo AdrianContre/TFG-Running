@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
 import { registerService } from "../services/authService";
 import PopUp from './PopUp'
+import { getUserLogged } from "../../home/services/mainService";
 
 
 
@@ -20,6 +21,8 @@ function Register () {
     const [isTrainer, setIsTrainer] = useState(false)
     const [error, setError] = useState("")
     const [show,setShow] = useState(false)
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+    const [consent, setConsent] = useState(false)
 
     const updateUsername = (event) => {
         setUsername(event.target.value)
@@ -44,6 +47,13 @@ function Register () {
         setIsTrainer(event.target.value);
     };
     
+    const handleCheckboxChange = (event) => {
+        setIsTermsAccepted(event.target.checked);
+    };
+
+    const handleConsentChange = (event) => {
+        setConsent(event.target.checked);
+    };
     
 
     const handleClick = async (event) => {
@@ -55,12 +65,16 @@ function Register () {
         }
         else {
             try {
-                const data = await registerService(name, surname, mail, username, password, isTrainer);
+                const data = await registerService(name, surname, mail, username, password, isTrainer, isTermsAccepted);
                 if (data.token) {
                     localStorage.setItem('token', data.token)
                     console.log(data.token)
                     console.log('Registration successful:', data);
-                    navigate('/main')
+
+                    const user = await getUserLogged();
+                    localStorage.setItem('userAuth', JSON.stringify(user))
+                    navigate('/activities')
+                    //navigate('/main')
                 }
                 else {
                     if (data.error) {
@@ -112,8 +126,16 @@ function Register () {
                         <option value="false" selected>Corredor</option>
                         <option value="true">Entrenador</option>
                     </select>
+                    <label>
+                    <input className="checkbox" type="checkbox" onChange={handleConsentChange}/>
+                    Declaro que soy mayor de edad o cuento con el consentimiento de mi representante legal para registrarme en esta plataforma.
+                    </label>
+                    <label>
+                    <input className="checkbox" type="checkbox" id="termsCheckbox" onChange={handleCheckboxChange}/>
+                    He leído y acepto los <a className="custom-label-register" style={{ marginTop: '10px', cursor: 'pointer'}}  onClick={() => {navigate('/terms')}}>Términos y Condiciones</a> y la <a className="custom-label-register" style={{ marginTop: '10px', cursor: 'pointer'}}  onClick={() => {navigate('/privacy')}}>Política de Privacidad</a>.
+                    </label>
                     <a className="custom-label-register" style={{fontSize: '20px', marginTop: '10px', cursor: 'pointer'}} onClick={handleAlreadyAnAccount}>Ya tienes cuenta ?</a>
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-register' onClick={handleClick}>REGISTRATE</Button>
+                    <Button id="register-button" variant='primary' size='lg' className='mt-5 custom-button-register' onClick={handleClick} disabled={!isTermsAccepted || !consent}>REGISTRATE</Button>
                     
                 </div>
             </div>

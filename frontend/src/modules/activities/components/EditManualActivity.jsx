@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
+import { Spinner } from "react-bootstrap";
 
 function EditManualActivity () {
     registerLocale('es', es)
@@ -31,6 +32,7 @@ function EditManualActivity () {
     const [error, setError] = useState("")
     const [title, setTitle] = useState("")
     const [date,setDate] = useState(new Date())
+    const [manualActivity, setManualActivity] = useState(null)
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -63,6 +65,7 @@ function EditManualActivity () {
                 })
             })
             setSelectedMaterials(selected); 
+            setManualActivity(manualActivity.data)
         };
 
 
@@ -110,6 +113,14 @@ function EditManualActivity () {
             
         }
 
+    }
+
+    if (!manualActivity) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
     }
 
     return (

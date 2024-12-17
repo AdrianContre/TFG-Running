@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -42,6 +43,9 @@ public class TrainingPlan {
 
     @ManyToMany(mappedBy = "trainingPlans")
     private Set<TrainingGroup> groups;
+
+    @Column(name="wearMaterial",nullable = false)
+    private String wearMaterial;
 
     public TrainingPlan() {}
 
@@ -147,4 +151,25 @@ public class TrainingPlan {
         }
         return counter;
     }
+
+    public void removeGroup(TrainingGroup group) {
+        this.groups.remove(group);
+    }
+
+    public void removeProgress(TrainingProgress tp) {
+        this.trainingProgresses.remove(tp);
+    }
+
+    public void removeWeek(TrainingWeek week) {
+        this.trainingWeeks.remove(week);
+    }
+
+    public String getWearMaterial() {
+        return wearMaterial;
+    }
+
+    public void setWearMaterial(String wearMaterial) {
+        this.wearMaterial = wearMaterial;
+    }
+
 }

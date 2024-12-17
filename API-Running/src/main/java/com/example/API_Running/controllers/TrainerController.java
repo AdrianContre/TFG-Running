@@ -27,4 +27,9 @@ public class TrainerController {
     public ResponseEntity<Object> getZones (@PathVariable Long trainerId) {
         return this.trainerService.getZones(trainerId);
     }
+
+    @GetMapping(path="/{trainerId}/stats")
+    public ResponseEntity<Object> getTrainerStats (@PathVariable Long trainerId) {
+        return this.trainerService.getTrainerStats(trainerId);
+    }
 }

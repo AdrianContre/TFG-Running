@@ -48,6 +48,7 @@ function EditProfile () {
                 updateError = true
                 errorMessage = userUpdated.error
             }
+            else localStorage.setItem('token', userUpdated.token)
         }
         else {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
@@ -55,6 +56,7 @@ function EditProfile () {
                 updateError = true
                 errorMessage = userUpdated.error
             }
+            else localStorage.setItem('token', userUpdated.token)
         }
         if (updateError === true) {
             const user = await getUserLogged();

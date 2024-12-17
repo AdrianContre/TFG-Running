@@ -7,6 +7,7 @@ import { useState } from 'react';
 import {loginService} from '../services/authService'
 import { useNavigate } from 'react-router';
 import PopUp from './PopUp'
+import { getUserLogged } from '../../home/services/mainService';
 
 function Login() {
 
@@ -18,7 +19,11 @@ function Login() {
             const data = await loginService(username, password);
             if (data.token) {
                 localStorage.setItem('token', data.token)
-                navigate('/main')
+
+                const user = await getUserLogged();
+                localStorage.setItem('userAuth', JSON.stringify(user))
+                navigate('/activities')
+                
             }
             else {
                 setPassword("")

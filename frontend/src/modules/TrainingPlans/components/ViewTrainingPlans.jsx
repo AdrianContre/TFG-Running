@@ -7,11 +7,12 @@ import { useNavigate } from "react-router"
 import { getOtherUsersPlans } from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 import Paginator from "../../../Paginator"
+import { Spinner } from "react-bootstrap"
 
 function ViewTrainingPlans () {
     const navigate = useNavigate()
     const [isTrainer, setIsTrainer] = useState(null)
-    const [plans,setPlans] = useState([])
+    const [plans,setPlans] = useState(null)
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
@@ -36,12 +37,7 @@ function ViewTrainingPlans () {
         fetchInfo()
         
     },[])
-    const handleClick = (event) => {
-        event.preventDefault();
-        navigate('/createtrainingplans')
-    }
-
-
+    
     const handleFilterChange = () => {
         let filtered = plans;
         
@@ -59,6 +55,14 @@ function ViewTrainingPlans () {
     useEffect(() => {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
+
+    if (!plans) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
 
     const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
     const indexOfLastPlan = currentPage * plansPerPage;
@@ -97,19 +101,7 @@ function ViewTrainingPlans () {
             <p className='text-custom'>
              NO HAY PLANES DISPONIBLES</p>
          </div>)}
-            
 
-            {isTrainer ? (
-                <div className="image-container">
-                    <div className="circle-container">
-                        <img className="circle-image" src={CirclePlus} onClick={handleClick}/>
-                        <div className="tooltip-text-view-training-plans">Crear plan de entrenamiento</div>
-                    </div>
-                </div> 
-            ): (
-                <>
-                </>
-            )}
             <div className="plans-container">
                 {currentPlans.map((plan, index) => (
                     <TrainingPlanCard
@@ -120,6 +112,7 @@ function ViewTrainingPlans () {
                         level={plan.level}
                         trainerName={plan.trainerName}
                         trainerSurname={plan.trainerSurname}
+                        wearMaterial={plan.wearMaterial}
                     />
                 ))}
             </div>

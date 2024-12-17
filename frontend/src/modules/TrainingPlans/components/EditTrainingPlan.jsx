@@ -22,6 +22,7 @@ function EditTrainingPlan() {
     const [description, setDescription] = useState('');
     const [level,setLevel] = useState("Principiante")
     const [objDistance, setObjDistance] = useState("5K")
+    const [wearMaterial, setWearMaterial] = useState("< 300km")
     const [sessionsInfo, setSessionsInfo] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [sessions, setSessions] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [showModal, setShowModal] = useState(false);
@@ -56,6 +57,7 @@ function EditTrainingPlan() {
             setLevel(planInfo.level)
             setSessionsInfo(Array(numWeeks).fill(Array(7).fill(null)))
             setGroups(planInfo.groups)
+            setWearMaterial(planInfo.wearMaterial)
             
             
 
@@ -101,6 +103,10 @@ function EditTrainingPlan() {
     const handleObjChange = (event) => {
         setObjDistance(event.target.value); // Actualiza el valor del estado con el seleccionado
     };
+
+    const handleWearChange = (event) => {
+        setWearMaterial(event.target.value)
+    }
 
     const updateNumWeeks = (increment) => {
         const newNumWeeks = numWeeks + increment;
@@ -195,7 +201,7 @@ function EditTrainingPlan() {
             groupsId.push(selected.value)
         })
         if (allSessionsFilled) {
-            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, groupsId)
+            const send = await editPlan(planId,name, description, numWeeks, objDistance, level, sessionsInfo, groupsId, wearMaterial)
             if (send) {
                 navigate('/viewplan', { state: {planId: planId}})
             }
@@ -284,6 +290,14 @@ function EditTrainingPlan() {
                             <option value="Principiante">Principiante</option>
                             <option value="Intermedio">Intermedio</option>
                             <option value="Avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'>Desgaste de material:</label>
+                        <select className='custom-input-create-plan' value={wearMaterial} onChange={handleWearChange}>
+                            <option value="low">{'< 300km'}</option>
+                            <option value="medium">300-500km</option>
+                            <option value="high">{'> 500km'}</option>
                         </select>
                     </div>
                 </div>

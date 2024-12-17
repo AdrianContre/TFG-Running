@@ -4,10 +4,11 @@ import TrainingPlanCard from "./TrainingPlanCard"
 import NavigationBar from "../../home/components/NavigationBar";
 import { getUserEnrolledPlans } from "../services/trainingService";
 import Paginator from "../../../Paginator";
+import { Spinner } from "react-bootstrap";
 
 function ListEnrolledPlans() {
 
-    const [plans,setPlans] = useState([])
+    const [plans,setPlans] = useState(null)
     const [filteredPlans, setFilteredPlans] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
@@ -25,6 +26,7 @@ function ListEnrolledPlans() {
             setFilteredPlans(trainersPlans)
         }
         fetchData()
+        console.log("planes: " + filteredPlans)
     },[])
 
     const handleFilterChange = () => {
@@ -44,6 +46,14 @@ function ListEnrolledPlans() {
     useEffect(() => {
         handleFilterChange();
     }, [selectedDistance, selectedLevel]);
+
+    if (!plans) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
 
     const totalPages = Math.ceil(filteredPlans.length / plansPerPage);
     const indexOfLastPlan = currentPage * plansPerPage;
@@ -95,6 +105,7 @@ function ListEnrolledPlans() {
                         trainerSurname={plan.trainerSurname}
                         numSessions={plan.numSessions}
                         sessionsCompleted={plan.sessionsCompleted}
+                        wearMaterial={plan.wearMaterial}
                     />
                 ))}
             </div>

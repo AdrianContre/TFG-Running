@@ -4,7 +4,6 @@ import './App.css'
 import {Link, Route, Routes} from 'react-router-dom'
 import Login from './modules/auth/components/Login';
 import Register from './modules/auth/components/Register';
-import Main from './modules/home/components/Main';
 import EditProfile from './modules/profile/components/editProfile';
 import ViewProfile from './modules/profile/components/viewProfile';
 import ListMaterials from './modules/profile/components/ListMaterials';
@@ -36,6 +35,8 @@ import ViewGroup from './modules/groups/components/ViewGroup';
 import EditGroup from './modules/groups/components/EditGroup';
 import ListGroupPlans from './modules/TrainingPlans/components/ListGroupPlans';
 import CommentScreen from './modules/comments/components/CommentScreen';
+import TermsConditions from './modules/terms/components/TermsConditions';
+import PrivacyPolitic from './modules/terms/components/PrivacyPolitic';
 
 
 
@@ -91,9 +92,10 @@ function App() {
         <Route path='/listmaterials' element={<AuthRoute element={ListMaterials}/>} />
         <Route path='/profile' element={<AuthRoute element={ViewProfile}/>} />
         <Route path='/editprofile' element={<AuthRoute element={EditProfile}/>} />
+        <Route path='/privacy' element={<PrivacyPolitic/>} />
+        <Route path='/terms' element={<TermsConditions/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
-        <Route path='/main' element={<AuthRoute element={Main}/>} />
         <Route path='/' element={<Home/>} />
       </Routes>
   )

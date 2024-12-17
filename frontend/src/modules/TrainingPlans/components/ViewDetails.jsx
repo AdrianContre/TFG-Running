@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { enrollUserToPlan, getPlanInfo, unenrollUserToPlan } from "../services/trainingService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserGroup, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faUserGroup, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus, faShirt} from '@fortawesome/free-solid-svg-icons';
 import ModalSession from "./ModalSession";
 import { Button, Spinner } from "react-bootstrap";
 import { getUserResultsPlan } from "../services/trainingResultService";
@@ -21,6 +21,7 @@ function ViewDetails () {
     const [numWeeks, setNumWeeks] = useState(0)
     const [objDistance, setObjDistance] = useState("")
     const [level, setLevel] = useState("")
+    const [wearMaterial, setWearMaterial] = useState('')
     const [trainingWeeks, setTrainingWeeks] = useState([])
     const [trainer, setTrainer] = useState({})
     const [sessionsInfo, setSessionsInfo] = useState(Array(numWeeks).fill(Array(7).fill(null)));
@@ -56,6 +57,16 @@ function ViewDetails () {
             
             const user = JSON.parse(localStorage.getItem("userAuth"))
             setUserAuth(user)
+
+            if (planInfo.wearMaterial === "low") {
+                setWearMaterial("< 300km")
+            }
+            else if (planInfo.wearMaterial === "medium") {
+                setWearMaterial('300-500km')
+            }
+            else {
+                setWearMaterial('> 500km')
+            }
 
             
             const weeklySessionsMatrix = planInfo.trainingWeeks.map(week => {
@@ -297,6 +308,10 @@ function ViewDetails () {
                     <div className="form-group-create-plan">
                         <label className='custom-label-create-plan'><FontAwesomeIcon icon={faSignal} /> Nivel:</label>
                         <span>{level}</span>
+                    </div>
+                    <div className="form-group-create-plan">
+                        <label className='custom-label-create-plan'><FontAwesomeIcon icon={faShirt} /> Desgaste de material:</label>
+                        <span>{wearMaterial}</span>
                     </div>
                     {groups.length > 0 ? (<div className="form-group-create-group">
                         <label className="custom-label-create-group"><FontAwesomeIcon icon={faUserGroup} />Grupos:</label>

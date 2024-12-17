@@ -7,9 +7,10 @@ import '../styles/listGroup.css'
 import {getTrainerGroups } from "../services/groupService";
 import GroupCard from "./GroupCard";
 import Paginator from "../../../Paginator";
+import { Spinner } from "react-bootstrap";
 
 function ListMyGroups() {
-    const [groups, setGroups] = useState([{}])
+    const [groups, setGroups] = useState(null)
     const [isTrainer, setIsTrainer] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [groupsPerPage] = useState(10); 
@@ -30,6 +31,14 @@ function ListMyGroups() {
     const handleClick = (event) => {
         event.preventDefault()
         navigate('/creategroup')
+    }
+
+    if (!groups) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
     }
 
     const totalPages = Math.ceil(groups.length / groupsPerPage);

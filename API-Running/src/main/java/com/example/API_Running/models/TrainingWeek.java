@@ -82,4 +82,8 @@ public class TrainingWeek {
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
     }
+
+    public void removeSession(TrainingSession session) {
+        this.sessions.remove(session);
+    }
 }
