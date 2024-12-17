@@ -25,11 +25,13 @@ public class RunnerService {
     private final RunnerRepository runnerRepository;
     private final UserRepository userRepository;
     private final ActivityRepository activityRepository;
+    private final JwtService jwtService;
 
-    public RunnerService (RunnerRepository runnerRepository, UserRepository userRepository, ActivityRepository activityRepository) {
+    public RunnerService (RunnerRepository runnerRepository, UserRepository userRepository, ActivityRepository activityRepository, JwtService jwtService) {
         this.runnerRepository = runnerRepository;
         this.userRepository = userRepository;
         this.activityRepository = activityRepository;
+        this.jwtService = jwtService;
     }
 
     public ResponseEntity<Object> updateRunner(Long runnerId, UpdateRunnerDTO updateRunnerDTO) {
@@ -64,6 +66,11 @@ public class RunnerService {
             this.runnerRepository.save(runner);
             RunnerDTO info = new RunnerDTO(runner);
             data.put("data", info);
+
+            UserDetailsImplementation updatedUserDetails = new UserDetailsImplementation(runner);
+            String newToken = jwtService.getToken(updatedUserDetails);
+            data.put("token", newToken);
+
             return new ResponseEntity<>(
                     data,
                     HttpStatus.OK

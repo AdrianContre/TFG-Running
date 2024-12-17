@@ -81,7 +81,7 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImplementation udp = (UserDetailsImplementation) authentication.getPrincipal();
         User user = udp.getUser();
-        if (user.getId().equals(userId)) {
+        if (!user.getId().equals(userId)) {
             data.put("error", "You can not edit a profile that is not yours");
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }

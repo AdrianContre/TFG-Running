@@ -20,11 +20,13 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Autowired
-    public TrainerService (TrainerRepository trainerRepository, UserRepository userRepository) {
+    public TrainerService (TrainerRepository trainerRepository, UserRepository userRepository, JwtService jwtService) {
         this.trainerRepository = trainerRepository;
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     public ResponseEntity<Object> updateTrainer(Long trainerId, UpdateTrainerDTO updateTrainerDTO) {
@@ -60,6 +62,9 @@ public class TrainerService {
             this.trainerRepository.save(trainer);
             TrainerDTO info = new TrainerDTO(trainer);
             data.put("data", info);
+            UserDetailsImplementation updatedUserDetails = new UserDetailsImplementation(trainer);
+            String newToken = jwtService.getToken(updatedUserDetails);
+            data.put("token", newToken);
             return new ResponseEntity<>(
                     data,
                     HttpStatus.OK
