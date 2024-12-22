@@ -155,7 +155,7 @@ function EditGenericResult() {
                             />
                         </div>
                     </div>
-                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleSendActivity}>AÑADIR</Button>
+                    <Button variant='primary' size='lg' className='mt-5 custom-button-createact' onClick={handleSendActivity}>EDITAR</Button>
                 </div>
             </div>
             <PopUp error={error} show={show} onHide={handleHide} title={title}/>

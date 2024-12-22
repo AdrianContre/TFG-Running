@@ -62,7 +62,7 @@ function EditMaterial () {
             <NavigationBar />
             <div className='d-flex align-items-center justify-content-center' style={{marginTop: '5%'}}> 
                 <div className='container-createmat d-grid d-flex align-items-center'>
-                    <h1 className="custom-h1">Añadir material</h1>
+                    <h1 className="custom-h1">Editar material</h1>
                     <div className='container-createmat d-grid d-flex align-items-center' style={{marginTop: '50px',}}>
                         <label className='custom-label-createmat' htmlFor="brand">MARCA</label>
                         <input name='brand' value={brand} onChange={updateValue(setBrand)} className='custom-input-register' ></input>
