@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import PopUp from "../../auth/components/PopUp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import { Spinner } from "react-bootstrap";
 

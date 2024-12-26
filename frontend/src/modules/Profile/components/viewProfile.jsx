@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Zones from "./zones";
 import { useEffect } from "react";
 import { deleteProfile, getRunnerZones, getTrainerZones } from "../services/profileService";
-import { Navigate, useNavigate } from "react-router";
+import {useNavigate } from "react-router";
 import Modal from 'react-bootstrap/Modal';
 import UserStats from "./UserStats";
 import { Spinner } from "react-bootstrap";

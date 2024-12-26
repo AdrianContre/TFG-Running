@@ -1,8 +1,6 @@
 import React from 'react'
-import background from '../../../assets/images/background.png'
 import '../styles/Login.css'
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import {loginService} from '../services/authService'
 import { useNavigate } from 'react-router';

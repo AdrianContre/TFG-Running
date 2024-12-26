@@ -6,11 +6,10 @@ import PopUp from "../../auth/components/PopUp";
 import Button from 'react-bootstrap/Button';
 import '../../activities/styles/createActivity.css'
 import Select from "react-select";
-import { addRoute, createManualActivity } from '../../activities/services/activitiesService';
 import { useLocation, useNavigate } from "react-router";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import RatingComponent from "./RatingComponent";
 import { createRunningSessionResult, uploadRouteToResult } from "../services/trainingResultService";

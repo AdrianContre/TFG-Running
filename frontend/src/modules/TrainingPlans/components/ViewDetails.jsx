@@ -8,7 +8,6 @@ import { faUserGroup, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus, faShirt
 import ModalSession from "./ModalSession";
 import { Button, Spinner } from "react-bootstrap";
 import { getUserResultsPlan } from "../services/trainingResultService";
-import { ChartNoAxesColumnDecreasing } from "lucide-react";
 
 
 function ViewDetails () {

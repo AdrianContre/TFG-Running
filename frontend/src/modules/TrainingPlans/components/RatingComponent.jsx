@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faFrown, faMeh } from '@fortawesome/free-regular-svg-icons';
 import '../styles/rating.css'
-import { useEffect } from 'react';
 
 const RatingComponent = ({ onChange }) => {
     const [selectedRating, setSelectedRating] = useState(null);
 
-    // Iconos para los niveles de satisfacción
+
     const ratings = [
         { value: 1, label: "Fatal", icon: faFrown },
         { value: 2, label: "Mal", icon: faFrown },
@@ -18,7 +17,7 @@ const RatingComponent = ({ onChange }) => {
 
     const handleRatingClick = (value) => {
         setSelectedRating(value);
-        onChange(value); // Enviar el valor seleccionado al backend
+        onChange(value); 
     };
 
 
