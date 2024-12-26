@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import "../styles/ResultsList.css" // Importa el archivo CSS
+import "../styles/ResultsList.css"
 
 const ResultsList = ({ results }) => {
     const navigate = useNavigate()

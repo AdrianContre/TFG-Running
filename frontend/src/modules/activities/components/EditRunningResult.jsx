@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
-import { addRoute, editManualActivity, editResult, getManualActivity, getRunningResult } from "../services/activitiesService";
+import {editResult, getRunningResult } from "../services/activitiesService";
 import Select from "react-select";
 import { getUserMaterials } from "../../profile/services/materialService";
 import Button from 'react-bootstrap/Button';
 import PopUp from "../../auth/components/PopUp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import RatingComponent from "../../TrainingPlans/components/RatingComponent";
 import { uploadRouteToResult } from "../../TrainingPlans/services/trainingResultService";

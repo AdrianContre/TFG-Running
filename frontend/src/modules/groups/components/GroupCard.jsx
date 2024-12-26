@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faRunning,faUser, faUserGroup} from '@fortawesome/free-solid-svg-icons'
+import {faUser, faUserGroup} from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from "react-router";
 import '../styles/groupCard.css'
 

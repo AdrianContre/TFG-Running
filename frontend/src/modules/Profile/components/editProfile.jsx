@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from 'react';
 import { updateRunnerProfile, updateTrainerProfile, uploadPicture } from '../services/profileService';
 import PopUp from '../../auth/components/PopUp'
 import { getUserLogged } from '../../home/services/mainService';
-import { Navigate, useNavigate } from 'react-router';
+import {useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faDownload} from '@fortawesome/free-solid-svg-icons'
 

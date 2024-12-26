@@ -1,5 +1,5 @@
-import { useState, useEffect, memo } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import {useLocation, useNavigate } from "react-router";
 import NavigationBar from "../../home/components/NavigationBar";
 import { Spinner, Button } from "react-bootstrap";
 import PopUp from "../../auth/components/PopUp";

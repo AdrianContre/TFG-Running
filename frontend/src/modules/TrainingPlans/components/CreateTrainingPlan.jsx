@@ -19,7 +19,7 @@ function CreateTrainingPlan() {
     const [description, setDescription] = useState('');
     const [level,setLevel] = useState("Principiante")
     const [objDistance, setObjDistance] = useState("5K")
-    const [wearMaterial, setWearMaterial] = useState("< 300km")
+    const [wearMaterial, setWearMaterial] = useState("low")
     const [sessionsInfo, setSessionsInfo] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [sessions, setSessions] = useState(Array(numWeeks).fill(Array(7).fill(null)));
     const [showModal, setShowModal] = useState(false);
@@ -145,6 +145,7 @@ function CreateTrainingPlan() {
         console.log(level)
         console.log(objDistance)
         console.log(sessionsInfo)
+        console.log(wearMaterial)
         const allSessionsFilled = sessionsInfo.every(week =>
             week.every(session => session !== null)
         );
@@ -260,17 +261,17 @@ function CreateTrainingPlan() {
                     <div className="form-group-create-plan">
                         <label className='custom-label-create-plan'>Nivel:</label>
                         <select className='custom-input-create-plan' value={level} onChange={handleLevelChange}>
-                            <option value="low">Principiante</option>
-                            <option value="medium">Intermedio</option>
-                            <option value="high">Avanzado</option>
+                            <option value="Principiante">Principiante</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
                         </select>
                     </div>
                     <div className="form-group-create-plan">
                         <label className='custom-label-create-plan'>Desgaste de material:</label>
                         <select className='custom-input-create-plan' value={wearMaterial} onChange={handleWearChange}>
-                            <option value="Principiante">{'< 300km'}</option>
-                            <option value="Intermedio">300-500km</option>
-                            <option value="Avanzado">{'> 500km'}</option>
+                            <option value="low">{'< 300km'}</option>
+                            <option value="medium">300-500km</option>
+                            <option value="high">{'> 500km'}</option>
                         </select>
                     </div>
                     <div className="form-group-create-plan">

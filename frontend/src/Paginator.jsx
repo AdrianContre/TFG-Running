@@ -1,8 +1,8 @@
 import React from 'react';
-import './Paginator.css'; // Opcional, para estilos específicos
+import './Paginator.css';
 
 const Paginator = ({ currentPage, totalPages, onPageChange }) => {
-    if (totalPages <= 1) return null; // No mostrar la paginación si hay una sola página
+    if (totalPages <= 1) return null; 
 
     return (
         <div className="paginator">

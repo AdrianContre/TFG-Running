@@ -1,4 +1,3 @@
-import { data } from "@remix-run/router";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";

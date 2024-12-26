@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 import Button from 'react-bootstrap/Button';
 import { editMaterial, uploadPhoto } from "../services/materialService";
-import { data } from "@remix-run/router";
 
 function EditMaterial () {
     const location = useLocation()

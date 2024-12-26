@@ -11,8 +11,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import { getUserMaterials } from "../../profile/services/materialService";
-import { createMobilitySessionResult, createStrengthSessionResult } from "../../TrainingPlans/services/trainingResultService";
 import { editResult, getMobilityResult, getStrengthResult } from "../services/activitiesService";
+import { Spinner } from "react-bootstrap";
 
 function EditGenericResult() {
     registerLocale('es', es)
@@ -115,6 +115,14 @@ function EditGenericResult() {
         }
         
     };
+
+    if (!rating) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
+                <Spinner animation="border" role="status"/>
+            </div>
+        )
+    }
 
     return (
         <>

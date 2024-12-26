@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import React from 'react'
 import '../styles/Register.css'
 import Button from 'react-bootstrap/Button';
@@ -74,7 +74,6 @@ function Register () {
                     const user = await getUserLogged();
                     localStorage.setItem('userAuth', JSON.stringify(user))
                     navigate('/activities')
-                    //navigate('/main')
                 }
                 else {
                     if (data.error) {

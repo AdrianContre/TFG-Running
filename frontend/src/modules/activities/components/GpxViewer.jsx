@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import {useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "leaflet-gpx";

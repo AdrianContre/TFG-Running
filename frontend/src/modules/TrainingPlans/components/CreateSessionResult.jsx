@@ -8,7 +8,7 @@ import '../../activities/styles/createActivity.css'
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import { getUserMaterials } from "../../profile/services/materialService";
 import { createMobilitySessionResult, createStrengthSessionResult } from "../services/trainingResultService";

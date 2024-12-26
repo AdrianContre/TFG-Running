@@ -1,6 +1,6 @@
 import NavigationBar from "../../home/components/NavigationBar";
 import { useState, useRef, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import '../styles/commentScreen.css';
 import { useLocation } from "react-router";
 import { createComment, getTrainingWeekComments } from "../services/commentsService";

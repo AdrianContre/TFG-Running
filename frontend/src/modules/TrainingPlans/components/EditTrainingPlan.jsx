@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/CreateTrainingPlan.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare, faCircleMinus, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
-import { createPlan, editPlan } from "../services/trainingService";
+import {editPlan } from "../services/trainingService";
 import { useLocation, useNavigate } from "react-router";
 import { getPlanInfo } from "../services/trainingService";
 import PopUp from "../../auth/components/PopUp";
