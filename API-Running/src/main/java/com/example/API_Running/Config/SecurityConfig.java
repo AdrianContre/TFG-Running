@@ -32,11 +32,13 @@ public class SecurityConfig {
 
     private final AuthenticationProvider authProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig (JwtAuthenticationFilter jwt, AuthenticationProvider auth) {
+    public SecurityConfig (JwtAuthenticationFilter jwt, AuthenticationProvider auth, CustomAuthenticationEntryPoint authenticationEntryPoint) {
         this.authProvider = auth;
         this.jwtAuthenticationFilter = jwt;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Bean
@@ -52,6 +54,8 @@ public class SecurityConfig {
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
                                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 .sessionManagement(sessionManager->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

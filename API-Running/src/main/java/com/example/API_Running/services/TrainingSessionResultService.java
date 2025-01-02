@@ -113,7 +113,7 @@ public class TrainingSessionResultService {
         }
 
         if (query2.get().getId() != user.getId()) {
-            data.put("error", "You can not create a mobility result for other user");
+            data.put("error", "You can not create a running result for other user");
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
 
