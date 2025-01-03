@@ -98,7 +98,7 @@ public class TrainingGroupService {
         UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
         User userAuth = u.getUser();
         if (!Objects.equals(userAuth.getId(), trainerId)) {
-            data.put("error", "You can not get other trainer plans");
+            data.put("error", "You can not get other trainer groups");
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         List<TrainingGroup> groups = this.trainingGroupRepository.findAllByCreator(trainerId);
