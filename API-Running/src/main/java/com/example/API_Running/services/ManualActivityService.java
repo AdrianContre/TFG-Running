@@ -122,7 +122,7 @@ public class ManualActivityService {
         UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
         User userAuth = u.getUser();
         if (!Objects.equals(userAuth.getId(), query.get().getRunner().getId())) {
-            data.put("error", "You can not create activities on behalf of other users");
+            data.put("error", "You can not upload a route in a activity that is not yours");
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         try {

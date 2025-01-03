@@ -89,7 +89,7 @@ public class RunnerService {
         UserDetailsImplementation u = (UserDetailsImplementation) authentication.getPrincipal();
         User userAuth = u.getUser();
         if (!Objects.equals(userAuth.getId(), runnerId)) {
-            data.put("error", "You can not get the training zones of other trainers");
+            data.put("error", "You can not get the training zones of other runners");
             return new ResponseEntity<>(data, HttpStatus.FORBIDDEN);
         }
         Optional<Runner> query = this.runnerRepository.findById(runnerId);
