@@ -1,0 +1,59 @@
+  .stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  p {
+    font-size: 16px;
+    color: black;
+    line-height: 1.5;
+  }
+  
+  p strong {
+    font-weight: bold;
+  }
+  
+  p:last-child {
+    margin-bottom: 20px;
+  }
+  
+
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .chart-container canvas {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+  
+
+  .material-info {
+    color: black;
+  }
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

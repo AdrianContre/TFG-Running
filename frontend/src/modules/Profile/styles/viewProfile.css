@@ -1,0 +1,103 @@
+.profile-layout {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.profile-left {
+    width: 40%; 
+}
+
+.profile-right {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    width: 60%;
+    margin-top: 50px;
+    border: 3px solid black;
+    border-radius: 20px;
+  }
+
+.profilecontainer {
+    display: flex;
+    align-items: center;
+    margin-left: 2%;
+    margin-top: 5%
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover; 
+}
+
+.profile-details {
+    margin-left:20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.profile-name {
+    font-size: 24px; 
+    font-weight: bold;
+    margin: 0; 
+}
+
+.profile-username {
+    font-size: 16px;
+    color: #555; 
+    margin: 0;
+}
+
+.custom-button-view-profile {
+    width: 170px;
+    height: 70px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.button-container-profile {
+    display: flex;
+    margin-top: 50px;
+    margin-left: 180px;
+    gap: 130px;
+}
+
+
+
+.custom-reference {
+    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.delete-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button-delete {
+    width: 200px;
+    height: 70px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    margin-bottom: 30px;    
+}
+
+.pop-up-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+}
+
+.container-zones {
+    width: 100%;
+}

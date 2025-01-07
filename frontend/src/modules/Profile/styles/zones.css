@@ -1,0 +1,44 @@
+.table-container-heart-zones {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+.heart-rate-zones-table {
+    width: 80%;
+    border-collapse: collapse;
+    text-align: center; 
+    border: 3px solid black;
+}
+
+.heart-rate-zones-table th,
+.heart-rate-zones-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center; 
+    border: 3px solid black;
+}
+
+.heart-rate-zones-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.zone-label {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.zone {
+    color: black;
+    font-weight: bold;
+}
+
+.zone1 { background-color: #c0c0c0; }
+.zone2 { background-color: #00ffff; }
+.zone3 { background-color: #00ff00; } 
+.zone4 { background-color: #ff8100; } 
+.zone5 { background-color: #e1251b; } 
+

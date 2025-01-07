@@ -1,0 +1,68 @@
+.container-profile-image {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 5%;
+    margin-top: 5%;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.container-column {
+    display: flex;
+    justify-content: space-between; 
+    margin: 2% auto;
+    max-width: 800px;
+}
+
+.edit-profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.col {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+}
+
+.custom-label-profile {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 150px; 
+    margin-right: 10px; 
+}
+
+.custom-input-profile {
+    flex-grow: 1; 
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+}
+
+.button-container-edit-profile {
+    display: flex;
+    justify-content: center;
+
+}
+
+.save-button {
+    padding: 10px 20px;
+    font-size: 25px;
+    border-radius: 30px;
+    width: 300px;
+    margin-top:30px;
+}
+

@@ -1,0 +1,50 @@
+.material-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.material-card {
+    width: 700px;
+    height: 300px;
+    background-color: #ffffff; 
+    border: none; 
+    padding: 20px;
+    border-radius: 15px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.material-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 8px 30px rgba(0, 0, 0, 0.2); 
+}
+
+.material-card .card-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.material-card .card-text {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.material-card button {
+    width: 120px;
+    align-self: center; 
+}
+
+.icons-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}

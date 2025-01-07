@@ -1,0 +1,41 @@
+.title-sec-login {
+    color: black;
+    font-size: 33px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    padding-left: 80px;
+}
+
+.custom-input-login {
+    border-radius: 30px;
+    border: 3px solid black;
+    font-size: 16px; 
+    width: 450px;
+    height: 80px;
+    margin: 20px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.custom-button-login {
+    width: 250px;
+    height: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.custom-label-login {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    
+}
+
+.padding1-login {
+    padding-right: 325px;
+}
+
+.padding2-login { 
+    padding-right: 325px;
+}
+
