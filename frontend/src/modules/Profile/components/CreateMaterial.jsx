@@ -6,6 +6,7 @@ import { createMaterial, uploadPhoto } from "../services/materialService";
 import { useNavigate } from "react-router";
 import '../styles/createMaterial.css'
 import PopUp from "../../auth/components/PopUp";
+import { useSelector } from "react-redux";
 
 function CreateMaterial () {
     const [brand, setBrand] = useState("")
@@ -15,13 +16,14 @@ function CreateMaterial () {
     const [show, setShow] = useState(false)
     const [picture,setPicture] = useState(null)
     const navigate = useNavigate()
+    const userAuth = useSelector((state) => {return state.auth.user})
 
     const handleAddMaterial = async () => {
         if (brand === "" || model === "" || description === "" || wear === "") {
             setShow(true)
         }
         else {
-            const data = await createMaterial(brand, model, description, wear, JSON.parse(localStorage.getItem("userAuth")).id)
+            const data = await createMaterial(brand, model, description, wear, userAuth.id)
             if (data.error) {
                 console.log("Error")
             }

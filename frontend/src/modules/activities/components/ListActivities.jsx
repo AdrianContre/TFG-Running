@@ -7,6 +7,7 @@ import CirclePlus from '../../../assets/images/plus-circle.png'
 import { useNavigate } from "react-router";
 import Paginator from "../../../Paginator";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 
 function ListActivities () {
@@ -15,9 +16,9 @@ function ListActivities () {
     const [activitiesPerPage] = useState(12);
     const [show, setShow] = useState(false)
     const navigate = useNavigate()
+    const runnerId = useSelector((state) => { return state.auth.user.id})
     useEffect(() => {
         const getActivities = async () => {
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
             const queryActivities = await listActivities(runnerId)
             if (queryActivities.error) {
                 setShow(true)

@@ -10,15 +10,18 @@ import {useNavigate } from "react-router";
 import Modal from 'react-bootstrap/Modal';
 import UserStats from "./UserStats";
 import { Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
 
 function ViewProfile () {
-    const userAuth = JSON.parse(localStorage.getItem("userAuth"))
+    const userAuth = useSelector((state) => {return state.auth.user})
 
     const [heartZones, setHeartZones] = useState(null)
     const [picture, setPicture] = useState(null)
     const [show,setShow] = useState(false)
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect (() => {
         const getHeartRateZones = async () => {
@@ -63,8 +66,7 @@ function ViewProfile () {
         event.preventDefault()
         try {
             const deleteProf = await deleteProfile(userAuth.id)
-            localStorage.removeItem('token')
-            localStorage.removeItem('userAuth')
+            dispatch(logout())
             navigate('/')
         }
         catch (error) {

@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router';
 import { registerService } from "../services/authService";
 import PopUp from './PopUp'
 import { getUserLogged } from "../../home/services/mainService";
-
+import {authentication, login} from '../../../redux/slices/authSlice'
+import { useDispatch } from "react-redux";
 
 
 function Register () {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [username, setUsername] = useState("")
     const [name, setName] = useState("")
@@ -67,12 +69,11 @@ function Register () {
             try {
                 const data = await registerService(name, surname, mail, username, password, isTrainer, isTermsAccepted);
                 if (data.token) {
-                    localStorage.setItem('token', data.token)
                     console.log(data.token)
+                    dispatch(authentication({token: data.token}))
                     console.log('Registration successful:', data);
-
                     const user = await getUserLogged();
-                    localStorage.setItem('userAuth', JSON.stringify(user))
+                    dispatch(login({user: user}))
                     navigate('/activities')
                 }
                 else {

@@ -1,7 +1,9 @@
+import store from '../../../redux/stores/store.js'
 const COMMENT_ENDPOINT = "http://localhost:8081/api/v1/comments"
+const authHeader = `Bearer ${store.getState().auth.token}`
 
 export const getTrainingWeekComments = async (trainingWeekId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${COMMENT_ENDPOINT}/trainingweeks/${trainingWeekId}`,{
         method: 'GET',
         headers: {
@@ -24,7 +26,7 @@ export const getTrainingWeekComments = async (trainingWeekId) => {
 }
 
 export const createComment = async (userId, content, trainingWeekId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${COMMENT_ENDPOINT}/trainingweeks/${trainingWeekId}`,{
         method: 'POST',
         headers: {

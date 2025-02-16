@@ -6,6 +6,7 @@ import MaterialCard from "./MaterialCard";
 import '../styles/listMaterials.css'
 import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 
 function ListMaterials () {
@@ -13,9 +14,10 @@ function ListMaterials () {
     const [materials,setMaterials] = useState(null)
 
     const navigate = useNavigate()
+    const userAuth = useSelector((state) => {return state.auth.user})
 
     useEffect(() => {
-        const id = JSON.parse(localStorage.getItem("userAuth")).id
+        const id = userAuth.id
         const getMaterialsUser = async () => {
             const userMaterials = await getUserMaterials(id);
             setMaterials(userMaterials)

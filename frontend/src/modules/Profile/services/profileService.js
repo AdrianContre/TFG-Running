@@ -1,8 +1,9 @@
+import store from '../../../redux/stores/store.js'
 const END_POINT_RUNNER = "http://localhost:8081/api/v1/runners"
 const END_POINT_TRAINER = "http://localhost:8081/api/v1/trainers"
 const END_POINT_USERS = "http://localhost:8081/api/v1/users"
 export const updateRunnerProfile = async (id,name, surname, username, mail, height, weight, fcMax) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_RUNNER}/${id}`,{
         method: 'PUT',
         headers: {
@@ -24,7 +25,7 @@ export const updateRunnerProfile = async (id,name, surname, username, mail, heig
 }
 
 export const updateTrainerProfile = async (id,name, surname, username, mail, height, weight, fcMax, experience) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_TRAINER}/${id}`,{
         method: 'PUT',
         headers: {
@@ -46,7 +47,7 @@ export const updateTrainerProfile = async (id,name, surname, username, mail, hei
 }
 
 export const getRunnerZones = async (id) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_RUNNER}/${id}/zones`,{
         method: 'GET',
         headers: {
@@ -67,7 +68,7 @@ export const getRunnerZones = async (id) => {
 }
 
 export const getTrainerZones = async (id) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_TRAINER}/${id}/zones`,{
         method: 'GET',
         headers: {
@@ -88,7 +89,7 @@ export const getTrainerZones = async (id) => {
 }
 
 export const uploadPicture = async (id, formData) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_USERS}/${id}`,{
         method: 'PUT',
         headers: {
@@ -109,7 +110,7 @@ export const uploadPicture = async (id, formData) => {
 }
 
 export const deleteProfile = async (userId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_USERS}/${userId}`,{
         method: 'DELETE',
         headers: {
@@ -129,7 +130,7 @@ export const deleteProfile = async (userId) => {
 }
 
 export const getRunnerStats = async (runnerId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_RUNNER}/${runnerId}/stats`,{
         method: 'GET',
         headers: {
@@ -151,7 +152,7 @@ export const getRunnerStats = async (runnerId) => {
 }
 
 export const getTrainerStats = async (userId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_TRAINER}/${userId}/stats`,{
         method: 'GET',
         headers: {

@@ -6,15 +6,16 @@ import { getAvailableGroups } from "../services/groupService";
 import GroupCard from "./GroupCard";
 import Paginator from "../../../Paginator";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function ListGroups() {
     const [groups, setGroups] = useState(null)
     const [isTrainer, setIsTrainer] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [groupsPerPage] = useState(10); 
+    const user = useSelector((state) => {return state.auth.user})
     useEffect(() => {
         const fetchInfo = async () => {
-            const user = JSON.parse(localStorage.getItem('userAuth'))
             if (user.userType === "Trainer") {
                 setIsTrainer(true)
             }

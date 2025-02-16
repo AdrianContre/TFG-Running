@@ -6,20 +6,23 @@ import {loginService} from '../services/authService'
 import { useNavigate } from 'react-router';
 import PopUp from './PopUp'
 import { getUserLogged } from '../../home/services/mainService';
+import { useDispatch } from 'react-redux';
+import {authentication, login} from '../../../redux/slices/authSlice'
+
 
 function Login() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleClick = async (event) => {
         event.preventDefault()
         try {
             const data = await loginService(username, password);
             if (data.token) {
-                localStorage.setItem('token', data.token)
-
+                dispatch(authentication({token: data.token}))
                 const user = await getUserLogged();
-                localStorage.setItem('userAuth', JSON.stringify(user))
+                dispatch(login({user: user}))
                 navigate('/activities')
                 
             }

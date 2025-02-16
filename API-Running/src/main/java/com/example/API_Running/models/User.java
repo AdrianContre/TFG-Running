@@ -40,6 +40,9 @@ public abstract class User {
     @Column(name="termsAccepted")
     private Boolean termsAccepted;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private PolarAccount polarAccount;
+
     public User() {}
 
     public User(Long id, String name, String surname, String mail, String username, String password) {
@@ -129,5 +132,13 @@ public abstract class User {
 
     public void setTermsAccepted(Boolean termsAccepted) {
         this.termsAccepted = termsAccepted;
+    }
+
+    public PolarAccount getPolarAccount() {
+        return polarAccount;
+    }
+
+    public void setPolarAccount(PolarAccount polarAccount) {
+        this.polarAccount = polarAccount;
     }
 }

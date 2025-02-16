@@ -8,6 +8,7 @@ import { faUserGroup, faMapMarkerAlt, faSignal, faUser, faCheck, faPlus, faShirt
 import ModalSession from "./ModalSession";
 import { Button, Spinner } from "react-bootstrap";
 import { getUserResultsPlan } from "../services/trainingResultService";
+import { useSelector } from "react-redux";
 
 
 function ViewDetails () {
@@ -32,6 +33,7 @@ function ViewDetails () {
     const [hasResult, setHasResult] = useState(Array(numWeeks).fill(Array(7).fill(false)));
     const [change,setChange] = useState(false)
     const [groups, setGroups] = useState(null)
+    const user = useSelector((state) => {return state.auth.user})
 
 
 
@@ -54,7 +56,7 @@ function ViewDetails () {
             setGroups(planInfo.groups)
             //setHasResult((Array(numWeeks).fill(Array(7).fill(null))))
             
-            const user = JSON.parse(localStorage.getItem("userAuth"))
+            
             setUserAuth(user)
 
             if (planInfo.wearMaterial === "low") {
@@ -257,7 +259,7 @@ function ViewDetails () {
                             )}
                         </div>
                     ))}
-                    {JSON.parse(localStorage.getItem('userAuth')).id === trainer.id ? (<div className="day-column-create-plan">
+                    {user.id === trainer.id ? (<div className="day-column-create-plan">
                             <Button variant="primary" onClick={(event) => handleComment(event, i+1, trainingWeeks[i].id)}>Ver comentarios</Button>
                     </div>) : (isEnrolled === true ? (<div className="day-column-create-plan">
                             <Button variant="primary" onClick={(event) => handleComment(event, i+1, trainingWeeks[i].id)}>Comentar</Button>
@@ -332,7 +334,7 @@ function ViewDetails () {
                         <div className="day-column-create-plan">Viernes</div>
                         <div className="day-column-create-plan">Sábado</div>
                         <div className="day-column-create-plan">Domingo</div>
-                        {JSON.parse(localStorage.getItem('userAuth')).id === trainer.id ? (<div className="day-column-create-plan">Comentarios</div>) : (isEnrolled === true ? (<div className="day-column-create-plan">Comentarios</div>) : (null))}
+                        {user.id === trainer.id ? (<div className="day-column-create-plan">Comentarios</div>) : (isEnrolled === true ? (<div className="day-column-create-plan">Comentarios</div>) : (null))}
                         
                     </div>
                     {renderTrainingRows()}

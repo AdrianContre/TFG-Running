@@ -9,12 +9,12 @@ function TermsConditions() {
     return (
         <>
             <div className="terms-main-container">
-                <h1>Términos y condiciones de RUNNING4ALL:</h1>
+                <h1>Términos y condiciones de RUNNING2ALL:</h1>
                 <h6>Fecha de entrada en vigor: 12 de Diciembre de 2024</h6>
                 <hr></hr>
                 <div className='list-container'>
                     <section>
-                        <p>¡Bienvenido/a a <strong>RUNNING4ALL</strong>!. Queremos que conozca y comprenda sus derechos y nuestras responsabilidades en relación con el uso de nuestra plataforma. Al registrarse o utilizar nuestros servicios, usted acepta los siguientes términos y condiciones. Por favor, léalos detenidamente.</p>
+                        <p>¡Bienvenido/a a <strong>RUNNING2ALL</strong>!. Queremos que conozca y comprenda sus derechos y nuestras responsabilidades en relación con el uso de nuestra plataforma. Al registrarse o utilizar nuestros servicios, usted acepta los siguientes términos y condiciones. Por favor, léalos detenidamente.</p>
                     </section>
                     <ol>
                         <h3><li>Privacidad y protección de datos</li></h3>
@@ -26,7 +26,7 @@ function TermsConditions() {
 
                         <h3><li>Edad mínima y consentimiento legal</li></h3>
                         <ul>
-                            <li>Para registrarse en <strong>RUNNING4ALL</strong>, debe de ser mayor de edad según las leyes de su país.</li>
+                            <li>Para registrarse en <strong>RUNNING2ALL</strong>, debe de ser mayor de edad según las leyes de su país.</li>
                             <li>Si es menor de edad, se requiere el consentimiento de su representante legal.</li>
                         </ul>
 

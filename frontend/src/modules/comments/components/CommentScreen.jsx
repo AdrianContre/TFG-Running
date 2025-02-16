@@ -6,6 +6,7 @@ import { useLocation } from "react-router";
 import { createComment, getTrainingWeekComments } from "../services/commentsService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCertificate} from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from "react-redux";
 
 function CommentScreen() {
     const location  = useLocation()
@@ -13,7 +14,7 @@ function CommentScreen() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const messageContainerRef = useRef(null);
-    const [userAuth, setUserAuth] = useState(null)
+    const userAuth = useSelector((state) => {return state.auth.user})
 
     useEffect(() => {
         console.log(planCreatorId)
@@ -23,7 +24,6 @@ function CommentScreen() {
             if (messageContainerRef.current) {
                 messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
             }
-            setUserAuth(JSON.parse(localStorage.getItem('userAuth')))
         }
         fetchInfo()
     }, []); 

@@ -10,7 +10,7 @@ function PrivacyPolitic() {
     return (
         <>
             <div className="terms-main-container">
-                <h1>Política de Privacidad de RUNNING4ALL:</h1>
+                <h1>Política de Privacidad de RUNNING2ALL:</h1>
                 <h6>Fecha de entrada en vigor: 12 de Diciembre de 2024</h6>
                 <hr></hr>
                 <div className='list-container'>
@@ -19,7 +19,7 @@ function PrivacyPolitic() {
                     </section>
                     <ol>
                         <h3><li>Introducción</li></h3>
-                        <p>Bienvenido/a a la Política de Privacidad de <strong>RUNNING4ALL</strong>. En este documento, explicamos cómo recopilamos, utilizamos, protegemos y compartimos sus datos personales cuando utiliza nuestra plataforma.</p>
+                        <p>Bienvenido/a a la Política de Privacidad de <strong>RUNNING2ALL</strong>. En este documento, explicamos cómo recopilamos, utilizamos, protegemos y compartimos sus datos personales cuando utiliza nuestra plataforma.</p>
                         <p>Nuestro compromiso es garantizar que su información sea tratada con el máximo respeto, en cumplimiento de las normativas de privacidad aplicables, como el Reglamento General de Protección de Datos (GDPR).</p>
                         <p>Por favor, lea también nuestros <a className='custom-label-register' style={{fontSize: '16px', marginTop: '10px', cursor:'pointer'}} onClick={navigateToTerms}>Términos y Condiciones</a>, donde encontrará información sobre las reglas que rigen el uso de nuestra plataforma.</p>
                         <span>Esta política describe:</span>
@@ -88,7 +88,7 @@ function PrivacyPolitic() {
 
                         <h3><li>Contacto</li></h3>
                         <ul>
-                            <li><strong>Correo electrónico: </strong><a className='custom-label-register' style={{fontSize: '16px', marginTop: '10px'}}>running4all@gmail.com</a></li>
+                            <li><strong>Correo electrónico: </strong><a className='custom-label-register' style={{fontSize: '16px', marginTop: '10px'}}>running2all@gmail.com</a></li>
                         </ul>
                     </ol>
                 </div>

@@ -13,6 +13,7 @@ import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import RatingComponent from "./RatingComponent";
 import { createRunningSessionResult, uploadRouteToResult } from "../services/trainingResultService";
+import { useSelector } from "react-redux";
 
 function CreateRunningSessionResult () {
 
@@ -36,6 +37,8 @@ function CreateRunningSessionResult () {
     const [date, setDate] = useState(new Date());
 
     const [rating, setRating] = useState(null);
+    
+    const userAuth = useSelector((state) =>{return state.auth.user})
 
     const handleRatingChange = (value) => {
         setRating(value);
@@ -43,8 +46,7 @@ function CreateRunningSessionResult () {
 
     useEffect(() => {
         const getMaterials = async () => {
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
-            const userMaterials = await getUserMaterials(runnerId);
+            const userMaterials = await getUserMaterials(userAuth.id);
             if (userMaterials.error) {
                 setShow(true);
             } else { 
@@ -71,7 +73,6 @@ function CreateRunningSessionResult () {
 
     const handleSendActivity = async (event) => {
         event.preventDefault();
-        const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
@@ -87,7 +88,7 @@ function CreateRunningSessionResult () {
         // }
         else {
             try {
-                const activity = await createRunningSessionResult(plan.id, runnerId, session.id, description, rating, distance, duration, pace, fcAvg, materialsId, dataInfo)
+                const activity = await createRunningSessionResult(plan.id, userAuth.id, session.id, description, rating, distance, duration, pace, fcAvg, materialsId, dataInfo)
                 if (activity.data) {
                     if (route !== null) {
                         const id = activity.data

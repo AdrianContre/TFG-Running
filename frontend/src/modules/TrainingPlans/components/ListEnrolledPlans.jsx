@@ -5,6 +5,7 @@ import NavigationBar from "../../home/components/NavigationBar";
 import { getUserEnrolledPlans } from "../services/trainingService";
 import Paginator from "../../../Paginator";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function ListEnrolledPlans() {
 
@@ -18,9 +19,10 @@ function ListEnrolledPlans() {
     const distances = ["5K", "10K", "21K", "42K"];
     const levels = ["Principiante", "Intermedio", "Avanzado"];
 
+    const user = useSelector((state) => {return state.auth.user})
+
     useEffect(() => {
         const fetchData = async () => {
-            const user = JSON.parse(localStorage.getItem("userAuth"))
             const trainersPlans = await getUserEnrolledPlans(user.id);
             setPlans(trainersPlans)
             setFilteredPlans(trainersPlans)

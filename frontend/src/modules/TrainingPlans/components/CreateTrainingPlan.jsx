@@ -11,6 +11,7 @@ import PopUp from "../../auth/components/PopUp";
 import Select from "react-select";
 import { useEffect } from "react";
 import { getTrainerGroups } from "../../groups/services/groupService";
+import { useSelector } from "react-redux";
 
 function CreateTrainingPlan() {
     const navigate = useNavigate()
@@ -36,6 +37,8 @@ function CreateTrainingPlan() {
     const [show,setShow] = useState(false)
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [groupOptions, setGroupOptions] = useState(null);
+
+    const userAuth = useSelector((state) =>{return state.auth.user})
 
     const onHide = (event) => {
         event.preventDefault()
@@ -137,7 +140,6 @@ function CreateTrainingPlan() {
     };
 
     const handleCreatePlan = async (event) => {
-        const trainerId = JSON.parse(localStorage.getItem("userAuth")).id
         event.preventDefault()
         console.log(name)
         console.log(description)
@@ -154,7 +156,7 @@ function CreateTrainingPlan() {
             selectedGroups.map(group => {
                 groupsId.push(group.value)
             })
-            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, trainerId, groupsId, wearMaterial)
+            const send = await createPlan(name, description, numWeeks, objDistance, level, sessionsInfo, userAuth.id, groupsId, wearMaterial)
             if (send) {
                 navigate('/myplans')
             }
@@ -207,8 +209,7 @@ function CreateTrainingPlan() {
 
     useEffect(() => {
         const fetchGroups = async () => {
-            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
-            const groups = await getTrainerGroups(trainerId)
+            const groups = await getTrainerGroups(userAuth.id)
             console.log(groups)
             const options = groups.data.map((group) => ({
                 value: group.id,

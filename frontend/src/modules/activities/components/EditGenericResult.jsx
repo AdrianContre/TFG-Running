@@ -13,6 +13,7 @@ import { es } from 'date-fns/locale/es';
 import { getUserMaterials } from "../../profile/services/materialService";
 import { editResult, getMobilityResult, getStrengthResult } from "../services/activitiesService";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function EditGenericResult() {
     registerLocale('es', es)
@@ -30,6 +31,7 @@ function EditGenericResult() {
     const [title,setTitle] = useState("")
     const [show, setShow] = useState(false)
     const navigate = useNavigate()
+    const runnerId = useSelector((state) => { return state.auth.user.id})
 
     const updateValue = (setter) => (event) => { 
         setter(event.target.value);
@@ -60,7 +62,6 @@ function EditGenericResult() {
             setDescription(activity.data.description)
             setRating(activity.data.effort)
             setDate(new Date(activity.data.date))
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
             const userMaterials = await getUserMaterials(runnerId);
             if (userMaterials.error) {
                 setShow(true);
@@ -87,7 +88,6 @@ function EditGenericResult() {
 
     const handleSendActivity = async (event) => {
         event.preventDefault();
-        const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)

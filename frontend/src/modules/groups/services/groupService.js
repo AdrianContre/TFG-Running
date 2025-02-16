@@ -1,9 +1,11 @@
+import store from '../../../redux/stores/store.js'
+
 const USER_ENDPOINT = "http://localhost:8081/api/v1/users"
 
 const GROUP_ENDPOINT = "http://localhost:8081/api/v1/groups"
 
 export const getAllUsers = async () => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(USER_ENDPOINT,{
         method: 'GET',
         headers: {
@@ -25,7 +27,7 @@ export const getAllUsers = async () => {
 }
 
 export const createGroup = async (name, description, trainerId, runnersId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(GROUP_ENDPOINT,{
         method: 'POST',
         headers: {
@@ -52,7 +54,7 @@ export const createGroup = async (name, description, trainerId, runnersId) => {
 }
 
 export const getAvailableGroups = async () => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${GROUP_ENDPOINT}/available`,{
         method: 'GET',
         headers: {
@@ -74,7 +76,7 @@ export const getAvailableGroups = async () => {
 }
 
 export const getTrainerGroups = async (trainerId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${GROUP_ENDPOINT}/trainers/${trainerId}`,{
         method: 'GET',
         headers: {
@@ -96,7 +98,7 @@ export const getTrainerGroups = async (trainerId) => {
 }
 
 export const getGroup = async (groupId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${GROUP_ENDPOINT}/${groupId}`,{
         method: 'GET',
         headers: {
@@ -118,7 +120,7 @@ export const getGroup = async (groupId) => {
 }
 
 export const editGroup = async (groupId, name, description, membersId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${GROUP_ENDPOINT}/${groupId}`,{
         method: 'PUT',
         headers: {
@@ -141,7 +143,7 @@ export const editGroup = async (groupId, name, description, membersId) => {
 }
 
 export const deleteGroup = async (groupId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${GROUP_ENDPOINT}/${groupId}`,{
         method: 'DELETE',
         headers: {

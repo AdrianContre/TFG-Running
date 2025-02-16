@@ -5,31 +5,29 @@ import { getRunnerStats, getTrainerStats } from "../services/profileService";
 import LineChart from "./LineChart";
 import PieChart from "./PieChart";
 import '../styles/userStats.css'
+import { useSelector } from "react-redux";
 
 
 function UserStats() {
     const [runnerData, setRunnerData] = useState(null)
     const [trainerData, setTrainerData] = useState(null)
-    const [user, setUser] = useState(null)
-    
+    const user = useSelector((state) => {return state.auth.user})
     
     useEffect(()=> {
         const fetchInfo = async () => {
-            const userAuth = JSON.parse(localStorage.getItem('userAuth'))
-            const userId = userAuth.id
-            const runnerStats = await getRunnerStats(userId)
+            const runnerStats = await getRunnerStats(user.id)
             setRunnerData(runnerStats.data)
 
-            if (userAuth.userType === "Trainer") {
-                const trainerStats = await getTrainerStats(userId)
+            if (user.userType === "Trainer") {
+                const trainerStats = await getTrainerStats(user.id)
                 setTrainerData(trainerStats.data)
             }
-            setUser(userAuth)
+            
         }
         fetchInfo()
     },[])
     
-    if (!user) {
+    if (!runnerData && !trainerData) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', marginTop:'25%'}}>
                 <Spinner animation="border" role="status"/>

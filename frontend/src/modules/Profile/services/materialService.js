@@ -1,8 +1,9 @@
+import store from '../../../redux/stores/store.js'
 const END_POINT_MATERIALS = "http://localhost:8081/api/v1/materials"
 
 
 export const getUserMaterials = async (id) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_MATERIALS}/runners/${id}`,{
         method: 'GET',
         headers: {
@@ -24,7 +25,7 @@ export const getUserMaterials = async (id) => {
 
 
 export const deleteMaterial = async (materialId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_MATERIALS}/${materialId}`,{
       method: 'DELETE',
       headers: {
@@ -46,7 +47,7 @@ export const deleteMaterial = async (materialId) => {
 }
 
 export const createMaterial = async (brand, model, description, wear, runnerId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(END_POINT_MATERIALS,{
       method: 'POST',
       headers: {
@@ -67,7 +68,7 @@ export const createMaterial = async (brand, model, description, wear, runnerId) 
 }
 
 export const editMaterial = async (brand, model, description, wear, materialId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_MATERIALS}/${materialId}`,{
       method: 'PUT',
       headers: {
@@ -89,7 +90,7 @@ export const editMaterial = async (brand, model, description, wear, materialId) 
 }
 
 export const uploadPhoto = async (materialId, picture) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_MATERIALS}/${materialId}/photo`,{
       method: 'PUT',
       headers: {

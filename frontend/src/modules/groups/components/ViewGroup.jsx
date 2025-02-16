@@ -5,19 +5,18 @@ import { deleteGroup, getGroup } from "../services/groupService";
 import { Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPersonRunning} from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from "react-redux";
 
 function ViewGroup() {
     const location = useLocation()
     const {groupId} = location.state
     const [group,setGroup] = useState(null)
-    const [userAuth, setUserAuth] = useState(null)
     const navigate = useNavigate()
+    const userAuth = useSelector((state) =>{return state.auth.user})
     useEffect(() => {
         const fetchInfo = async () => {
             const groupInfo = await getGroup(groupId)
             setGroup(groupInfo.data)
-            console.log(groupInfo.data)
-            setUserAuth(JSON.parse(localStorage.getItem('userAuth')))
         }
         fetchInfo()
     },[])

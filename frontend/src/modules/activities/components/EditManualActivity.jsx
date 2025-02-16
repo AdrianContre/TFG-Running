@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function EditManualActivity () {
     registerLocale('es', es)
@@ -34,6 +35,8 @@ function EditManualActivity () {
     const [date,setDate] = useState(new Date())
     const [manualActivity, setManualActivity] = useState(null)
 
+    const userId = useSelector((state) => { return state.auth.user.id})
+
     useEffect(() => {
         const fetchInfo = async () => {
             const manualActivity = await getManualActivity(manualActivityId);
@@ -48,7 +51,7 @@ function EditManualActivity () {
             const activityMaterialLabels = manualActivity.data.materials;
             setDefault(activityMaterialLabels)
 
-            const userId = JSON.parse(localStorage.getItem("userAuth")).id;
+
             const mats = await getUserMaterials(userId);
             setMaterials(mats);
             const options = mats.map(material => ({

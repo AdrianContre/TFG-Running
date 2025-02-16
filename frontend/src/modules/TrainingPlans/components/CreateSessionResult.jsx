@@ -12,6 +12,7 @@ import { registerLocale} from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
 import { getUserMaterials } from "../../profile/services/materialService";
 import { createMobilitySessionResult, createStrengthSessionResult } from "../services/trainingResultService";
+import { useSelector } from "react-redux";
 
 
 function CreateSessionResult() {
@@ -27,6 +28,8 @@ function CreateSessionResult() {
     const [title,setTitle] = useState("")
     const [show, setShow] = useState(false)
     const navigate = useNavigate()
+
+    const userAuth = useSelector((state) =>{return state.auth.user})
 
     const updateValue = (setter) => (event) => { 
         setter(event.target.value);
@@ -48,8 +51,7 @@ function CreateSessionResult() {
 
     useEffect(() => {
         const getMaterials = async () => {
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
-            const userMaterials = await getUserMaterials(runnerId);
+            const userMaterials = await getUserMaterials(userAuth.id);
             if (userMaterials.error) {
                 setShow(true);
             } else { 
@@ -61,7 +63,6 @@ function CreateSessionResult() {
 
     const handleSendActivity = async (event) => {
         event.preventDefault();
-        const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)
@@ -75,10 +76,10 @@ function CreateSessionResult() {
         else {
             try {
                 if (session.type === "strength") {
-                    const activity = await createStrengthSessionResult(plan.id, runnerId, session.id, description, rating, materialsId, dataInfo)
+                    const activity = await createStrengthSessionResult(plan.id, userAuth.id, session.id, description, rating, materialsId, dataInfo)
                 }
                 else {
-                    const activity = await createMobilitySessionResult(plan.id, runnerId, session.id, description, rating, materialsId, dataInfo)
+                    const activity = await createMobilitySessionResult(plan.id, userAuth.id, session.id, description, rating, materialsId, dataInfo)
                 }
                 
                 navigate('/viewplan', { state: {planId: plan.id}})

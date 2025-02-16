@@ -14,10 +14,8 @@ public class TrainerDTO {
     private Integer fcMax;
     private byte[] profilePicture;
     private Integer experience;
-
-
-
     private String userType;
+    private Boolean linkPolar;
 
     public TrainerDTO(Trainer t) {
         this.id = t.getId();
@@ -31,6 +29,7 @@ public class TrainerDTO {
         this.profilePicture = t.getProfilePicture();
         this.userType = "Trainer";
         this.experience = t.getExperience();
+        this.linkPolar = (t.getPolarAccount() != null);
 
     }
     public Long getId() {
@@ -119,5 +118,13 @@ public class TrainerDTO {
 
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Boolean getLinkPolar() {
+        return linkPolar;
+    }
+
+    public void setLinkPolar(Boolean linkPolar) {
+        this.linkPolar = linkPolar;
     }
 }

@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import { createGroup, getAllUsers } from "../services/groupService";
 import PopUp from "../../auth/components/PopUp";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 function CreateGroup() {
     const [name, setName] = useState("")
@@ -18,6 +19,7 @@ function CreateGroup() {
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
+    const trainerId = useSelector((state) => {return state.auth.user.id})
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -48,7 +50,6 @@ function CreateGroup() {
     const handleCreateGroup = async (event) => {
         event.preventDefault()
         let runnersId = []
-        const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
         selectedUsers.map(user => {
             runnersId.push(user.value)
         })

@@ -13,6 +13,7 @@ import { es } from 'date-fns/locale/es';
 import RatingComponent from "../../TrainingPlans/components/RatingComponent";
 import { uploadRouteToResult } from "../../TrainingPlans/services/trainingResultService";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function EditRunningResult() {
     registerLocale('es', es)
@@ -36,6 +37,7 @@ function EditRunningResult() {
     const [title, setTitle] = useState("")
     const [date,setDate] = useState(new Date())
     const [activity, setActivity] = useState(null)
+    const userId = useSelector((state) => { return state.auth.user.id})
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -53,7 +55,6 @@ function EditRunningResult() {
             const activityMaterialLabels = runningResult.data.materials;
             setDefault(activityMaterialLabels)
 
-            const userId = JSON.parse(localStorage.getItem("userAuth")).id;
             const mats = await getUserMaterials(userId);
             setMaterials(mats);
             const options = mats.map(material => ({

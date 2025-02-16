@@ -7,14 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCircleUser} from '@fortawesome/free-solid-svg-icons'
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useState, useEffect } from 'react';
+import { logout } from '../../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 
 function NavigationBar () {
   const [profilePicture, setProfilePicture] = useState(null)
   const [userRole, setUserRole] = useState("")
+  const dispatch = useDispatch()
   const handleClick = (event) => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userAuth')
+    dispatch(logout())
   }
 
   useEffect (() => {

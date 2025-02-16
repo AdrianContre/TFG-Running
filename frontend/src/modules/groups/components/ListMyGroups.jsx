@@ -8,6 +8,7 @@ import {getTrainerGroups } from "../services/groupService";
 import GroupCard from "./GroupCard";
 import Paginator from "../../../Paginator";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function ListMyGroups() {
     const [groups, setGroups] = useState(null)
@@ -15,14 +16,13 @@ function ListMyGroups() {
     const [currentPage, setCurrentPage] = useState(1);
     const [groupsPerPage] = useState(10); 
     const navigate = useNavigate()
+    const user = useSelector((state) => {return state.auth.user})
     useEffect(() => {
         const fetchInfo = async () => {
-            const user = JSON.parse(localStorage.getItem('userAuth'))
             if (user.userType === "Trainer") {
                 setIsTrainer(true)
             }
-            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
-            const groups = await getTrainerGroups(trainerId)
+            const groups = await getTrainerGroups(user.id)
             setGroups(groups.data)
         }
         fetchInfo()

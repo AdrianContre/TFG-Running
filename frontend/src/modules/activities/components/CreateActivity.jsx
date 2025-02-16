@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import { es } from 'date-fns/locale/es';
+import { useSelector } from "react-redux";
 
 function CreateActivity() {
     registerLocale('es', es)
@@ -28,12 +29,12 @@ function CreateActivity() {
     const [error, setError] = useState("")
     const [title,setTitle] = useState("")
     const navigate = useNavigate()
+    const runnerId = useSelector((state) => { return state.auth.user.id})
 
     const [date, setDate] = useState(new Date());
 
     useEffect(() => {
         const getMaterials = async () => {
-            const runnerId = JSON.parse(localStorage.getItem("userAuth")).id;
             const userMaterials = await getUserMaterials(runnerId);
             if (userMaterials.error) {
                 setShow(true);
@@ -60,7 +61,6 @@ function CreateActivity() {
 
     const handleSendActivity = async (event) => {
         event.preventDefault();
-        const runnerId = JSON.parse(localStorage.getItem("userAuth")).id
         let materialsId = []
         selectedMaterials.forEach((material) => {
             materialsId.push(material.value)

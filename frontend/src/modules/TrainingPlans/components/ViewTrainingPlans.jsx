@@ -7,6 +7,7 @@ import { getOtherUsersPlans } from "../services/trainingService"
 import TrainingPlanCard from "./TrainingPlanCard"
 import Paginator from "../../../Paginator"
 import { Spinner } from "react-bootstrap"
+import { useSelector } from "react-redux"
 
 function ViewTrainingPlans () {
     const navigate = useNavigate()
@@ -20,9 +21,10 @@ function ViewTrainingPlans () {
 
     const distances = ["5K", "10K", "21K", "42K"];
     const levels = ["Principiante", "Intermedio", "Avanzado"];
+
+    const user = useSelector((state) => {return state.auth.user})
     useEffect(() => {
         const fetchInfo = async () => {
-            const user = JSON.parse(localStorage.getItem('userAuth'))
             if (user.userType === "Runner") {
                 setIsTrainer(false)
             }

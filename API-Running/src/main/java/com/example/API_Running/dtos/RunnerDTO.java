@@ -13,6 +13,7 @@ public class RunnerDTO {
     private Integer fcMax;
     private byte[] profilePicture;
     private String userType;
+    private Boolean linkPolar;
 
     public RunnerDTO(Runner r) {
         this.id = r.getId();
@@ -25,6 +26,7 @@ public class RunnerDTO {
         this.fcMax = r.getFcMax();
         this.profilePicture = r.getProfilePicture();
         this.userType = "Runner";
+        this.linkPolar = (r.getPolarAccount() != null);
 
     }
     public Long getId() {
@@ -105,5 +107,13 @@ public class RunnerDTO {
 
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Boolean getLinkPolar() {
+        return linkPolar;
+    }
+
+    public void setLinkPolar(Boolean linkPolar) {
+        this.linkPolar = linkPolar;
     }
 }

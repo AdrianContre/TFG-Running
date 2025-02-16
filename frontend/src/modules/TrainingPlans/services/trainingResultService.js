@@ -1,7 +1,8 @@
+import store from '../../../redux/stores/store.js'
 const END_POINT_RESULTS = "http://localhost:8081/api/v1/sessionresults"
 
 export const getUserResultsPlan = async (planId, userId) => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(`${END_POINT_RESULTS}/users/${userId}/plans/${planId}`,{
         method: 'GET',
         headers: {
@@ -24,7 +25,7 @@ export const getUserResultsPlan = async (planId, userId) => {
 }
 
 export const createRunningSessionResult = async (planId, userId, sessionId, description, effort, distance, duration, pace, fcAvg, materials, date) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_RESULTS}/running`,{
       method: 'POST',
       headers: {
@@ -48,7 +49,7 @@ export const createRunningSessionResult = async (planId, userId, sessionId, desc
 }
 
 export const createStrengthSessionResult = async (planId, userId, sessionId, description, effort, materials, date) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_RESULTS}/strength`,{
       method: 'POST',
       headers: {
@@ -72,7 +73,7 @@ export const createStrengthSessionResult = async (planId, userId, sessionId, des
 }
 
 export const createMobilitySessionResult = async (planId, userId, sessionId, description, effort, materials, date) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_RESULTS}/mobility`,{
       method: 'POST',
       headers: {
@@ -96,7 +97,7 @@ export const createMobilitySessionResult = async (planId, userId, sessionId, des
 }
 
 export const uploadRouteToResult = async (formData, resultId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_RESULTS}/${resultId}/route`,{
       method: 'PUT',
       headers: {
@@ -121,7 +122,7 @@ export const uploadRouteToResult = async (formData, resultId) => {
 }
 
 export const getPlanResults = async (planId) => {
-  const authHeader = `Bearer ${localStorage.getItem('token')}`
+  const authHeader = `Bearer ${store.getState().auth.token}`
   return fetch(`${END_POINT_RESULTS}/plans/${planId}`,{
       method: 'GET',
       headers: {

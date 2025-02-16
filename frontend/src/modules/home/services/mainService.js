@@ -1,7 +1,8 @@
+import store from '../../../redux/stores/store.js'
 const API_ROUTE = "http://localhost:8081/api/v1/users/whoAmI"
 
 export const getUserLogged = async () => {
-    const authHeader = `Bearer ${localStorage.getItem('token')}`
+    const authHeader = `Bearer ${store.getState().auth.token}`
     return fetch(API_ROUTE,{
         method: 'GET',
         headers: {

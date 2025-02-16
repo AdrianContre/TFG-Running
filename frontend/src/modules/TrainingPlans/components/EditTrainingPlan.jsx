@@ -11,6 +11,7 @@ import { getPlanInfo } from "../services/trainingService";
 import PopUp from "../../auth/components/PopUp";
 import { getTrainerGroups } from "../../groups/services/groupService";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 
 
 function EditTrainingPlan() {
@@ -40,6 +41,7 @@ function EditTrainingPlan() {
     const [groups, setGroups] = useState(null)
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [groupOptions, setGroupOptions] = useState(null);
+    const userAuth = useSelector((state) =>{return state.auth.user})
 
     const onHide = (event) => {
         event.preventDefault()
@@ -73,8 +75,7 @@ function EditTrainingPlan() {
             //console.log("sessiones: "+ weeklySessionsMatrix)
             setSessionsInfo(weeklySessionsMatrix)
 
-            const trainerId = JSON.parse(localStorage.getItem('userAuth')).id
-            const groups = await getTrainerGroups(trainerId)
+            const groups = await getTrainerGroups(userAuth.id)
             console.log(groups)
             const options = groups.data.map((group) => ({
                 value: group.id,
@@ -153,7 +154,7 @@ function EditTrainingPlan() {
     };
 
     const handleCreateSession = () => {
-        const newSessions = [...sessions];
+        const newSessions = [...sessionsInfo];
         newSessions[selectedWeek][selectedDay] = sessionData.name; 
         setSessions(newSessions);
         const newSessionsInfo = [...sessionsInfo];
@@ -188,7 +189,6 @@ function EditTrainingPlan() {
     };
 
     const handleEditPlan = async (event) => {
-        const trainerId = JSON.parse(localStorage.getItem("userAuth")).id
         event.preventDefault()
 
         const allSessionsFilled = sessionsInfo.every(week =>

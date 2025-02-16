@@ -10,6 +10,8 @@ import { getUserLogged } from '../../home/services/mainService';
 import {useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faDownload} from '@fortawesome/free-solid-svg-icons'
+import { useDispatch } from 'react-redux';
+import { authentication, login } from '../../../redux/slices/authSlice';
 
 
 
@@ -31,6 +33,7 @@ function EditProfile () {
     const fileInputRef = useRef(null);
     const [error, setError] = useState('')
     const [title,setTitle] = useState('')
+    const dispatch = useDispatch()
 
     const handleClick = async (event) => {
         event.preventDefault()
@@ -48,7 +51,7 @@ function EditProfile () {
                 updateError = true
                 errorMessage = userUpdated.error
             }
-            else localStorage.setItem('token', userUpdated.token)
+            else dispatch(authentication({token: userUpdated.token}))
         }
         else {
             userUpdated = await updateTrainerProfile(profileData.id,name, surname, username, mail, height, weight, fcMax, experience);
@@ -56,7 +59,7 @@ function EditProfile () {
                 updateError = true
                 errorMessage = userUpdated.error
             }
-            else localStorage.setItem('token', userUpdated.token)
+            else dispatch(authentication({token: userUpdated.token}))
         }
         if (updateError === true) {
             const user = await getUserLogged();
@@ -80,7 +83,7 @@ function EditProfile () {
             }
             const user = await getUserLogged();
             setProfileData(user)
-            localStorage.setItem('userAuth', JSON.stringify(user));
+            dispatch(login({user: user}))
             navigate('/profile')
         }
         
